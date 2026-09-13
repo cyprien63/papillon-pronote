@@ -1,0 +1,510 @@
+/* ============================================================
+   Papillon — Restyle de la page de connexion ENT (Skolengo CAS)
+   Layout : écran PC plein — split photo / identifiants
+   Bords droits, aucune ombre de carte, assets officiels repo.
+   ============================================================ */
+
+/* ---------- @font-face (Inter, local) ---------- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-400-latin.woff2') format('woff2');
+  unicode-range: U+0100-024F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-500-latin.woff2') format('woff2');
+  unicode-range: U+0100-024F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-600-latin.woff2') format('woff2');
+  unicode-range: U+0100-024F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-600-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-700-latin.woff2') format('woff2');
+  unicode-range: U+0100-024F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-700-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-800-latin.woff2') format('woff2');
+  unicode-range: U+0100-024F;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../../styles/fonts/inter-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+
+/* ---------- Base ---------- */
+html, body.cas {
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+body.cas {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 15px !important;
+  color: #1f2937 !important;
+  background: #ffffff !important;
+  line-height: 1.5 !important;
+}
+
+/* ---------- Logo Skolengo masqué (bandeau Papillon à la place) ---------- */
+#authentification_logo,
+.cas__header-logo {
+  display: none !important;
+}
+
+/* ---------- Container : plein écran, bords droits ---------- */
+.cas__container {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+  border: none !important;
+}
+.cas__container .grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-rows: 1fr !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+.cas__container .grid .grid__item {
+  grid-column: auto !important;
+  grid-column-start: auto !important;
+  grid-column-end: auto !important;
+}
+
+/* ---------- Photo de gauche supprimée (pleine page formulaire) ---------- */
+.cas__splashscreen {
+  display: none !important;
+}
+.cas__message {
+  display: none !important;
+}
+
+/* ---------- Panneau de droite : blanc, bords droits, plein ---------- */
+.cas__login {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.cas__login .cas__panel {
+  background: #ffffff !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+.cas__login .cas__panel .panel__body {
+  max-width: 520px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 40px 24px 20px !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+/* ---------- Bandeau de marque : plein, bords droits ---------- */
+.papillon-brand {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 44px 40px 38px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+}
+.papillon-brand__logotype {
+  display: block !important;
+  width: 264px !important;
+  height: auto !important;
+}
+
+/* ---------- Titre ---------- */
+.cas__login .cas__panel .panel__body h1,
+.cas__login h1 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  color: #17302a !important;
+  margin: 0 0 6px !important;
+  letter-spacing: -0.01em !important;
+  background-image: none !important;
+}
+
+/* ---------- Sous-titre ---------- */
+.cas__login .cas__panel .panel__body p,
+.cas__login .panel__body > p {
+  font-size: 15px !important;
+  color: #5b6b66 !important;
+  margin: 0 0 26px !important;
+}
+
+/* ---------- Choix : cartes arrondies (le label remplit toute la carte) ---------- */
+.cas__wayf-idp {
+  display: flex !important;
+  align-items: stretch !important;
+  position: relative !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+.cas__wayf-idp .space {
+  display: none !important;
+}
+.cas__wayf-idp .form__label,
+li .cas__wayf-categorie .form__label {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  box-sizing: border-box !important;
+  padding: 15px 18px 15px 46px !important;
+  background: #ffffff !important;
+  border: 1px solid #dde8e5 !important;
+  border-radius: 14px !important;
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+.cas__wayf-idp .form__label:hover,
+li .cas__wayf-categorie .form__label:hover {
+  background: #fafcfc !important;
+  border-color: #d3e0dc !important;
+}
+.cas__wayf-idp .js-wayf-composant:checked ~ .form__label,
+li .cas__wayf-categorie .js-wayf-composant:checked ~ .form__label {
+  background: #e5f4ef !important;
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 1px #29947a !important;
+}
+.cas__wayf-idp .js-wayf-composant,
+li .cas__wayf-categorie .js-wayf-composant {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.cas__wayf-idp .form__label::before,
+li .cas__wayf-categorie .form__label::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 18px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 20px !important;
+  height: 20px !important;
+  border: 2px solid #cfd9d5 !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+.cas__wayf-idp .js-wayf-composant:checked ~ .form__label::before,
+li .cas__wayf-categorie .js-wayf-composant:checked ~ .form__label::before {
+  background: #29947a !important;
+  border-color: #29947a !important;
+  box-shadow: inset 0 0 0 3.5px #ffffff !important;
+}
+ul.js-wayfchoices {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 8px 0 0 !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+ul.js-wayfchoices:not(.hide) {
+  display: flex !important;
+}
+ul.js-wayfchoices.hide {
+  display: none !important;
+}
+ul.js-wayfchoices li {
+  margin: 0 !important;
+}
+li .cas__wayf-categorie {
+  display: flex !important;
+  align-items: stretch !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+li .cas__wayf-categorie .form__label {
+  padding: 12px 14px 12px 42px !important;
+  border-radius: 12px !important;
+}
+li .cas__wayf-categorie .form__label::before {
+  left: 14px !important;
+}
+/* Accordéons + icône + et - remplacée (charte = bleu #006dcc) → téal */
+.js-wayftoggle {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 6px 0 !important;
+  width: 100% !important;
+  cursor: pointer !important;
+}
+.js-wayftoggle .icon--plus,
+.js-wayftoggle .icon--moins,
+.js-wayftoggle .icon--minus {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2329947a'%3E%3Cpath d='M7 3h2v10H7z'/%3E%3Cpath d='M3 7h10v2H3z'/%3E%3C/svg%3E") !important;
+  background-size: 16px 16px !important;
+}
+.js-wayftoggle .icon {
+  transition: transform 0.15s ease !important;
+  color: #29947a !important;
+  font-weight: 700 !important;
+}
+.js-wayftoggle[aria-expanded="true"] .icon {
+  transform: rotate(45deg) !important;
+}
+.js-wayftoggle:focus,
+#button-submit:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.cas__wayf-idp:focus,
+.cas__wayf-idp .form__label:focus,
+li .cas__wayf-categorie:focus,
+li .cas__wayf-categorie .form__label:focus,
+.cas__wayf-form .js-wayf-composant:focus {
+  outline: none !important;
+}
+.cas__wayf-idp:focus-within,
+li .cas__wayf-categorie:focus-within {
+  outline: none !important;
+}
+.cas__wayf-form input[type="radio"]:focus ~ label,
+.cas__wayf-form input[type="radio"]:active ~ label {
+  outline: none !important;
+}
+.js-wayftoggle:focus-visible,
+.cas__wayf-idp .form__label:focus-visible,
+li .cas__wayf-categorie .form__label:focus-visible {
+  outline: 2px solid #29947a !important;
+  outline-offset: 2px !important;
+}
+.cas__wayf-form hr.divider {
+  border: none !important;
+  border-top: 1px solid #edf3f1 !important;
+  margin: 14px 0 !important;
+}
+
+/* ---------- Ligne partenaires cachée ---------- */
+.cas__matricule,
+.cas__col,
+.list--inlined.cas__partners,
+.cas__partners {
+  display: none !important;
+}
+
+/* ---------- Accordéons (flèche) ---------- */
+.cas__list-radio .js-wayftoggle {
+  margin-top: 2px !important;
+}
+.crypto-note,
+.cas__login .cas__panel .panel__body .crypto-note {
+  color: #5b6b66 !important;
+}
+
+/* ---------- Bouton Confirmer ---------- */
+.cas__login .cas__panel .panel__body .form-actions,
+.cas__login .form-actions {
+  margin-top: 6px !important;
+}
+#button-submit,
+.cas__login .cas__panel .panel__body button[type="submit"],
+.cas__login button[type="submit"] {
+  width: 100% !important;
+  padding: 16px 24px !important;
+  border-radius: 14px !important;
+  border: none !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  letter-spacing: 0.01em !important;
+}
+#button-submit:hover,
+.cas__login button[type="submit"]:hover {
+  filter: brightness(1.05) !important;
+}
+
+/* ---------- Responsive : deux colonnes conservées ---------- */
+@media (max-width: 1100px) {
+  .cas__container .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .cas__login .cas__panel .panel__body {
+    padding: 34px 24px 20px !important;
+  }
+  .papillon-brand {
+    padding: 34px 28px 30px !important;
+  }
+  .papillon-brand__logotype {
+    width: 220px !important;
+  }
+}
+@media (max-width: 760px) {
+  .cas__login .cas__panel .panel__body {
+    padding: 26px 26px 14px !important;
+  }
+  .papillon-brand {
+    padding: 26px 20px 22px !important;
+  }
+  .papillon-brand__logotype {
+    width: 180px !important;
+  }
+  .cas__message {
+    left: 20px !important;
+    top: 20px !important;
+  }
+}
+
+/* ============================================================
+   Mode sombre — activé via les options de l'extension
+   (html.papillon-dark posé par content/portal/portal.js)
+   ============================================================ */
+html.papillon-dark body.cas,
+html.papillon-dark .cas__container,
+html.papillon-dark .cas__login,
+html.papillon-dark .cas__login .cas__panel {
+  background: #101513 !important;
+}
+html.papillon-dark body.cas {
+  color: #e7efec !important;
+}
+html.papillon-dark .cas__login .cas__panel .panel__body h1 {
+  color: #eef5f2 !important;
+}
+html.papillon-dark .cas__login .cas__panel .panel__body p {
+  color: #93a79f !important;
+}
+html.papillon-dark .cas__wayf-idp .form__label,
+html.papillon-dark li .cas__wayf-categorie .form__label {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark .cas__wayf-idp .form__label:hover,
+html.papillon-dark li .cas__wayf-categorie .form__label:hover {
+  background: #202926 !important;
+  border-color: #3a4542 !important;
+}
+html.papillon-dark .cas__wayf-idp .js-wayf-composant:checked ~ .form__label,
+html.papillon-dark li .cas__wayf-categorie .js-wayf-composant:checked ~ .form__label {
+  background: #14352c !important;
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 1px #29947a !important;
+}
+html.papillon-dark .cas__wayf-idp .form__label,
+html.papillon-dark li .cas__wayf-categorie .form__label,
+html.papillon-dark .js-wayftoggle {
+  color: #e7efec !important;
+}
+html.papillon-dark .cas__wayf-idp .form__label::before,
+html.papillon-dark li .cas__wayf-categorie .form__label::before {
+  border-color: #3a4542 !important;
+  background: #101513 !important;
+}
+html.papillon-dark .cas__wayf-idp .js-wayf-composant:checked ~ .form__label::before,
+html.papillon-dark li .cas__wayf-categorie .js-wayf-composant:checked ~ .form__label::before {
+  background: #29947a !important;
+  border-color: #29947a !important;
+  box-shadow: inset 0 0 0 3.5px #14352c !important;
+}
+html.papillon-dark .cas__wayf-form hr.divider {
+  border-top-color: #232c29 !important;
+}
+html.papillon-dark .js-wayftoggle .icon--plus,
+html.papillon-dark .js-wayftoggle .icon--moins,
+html.papillon-dark .js-wayftoggle .icon--minus {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2335bba0'%3E%3Cpath d='M7 3h2v10H7z'/%3E%3Cpath d='M3 7h10v2H3z'/%3E%3C/svg%3E") !important;
+}

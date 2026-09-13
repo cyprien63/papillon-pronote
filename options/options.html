@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Papillon — Paramètres</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <header class="opt-header">
+    <img class="opt-logo" src="../assets/brand/logotype.png" alt="Papillon" />
+  </header>
+
+  <main class="opt-main">
+    <h1 class="opt-title">Paramètres de l'extension</h1>
+    <p class="opt-sub">Papillon — restyle des portails ENT & PRONOTE</p>
+
+    <section class="opt-section">
+      <h2 class="opt-h2">Thème de l'interface</h2>
+      <p class="opt-desc">Appliqué aux portails présentés par l'extension.</p>
+
+      <div class="opt-cards">
+        <label class="opt-card js-opt-card" data-theme="light">
+          <input type="radio" name="theme" value="light" class="js-opt-radio" />
+          <span class="opt-card-swatch swatch-light"></span>
+          <span class="opt-card-label">Clair</span>
+          <span class="opt-card-dot"></span>
+        </label>
+        <label class="opt-card js-opt-card" data-theme="dark">
+          <input type="radio" name="theme" value="dark" class="js-opt-radio" />
+          <span class="opt-card-swatch swatch-dark"></span>
+          <span class="opt-card-label">Sombre</span>
+          <span class="opt-card-dot"></span>
+        </label>
+      </div>
+
+      <p class="opt-status js-status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Papillon — Portail ENT",
+  "version": "0.1.0",
+  "description": "Refonte de la page de connexion du portail ENT (cas.ent.auvergnerhonealpes.fr) façon Papillon.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://cas.ent.auvergnerhonealpes.fr/login*",
+        "https://cas.ent.auvergnerhonealpes.fr/auth/login*",
+        "https://*.ent.auvergnerhonealpes.fr/login*"
+      ],
+      "js": ["content/portal/portal.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/portal/portal.css",
+        "styles/fonts/*",
+        "assets/brand/*"
+      ],
+      "matches": [
+        "https://cas.ent.auvergnerhonealpes.fr/*",
+        "https://*.ent.auvergnerhonealpes.fr/*"
+      ]
+    }
+  ]
+}

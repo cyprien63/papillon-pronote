@@ -1,0 +1,219 @@
+/* ============================================================
+   Papillon — Page de paramètres de l'extension
+   Choix du thème (clair / sombre) appliqué aux portails.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../styles/fonts/inter-400-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../styles/fonts/inter-600-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../styles/fonts/inter-800-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f4f8f6;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+/* ---------- Bandeau de marque ---------- */
+.opt-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 34px;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%);
+}
+.opt-logo {
+  display: block;
+  width: 240px;
+  height: auto;
+}
+
+/* ---------- Contenu ---------- */
+.opt-main {
+  max-width: 640px;
+  margin: 40px auto 60px;
+  padding: 0 24px;
+}
+.opt-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #17302a;
+  margin: 0 0 4px;
+}
+.opt-sub {
+  font-size: 14px;
+  color: #5b6b66;
+  margin: 0 0 28px;
+}
+
+.opt-section {
+  background: #ffffff;
+  border: 1px solid #e2ecea;
+  border-radius: 16px;
+  padding: 24px;
+}
+.opt-h2 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #17302a;
+  margin: 0 0 4px;
+}
+.opt-desc {
+  font-size: 14px;
+  color: #5b6b66;
+  margin: 0 0 18px;
+}
+
+/* ---------- Cartes de choix ---------- */
+.opt-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.opt-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #dde8e5;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.opt-card:hover {
+  background: #fafcfc;
+  border-color: #c9d8d3;
+}
+.opt-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.opt-card:has(input:checked) {
+  background: #e5f4ef;
+  border-color: #29947a;
+  box-shadow: 0 0 0 1px #29947a;
+}
+.opt-card-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  flex: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.swatch-light {
+  background: linear-gradient(135deg, #ffffff 0%, #eef4f1 100%);
+}
+.swatch-dark {
+  background: linear-gradient(135deg, #1a211e 0%, #0e1211 100%);
+}
+.opt-card-label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+  flex: 1;
+}
+.opt-card-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #c3d6cf;
+  background: #ffffff;
+  flex: none;
+  box-sizing: border-box;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.opt-card:has(input:checked) .opt-card-dot {
+  background: #29947a;
+  border-color: #29947a;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+
+.opt-status {
+  font-size: 13px;
+  color: #29947a;
+  font-weight: 600;
+  margin: 14px 0 0;
+  min-height: 18px;
+}
+
+@media (max-width: 480px) {
+  .opt-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Mode sombre (html.papillon-dark posé par options.js) ---------- */
+html.papillon-dark body {
+  background: #101513;
+  color: #e7efec;
+}
+html.papillon-dark .opt-title,
+html.papillon-dark .opt-h2 {
+  color: #eef5f2;
+}
+html.papillon-dark .opt-sub,
+html.papillon-dark .opt-desc {
+  color: #93a79f;
+}
+html.papillon-dark .opt-section {
+  background: #1a211e;
+  border-color: #2a3531;
+}
+html.papillon-dark .opt-card {
+  background: #1a211e;
+  border-color: #2a3531;
+}
+html.papillon-dark .opt-card:hover {
+  background: #202926;
+  border-color: #3a4542;
+}
+html.papillon-dark .opt-card:has(input:checked) {
+  background: #14352c;
+  border-color: #29947a;
+  box-shadow: 0 0 0 1px #29947a;
+}
+html.papillon-dark .opt-card-label {
+  color: #e7efec;
+}
+html.papillon-dark .opt-card-dot {
+  border-color: #3a4542;
+  background: #101513;
+}
+html.papillon-dark .opt-card:has(input:checked) .opt-card-dot {
+  background: #29947a;
+  border-color: #29947a;
+  box-shadow: inset 0 0 0 3px #14352c;
+}
+html.papillon-dark .opt-status {
+  color: #35bba0;
+}
