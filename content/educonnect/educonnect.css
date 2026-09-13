@@ -1,0 +1,725 @@
+/* ============================================================
+   Papillon — Restyle de la page de connexion EduConnect (DSFR)
+   educonnect.education.gouv.fr/idp/profile/SAML2/POST/SSO
+   Étapes : sélection profil (div_profil) puis login (div_connexion).
+   Layout : bannière Papillon pleine largeur + colonne 560px.
+   Thème clair/sombre géré par educonnect.js (html.papillon-dark).
+   Aucune modification du fonctionnement du formulaire.
+   ============================================================ */
+
+/* ---------- @font-face : injecté par educonnect.js (URLs absolues
+   chrome-extension://) car le CSS content_scripts résout les url()
+   relatives par rapport à la page et non à l'extension ---------- */
+
+/* ============================================================
+   Base — fond blanc plein, police Inter, suppression du padd
+   de compensation du header DSFR fixed
+   ============================================================ */
+body.papillon-educonnect {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 15px !important;
+  color: #1f2937 !important;
+  background: #ffffff !important;
+  line-height: 1.5 !important;
+  padding-top: 0 !important;
+}
+body.papillon-educonnect a {
+  color: #29947a !important;
+  text-decoration: none !important;
+}
+body.papillon-educonnect a:hover {
+  color: #227e6b !important;
+  text-decoration: underline !important;
+}
+
+/* ---------- En-têtes DSFR : le profil switch reste, la marque part ---------- */
+body.papillon-educonnect #header_profil {
+  display: none !important;
+}
+body.papillon-educonnect #header_connexion {
+  position: relative !important;
+  top: auto !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+  min-height: 0 !important;
+}
+body.papillon-educonnect #header_connexion .fr-header__logo,
+body.papillon-educonnect #header_connexion .fr-header__service,
+body.papillon-educonnect #header_connexion .fr-header__navbar {
+  display: none !important;
+}
+body.papillon-educonnect #header_connexion .fr-header__tools {
+  width: 100% !important;
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  padding: 10px 24px 18px !important;
+  box-sizing: border-box !important;
+}
+body.papillon-educonnect #bouton_profil {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 9px 16px !important;
+  border-radius: 999px !important;
+  border: 1px solid #dde8e5 !important;
+  background: #ffffff !important;
+  color: #29947a !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect #bouton_profil:hover {
+  background: #fafcfc !important;
+  border-color: #29947a !important;
+  color: #227e6b !important;
+}
+
+/* ---------- Bandeau de marque : plein, bords droits ---------- */
+body.papillon-educonnect .papillon-brand {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 44px 40px 38px !important;
+  margin: 0 0 40px !important;
+  border-radius: 0 !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+}
+body.papillon-educonnect .papillon-brand__logotype {
+  display: block !important;
+  width: 264px !important;
+  height: auto !important;
+}
+
+/* ============================================================
+   Contenu — colonne unique centrée 560px, sidebars masquées
+   ============================================================ */
+body.papillon-educonnect #contenu {
+  max-width: none !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect #contenu > .fr-grid-row {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  box-sizing: border-box !important;
+}
+body.papillon-educonnect #contenu .fr-col-md-8,
+body.papillon-educonnect #contenu .fr-col-12 {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+body.papillon-educonnect .sidebar-container,
+body.papillon-educonnect #sidebar_maintenance {
+  display: none !important;
+}
+
+/* ---------- Titres ---------- */
+body.papillon-educonnect #contenu h1,
+body.papillon-educonnect #contenu .fs-20 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  color: #17302a !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 0 24px !important;
+}
+body.papillon-educonnect .champ-obligatoire-label {
+  font-size: 14px !important;
+  color: #8a9b95 !important;
+  margin: 0 0 18px !important;
+}
+body.papillon-educonnect #div_profil h1.fs-20,
+body.papillon-educonnect .choixProfil h1 {
+  text-align: center !important;
+}
+
+/* ============================================================
+   Sélection du profil — 2 cartes pleine largeur
+   ============================================================ */
+body.papillon-educonnect .choixProfil__row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+body.papillon-educonnect .choixProfil__btn {
+  flex: 1 1 calc(50% - 6px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  min-height: 180px !important;
+  padding: 28px 16px !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+  border: 1px solid #dde8e5 !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+body.papillon-educonnect .choixProfil__btn:hover {
+  background: #fafcfc !important;
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 1px #29947a !important;
+}
+body.papillon-educonnect .papillon-profile-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 64px !important;
+  height: 64px !important;
+  margin: 0 auto !important;
+  border-radius: 50% !important;
+  background: linear-gradient(140deg, #35bba0 0%, #27a08a 55%, #1f7d6b 100%) !important;
+  box-shadow: 0 8px 18px rgba(41, 148, 122, 0.30) !important;
+}
+body.papillon-educonnect .papillon-profile-icon svg {
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+body.papillon-educonnect .papillon-profile-icon + button,
+body.papillon-educonnect .choixProfil__icone + button {
+  align-self: stretch !important;
+}
+body.papillon-educonnect .choixProfil__btn button {
+  flex: 0 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #1f2937 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+body.papillon-educonnect .choixProfil__btn button::before,
+body.papillon-educonnect .choixProfil__btn button::after {
+  content: none !important;
+}
+
+/* ============================================================
+   Zone de connexion
+   ============================================================ */
+body.papillon-educonnect #div_connexion {
+  padding: 6px 0 28px !important;
+}
+
+/* ---------- Tabs (Je me connecte / Je n'ai pas de compte) ---------- */
+body.papillon-educonnect .fr-tabs__list {
+  box-shadow: inset 0 -1px 0 0 #edf3f1 !important;
+  margin: 0 0 26px !important;
+  padding: 0 !important;
+  background: none !important;
+}
+body.papillon-educonnect .fr-tabs__tab {
+  color: #5b6b66 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 12px 4px !important;
+  margin-right: 24px !important;
+  box-shadow: none !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+body.papillon-educonnect .fr-tabs__tab::after {
+  content: none !important;
+}
+body.papillon-educonnect .fr-tabs__tab[aria-selected="true"] {
+  color: #29947a !important;
+  box-shadow: inset 0 -2px 0 0 #29947a !important;
+}
+body.papillon-educonnect .fr-tabs__tab:not([aria-selected="true"]):hover {
+  color: #227e6b !important;
+}
+body.papillon-educonnect .fr-tabs {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect .fr-tabs::before {
+  content: none !important;
+}
+body.papillon-educonnect .fr-tabs__panel {
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: none !important;
+  position: relative !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  transform: none !important;
+  translate: none !important;
+  inset: auto 0 auto 0 !important;
+  transition: none !important;
+  animation: none !important;
+  visibility: visible !important;
+}
+body.papillon-educonnect .fr-tabs__panel--selected {
+  display: block !important;
+}
+body.papillon-educonnect .fr-tabs__panel:not(.fr-tabs__panel--selected) {
+  display: none !important;
+}
+body.papillon-educonnect .fr-card__body {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* ============================================================
+   Formulaire de connexion
+   ============================================================ */
+body.papillon-educonnect form#validerAuth,
+body.papillon-educonnect form[action*="SAML2/POST/SSO"] {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ---------- Champs ---------- */
+body.papillon-educonnect .fr-input-group {
+  margin: 0 0 18px !important;
+}
+body.papillon-educonnect label.fr-label,
+body.papillon-educonnect .fr-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: #17302a !important;
+  margin: 0 0 6px !important;
+  letter-spacing: 0.01em !important;
+}
+body.papillon-educonnect input.fr-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px 16px !important;
+  border: 1px solid #dde8e5 !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+body.papillon-educonnect input.fr-input:hover {
+  border-color: #d3e0dc !important;
+}
+body.papillon-educonnect input.fr-input:focus {
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 3px rgba(41, 148, 122, 0.15) !important;
+}
+body.papillon-educonnect input.fr-input::placeholder {
+  color: #9aa8a3 !important;
+}
+
+/* ---------- Liens "oublié" ---------- */
+body.papillon-educonnect .fr-link.small {
+  font-size: 13px !important;
+  color: #29947a !important;
+}
+body.papillon-educonnect .fr-link.small:hover {
+  color: #227e6b !important;
+}
+
+/* ---------- Bouton afficher / masquer le mot de passe ---------- */
+body.papillon-educonnect .showPwd {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: none !important;
+  border: none !important;
+  color: #5b6b66 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  padding: 4px !important;
+}
+body.papillon-educonnect .showPwd:hover {
+  color: #227e6b !important;
+}
+
+/* ---------- Bouton Se connecter ---------- */
+body.papillon-educonnect button#bouton_valider {
+  width: 100% !important;
+  padding: 16px 24px !important;
+  border-radius: 14px !important;
+  border: none !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  letter-spacing: 0.01em !important;
+  text-align: center !important;
+  opacity: 1 !important;
+}
+body.papillon-educonnect button#bouton_valider:hover:not(:disabled) {
+  filter: brightness(1.05) !important;
+}
+body.papillon-educonnect button#bouton_valider:disabled {
+  opacity: 0.55 !important;
+  cursor: default !important;
+}
+body.papillon-educonnect button#bouton_valider::before,
+body.papillon-educonnect button#bouton_valider::after {
+  content: none !important;
+}
+
+/* ============================================================
+   FranceConnect — séparateur "ou" + carte épurée
+   ============================================================ */
+body.papillon-educonnect #div_franceconnect {
+  margin-top: 28px !important;
+}
+body.papillon-educonnect #div_franceconnect .divider {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin: 0 0 24px !important;
+}
+body.papillon-educonnect #div_franceconnect .divider::before,
+body.papillon-educonnect #div_franceconnect .divider::after {
+  content: '' !important;
+  flex: 1 1 auto !important;
+  height: 1px !important;
+  background: #edf3f1 !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-card {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-card__body {
+  padding: 0 !important;
+}
+body.papillon-educonnect #titreFC {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #17302a !important;
+  margin: 0 0 6px !important;
+}
+body.papillon-educonnect #descriptionFC {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: #5b6b66 !important;
+  line-height: 1.5 !important;
+  margin: 0 0 18px !important;
+}
+
+/* ---------- Bouton FranceConnect ---------- */
+body.papillon-educonnect #div_franceconnect .fr-connect {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+  border: 1px solid #dde8e5 !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  font-family: 'Inter', sans-serif !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-connect:hover {
+  background: #fafcfc !important;
+  border-color: #29947a !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-connect::before {
+  content: '' !important;
+  flex: 0 0 auto !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(100deg, #f5d340 0%, #f5d340 33%, #ed483c 33%, #ed483c 66%, #0070d2 66%, #0070d2 100%) !important;
+  display: inline-block !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-connect__login {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+body.papillon-educonnect #div_franceconnect .fr-connect__brand {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #29947a !important;
+}
+body.papillon-educonnect #div_franceconnect #lienQuoiFC {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: #29947a !important;
+}
+
+/* ---------- Messages d'erreur ---------- */
+body.papillon-educonnect .fr-message--error {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  color: #d34843 !important;
+  padding-left: 20px !important;
+  position: relative !important;
+}
+body.papillon-educonnect .fr-message--error::before {
+  content: '!' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 1px !important;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  background: #d34843 !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  line-height: 14px !important;
+  text-align: center !important;
+}
+body.papillon-educonnect .fr-input-group--error input.fr-input {
+  border-color: #d34843 !important;
+  box-shadow: 0 0 0 3px rgba(211, 72, 67, 0.12) !important;
+}
+
+/* ============================================================
+   "Je n'ai pas de compte" — cartes SMS / mail
+   ============================================================ */
+body.papillon-educonnect #inscription form {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect #inscription .fr-grid-row {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+body.papillon-educonnect #inscription .fr-col-md-6,
+body.papillon-educonnect #inscription .fr-col-12 {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+body.papillon-educonnect .btn-icon {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 16px 18px !important;
+  background: #ffffff !important;
+  border: 1px solid #dde8e5 !important;
+  border-radius: 14px !important;
+  color: #1f2937 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+body.papillon-educonnect .btn-icon:hover {
+  background: #fafcfc !important;
+  border-color: #29947a !important;
+}
+body.papillon-educonnect .btn-icon small {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #5b6b66 !important;
+}
+
+/* ============================================================
+   Éléments masqués — footer, skiplinks, assistant chatmd, etc.
+   ============================================================ */
+body.papillon-educonnect .fr-footer,
+body.papillon-educonnect .fr-skiplinks,
+body.papillon-educonnect #chatmd,
+body.papillon-educonnect #chatmd-fab,
+body.papillon-educonnect #chatmd-anchor,
+body.papillon-educonnect #indispo,
+body.papillon-educonnect .modalMaintenance,
+body.papillon-educonnect .fr-container > .fr-mt-4w:empty {
+  display: none !important;
+}
+
+/* ---------- Titre "Je sélectionne mon profil" ---------- */
+body.papillon-educonnect h2 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #17302a !important;
+  margin: 0 0 20px !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+  body.papillon-educonnect .papillon-brand {
+    padding: 26px 20px 22px !important;
+    margin: 0 0 28px !important;
+  }
+  body.papillon-educonnect .papillon-brand__logotype {
+    width: 180px !important;
+  }
+  body.papillon-educonnect #contenu > .fr-grid-row {
+    padding: 0 22px !important;
+  }
+  body.papillon-educonnect .choixProfil__btn {
+    flex: 1 1 100% !important;
+  }
+}
+
+/* ============================================================
+   Mode sombre — html.papillon-dark posé par educonnect.js
+   ============================================================ */
+html.papillon-dark body.papillon-educonnect {
+  background: #101513 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-educonnect #header_connexion {
+  background: #101513 !important;
+}
+html.papillon-dark body.papillon-educonnect #contenu h1,
+html.papillon-dark body.papillon-educonnect #contenu .fs-20,
+html.papillon-dark body.papillon-educonnect .titreCompte,
+html.papillon-dark body.papillon-educonnect label.fr-label,
+html.papillon-dark body.papillon-educonnect .fr-label {
+  color: #eef5f2 !important;
+}
+html.papillon-dark body.papillon-educonnect .choixProfil__btn,
+html.papillon-dark body.papillon-educonnect .btn-icon {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+}
+html.papillon-dark body.papillon-educonnect .choixProfil__btn:hover,
+html.papillon-dark body.papillon-educonnect .btn-icon:hover {
+  background: #202926 !important;
+  border-color: #3a4542 !important;
+}
+html.papillon-dark body.papillon-educonnect .choixProfil__btn {
+  border-color: #2a3531 !important;
+}
+html.papillon-dark body.papillon-educonnect .choixProfil__btn:hover {
+  border-color: #29947a !important;
+}
+html.papillon-dark body.papillon-educonnect .choixProfil__btn button {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-educonnect .fr-tabs__tab {
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-educonnect .fr-tabs__tab[aria-selected="true"] {
+  color: #35bba0 !important;
+  box-shadow: inset 0 -2px 0 0 #29947a !important;
+}
+html.papillon-dark body.papillon-educonnect input.fr-input {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-educonnect input.fr-input:hover {
+  border-color: #3a4542 !important;
+}
+html.papillon-dark body.papillon-educonnect input.fr-input:focus {
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 3px rgba(41, 148, 122, 0.25) !important;
+}
+html.papillon-dark body.papillon-educonnect .fr-tabs__list {
+  box-shadow: inset 0 -1px 0 0 #232c29 !important;
+}
+html.papillon-dark body.papillon-educonnect #div_franceconnect .divider::before,
+html.papillon-dark body.papillon-educonnect #div_franceconnect .divider::after {
+  background: #232c29 !important;
+}
+html.papillon-dark body.papillon-educonnect a {
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-educonnect .btn-icon small {
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-educonnect #bouton_profil {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-educonnect h2 {
+  color: #eef5f2 !important;
+}
+html.papillon-dark body.papillon-educonnect .fr-link.small {
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-educonnect #div_franceconnect .fr-connect {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-educonnect #div_franceconnect .fr-connect:hover {
+  background: #202926 !important;
+  border-color: #29947a !important;
+}
+html.papillon-dark body.papillon-educonnect #div_franceconnect .fr-connect__brand,
+html.papillon-dark body.papillon-educonnect #div_franceconnect #lienQuoiFC {
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-educonnect #descriptionFC {
+  color: #93a79f !important;
+}
