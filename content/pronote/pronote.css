@@ -1,17 +1,9 @@
 /* ============================================================
-    Papillon — Restyle de l'espace PRONOTE (Espace Élèves) connexion
-    Cible : https://*.index-education.net/pronote/*
-    Interface générée par eleve.js (DOM réécrit à chaque navigation) :
-    MutationObserver ré-applique branding + icônes après rendu.
-    Design fidèle à Papillon (PapillonApp/Papillon) :
-      - Conteneur max-width 700 centré, padding 16
-      - Cartes widgets radius 25, fond carte, shadow elevation 2
-      - Ligne d'en-tête widget : icône (opacity .6) + titre (.6) +
-        bouton "Voir plus" (fond .11 opacity)
-      - Palette primaire #29947A, couleurs matières
-      - Mode clair/sombre via html.papillon-dark
-    Icônes : Papicons (MIT), injectées inline par pronote.js.
-   ============================================================ */
+    Papillon — Restyle VISUEL de l'espace PRONOTE
+    PRINCIPE : on ne touche PAS au layout de Pronote (floats, grid,
+    positions, display). On change UNIQUEMENT : couleurs, polices,
+    bordures arrondies, ombres, opacités.
+    ============================================================ */
 
 /* ============================================================
     Base
@@ -23,13 +15,6 @@ body.papillon-pronote {
   color: #000 !important;
   background: #fff !important;
 }
-body.papillon-pronote a { text-decoration: none !important; }
-body.papillon-pronote .evitement,
-body.papillon-pronote .sr-only {
-  position: absolute !important; clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important; width: 1px !important;
-  height: 1px !important; overflow: hidden !important;
-}
 
 /* ============================================================
     Icônes Papicons (injectées inline par pronote.js)
@@ -37,32 +22,30 @@ body.papillon-pronote .sr-only {
 body.papillon-pronote .papillon-icon {
   display: inline-flex !important; align-items: center !important;
   justify-content: center !important; flex: 0 0 auto !important;
+  overflow: visible !important;
 }
-body.papillon-pronote .papillon-icon svg { display: block !important; width: 100% !important; height: 100% !important; }
+body.papillon-pronote .papillon-icon svg {
+  display: block !important; width: 100% !important; height: 100% !important;
+}
 body.papillon-pronote .papillon-icon svg path { fill: currentColor !important; }
-
-/* Icône menu */
 body.papillon-pronote .papillon-icon--menu {
-  width: 20px !important; height: 20px !important; color: #000 !important; opacity: .6 !important;
+  width: 20px !important; height: 20px !important; opacity: .6 !important;
 }
-/* Icône widget (badge circulaire dans la carte) */
 body.papillon-pronote .papillon-icon--widget {
   width: 28px !important; height: 28px !important; border-radius: 50% !important;
   color: #fff !important; background: rgba(0,0,0,.06) !important;
-  box-shadow: none !important; flex: 0 0 auto !important;
+  flex: 0 0 auto !important;
 }
-body.papillon-pronote .papillon-icon--widget svg { width: 17px !important; height: 17px !important; }
-/* Icône dans header haut (palette / settings) */
-body.papillon-pronote .papillon-icon--topbar {
-  width: 22px !important; height: 22px !important; color: #000 !important; opacity: .6 !important;
+body.papillon-pronote .papillon-icon--widget svg {
+  width: 17px !important; height: 17px !important;
 }
 
 /* ============================================================
-    Bandeau principal (header) — style Papillon top bar
+    Bandeau principal (header) — gradient vert Papillon
    ============================================================ */
 body.papillon-pronote header.ObjetBandeauEspace {
   background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
-  color: #fff !important; padding: 0 !important;
+  color: #fff !important;
 }
 body.papillon-pronote .ObjetBandeauEspace .ibe_image_etab,
 body.papillon-pronote .ObjetBandeauEspace .ibe_logo,
@@ -70,40 +53,36 @@ body.papillon-pronote .ObjetBandeauEspace .ibe_logo_image { display: none !impor
 
 /* Branding Papillon (gauche) */
 body.papillon-pronote .papillon-brand-accueil {
-  display: flex !important; align-items: center !important; height: 100% !important;
+  display: flex !important; align-items: center !important;
+  padding-left: 10px !important;
 }
 body.papillon-pronote .papillon-brand-accueil .papillon-brand__logotype {
-  display: block !important; width: auto !important; max-height: 44px !important; height: auto !important;
+  display: block !important; max-height: 32px !important; height: auto !important;
 }
 
 /* Centre : établissement + utilisateur */
 body.papillon-pronote .ObjetBandeauEspace .ibe_centre { color: #fff !important; }
 body.papillon-pronote .ObjetBandeauEspace .ibe_etab { color: #eafff9 !important; }
-body.papillon-pronote .ObjetBandeauEspace .ibe_util { color: #fff !important; }
 body.papillon-pronote .ObjetBandeauEspace .ibe_util a { color: #fff !important; }
-body.papillon-pronote .ObjetBandeauEspace .ibe_util_photo {
-  border-color: rgba(255,255,255,.6) !important; box-shadow: 0 2px 8px rgba(0,0,0,.18) !important;
-}
 
 /* ============================================================
-    Menu principal — puces avec icônes
+    Menu principal — style pills Papillon
    ============================================================ */
 body.papillon-pronote .objetBandeauEntete_menu {
-  background: #fff !important; border-bottom: 1px solid #e7efee !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e7efee !important;
 }
-body.papillon-pronote .menu-principal_niveau0 {
-  list-style: none !important; margin: 0 !important; padding: 0 !important;
-  display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 2px !important;
-}
-body.papillon-pronote .menu-principal_niveau0 li { list-style: none !important; margin: 0 !important; padding: 0 !important; }
 body.papillon-pronote .menu-principal_niveau0 a {
   display: inline-flex !important; align-items: center !important; gap: 8px !important;
   padding: 9px 14px !important; border-radius: 999px !important;
-  color: #000 !important; font-family: 'Inter', sans-serif !important;
-  font-size: 14px !important; font-weight: 600 !important; line-height: 1.2 !important;
-  text-decoration: none !important; transition: background .15s ease, color .15s ease !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important; font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: background .15s ease, color .15s ease !important;
 }
-body.papillon-pronote .menu-principal_niveau0 a:hover { background: #f1f1f1 !important; color: #29947a !important; }
+body.papillon-pronote .menu-principal_niveau0 a:hover {
+  background: #f1f1f1 !important; color: #29947a !important;
+}
 body.papillon-pronote .menu-principal_niveau0 a[aria-current],
 body.papillon-pronote .menu-principal_niveau0 a[aria-current="page"],
 body.papillon-pronote .menu-principal_niveau0 .menu-principal_item_niveau0_active,
@@ -111,24 +90,23 @@ body.papillon-pronote .menu-principal_niveau0 li.active > a,
 body.papillon-pronote .menu-principal_niveau0 li.actif > a {
   background: #ddf2ec !important; color: #157a63 !important;
 }
-body.papillon-pronote .menu-principal_niveau0 a[aria-current] .papillon-icon--menu,
-body.papillon-pronote .menu-principal_niveau0 li.active > a .papillon-icon--menu,
-body.papillon-pronote .menu-principal_niveau0 li.actif > a .papillon-icon--menu { color: #157a63 !important; }
 
 /* ============================================================
-    Second menu (titre de page + commandes)
+    Second menu (titre de page)
    ============================================================ */
 body.papillon-pronote .objetBandeauEntete_secondmenu {
-  background: #fff !important; border-bottom: 1px solid #e7efee !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e7efee !important;
 }
 body.papillon-pronote .titre-onglet {
-  font-family: 'Inter', sans-serif !important; font-size: 22px !important;
-  font-weight: 800 !important; line-height: 1.25 !important;
-  letter-spacing: -.01em !important; color: #000 !important; margin: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 22px !important; font-weight: 800 !important;
+  letter-spacing: -.01em !important; margin: 0 !important;
 }
 body.papillon-pronote .precedenteConnexion {
-  font-family: 'Inter', sans-serif !important; font-size: 12.5px !important;
-  font-weight: 500 !important; color: #8a9b95 !important; margin: 2px 0 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important; font-weight: 500 !important;
+  color: #8a9b95 !important;
 }
 body.papillon-pronote .menu-commandes a,
 body.papillon-pronote .menu-commandes button,
@@ -136,51 +114,41 @@ body.papillon-pronote .menu-commandes [role="button"] {
   border-radius: 999px !important; background: #f1f1f1 !important;
   border: 1px solid #e7efee !important; box-shadow: none !important;
 }
-body.papillon-pronote .menu-commandes a:hover,
-body.papillon-pronote .menu-commandes button:hover { background: #e8e8e8 !important; border-color: #d3eae3 !important; }
 
 /* ============================================================
-    Corps de page — conteneur centré max-width 700
+    Corps de page — on ne touche PAS au layout !
+    Pas de grid, pas de float override, pas de display:contents.
+    On laisse Pronote gérer ses colonnes et positions.
    ============================================================ */
 body.papillon-pronote .interface_affV_client { background: #fff !important; }
-body.papillon-pronote .AffichagePageAccueil { padding: 0 !important; }
-
-/* Conteneur centré à 700px (imité sur le wrapper des widgets) */
-.papillon-home-container {
-  max-width: 700px !important; margin: 0 auto !important;
-  padding: 16px !important; display: flex !important;
-  flex-direction: column !important; gap: 12px !important;
-}
-
-/* ---------- Bannière informative ---------- */
-body.papillon-pronote [class*="_message-informatif"] {
-  background: #f1f1f1 !important; border: 1px solid #e7efee !important;
-  border-radius: 12px !important; color: #000 !important;
-  font-family: 'Inter', sans-serif !important; font-size: 13px !important; line-height: 1.5 !important;
+body.papillon-pronote .interface_affV_client,
+body.papillon-pronote .AffichagePageAccueil {
+  padding-bottom: 70px !important;
 }
 
 /* ============================================================
     Cartes widgets — style Papillon (radius 25, elevation 2)
+    Juste du VISUEL, pas de layout.
    ============================================================ */
 body.papillon-pronote .widget {
-  background: #fff !important; border: 1px solid #e7efee !important;
-  border-radius: 25px !important; box-shadow: 0 2px 8px rgba(16,24,22,.06) !important;
-  overflow: hidden !important; padding: 0 !important;
+  background: #fff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 8px rgba(16,24,22,.06) !important;
 }
 body.papillon-pronote .widget .widget-header {
   display: flex !important; align-items: center !important; gap: 10px !important;
-  padding: 10px 10px !important; margin-top: -1px !important;
+  padding: 10px 10px !important;
 }
 body.papillon-pronote .papillon-widget-title {
   display: inline-flex !important; align-items: center !important; gap: 8px !important;
   font-family: 'Inter', sans-serif !important; font-size: 15px !important;
-  font-weight: 600 !important; line-height: 1.3 !important; color: #000 !important;
-  opacity: .6 !important; letter-spacing: normal !important; flex: 1 !important;
+  font-weight: 600 !important; opacity: .6 !important; flex: 1 !important;
 }
-/* Bouton "Voir plus" (style Papillon pill) */
+/* Bouton "Voir plus" pill */
 body.papillon-pronote .widget .widget-header a,
 body.papillon-pronote .widget .widget-header [role="button"] {
-  display: inline-flex !important; align-items: center !important; gap: 6px !important;
+  display: inline-flex !important; align-items: center !important;
   padding: 12px 6px !important; border-radius: 20px !important;
   background: rgba(0,0,0,.06) !important; border: none !important;
   font-family: 'Inter', sans-serif !important; font-size: 13px !important;
@@ -190,20 +158,16 @@ body.papillon-pronote .widget .widget-header a:hover,
 body.papillon-pronote .widget .widget-header [role="button"]:hover {
   background: rgba(0,0,0,.09) !important; color: #333 !important;
 }
-body.papillon-pronote .widget .widget-header a svg,
-body.papillon-pronote .widget .widget-header [role="button"] svg {
-  width: 20px !important; height: 20px !important; opacity: .5 !important;
-}
 
 /* ---------- Emploi du temps (cours) ---------- */
 body.papillon-pronote .liste-cours { list-style: none !important; margin: 0 !important; padding: 0 !important; }
 body.papillon-pronote .liste-cours li {
   background: #fafcfb !important; border: 1px solid #edf3f1 !important;
-  border-radius: 14px !important; margin-bottom: 8px !important; padding: 0 !important;
+  border-radius: 14px !important; margin-bottom: 8px !important;
 }
 body.papillon-pronote .liste-cours .container-cours {
   font-family: 'Inter', sans-serif !important; font-size: 14px !important;
-  font-weight: 600 !important; color: #000 !important;
+  font-weight: 600 !important;
 }
 body.papillon-pronote .liste-cours .container-heures {
   font-family: 'Inter', sans-serif !important; font-size: 12px !important;
@@ -220,33 +184,48 @@ body.papillon-pronote .trait-matiere[data-coul="4"] { background: #C400DD !impor
 body.papillon-pronote .trait-matiere[data-coul="5"] { background: #48B7E8 !important; }
 body.papillon-pronote .trait-matiere[data-coul="6"] { background: #6D6D6D !important; }
 
-/* ---------- Travail à faire / listes imbriquées ---------- */
+/* ---------- Travail à faire ---------- */
 body.papillon-pronote .conteneur-liste-CDT li { border-bottom: 1px solid #eef3f1 !important; }
 body.papillon-pronote .conteneur-liste-CDT li:last-child { border-bottom: none !important; }
 body.papillon-pronote .titre-matiere {
   font-family: 'Inter', sans-serif !important; font-size: 14px !important;
-  font-weight: 600 !important; color: #000 !important;
+  font-weight: 600 !important;
 }
 
-/* ---------- Puces / tags ---------- */
+/* ---------- Tags ---------- */
 body.papillon-pronote .tag-style {
   border-radius: 999px !important; font-family: 'Inter', sans-serif !important;
-  font-size: 11px !important; font-weight: 600 !important; line-height: 1 !important;
-  padding: 3px 8px !important; display: inline-flex !important; align-items: center !important; gap: 4px !important;
+  font-size: 11px !important; font-weight: 600 !important;
+  padding: 3px 8px !important; display: inline-flex !important; align-items: center !important;
 }
 
 /* ---------- États vides ---------- */
 body.papillon-pronote .no-events {
-  font-family: 'Inter', sans-serif !important; font-size: 13px !important; color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important; font-size: 13px !important;
+  color: #8a9b95 !important;
 }
 
 /* ---------- Cases à cocher ---------- */
 body.papillon-pronote .conteneur-cb { accent-color: #29947a !important; }
 
+/* ---------- Fond blanc forcé Pronote (Identite.collection._1_T) ---------- */
+body.papillon-pronote #IE\.Identite\.collection\._1_T {
+  background: #fff !important;
+}
+html.papillon-dark body.papillon-pronote #IE\.Identite\.collection\._1_T {
+  background: #121212 !important;
+}
+
+/* ---------- Bannière informative ---------- */
+body.papillon-pronote [class*="_message-informatif"] {
+  background: #f1f1f1 !important; border: 1px solid #e7efee !important;
+  border-radius: 12px !important;
+  font-family: 'Inter', sans-serif !important; font-size: 13px !important;
+}
+
 /* ============================================================
     Pied de page
    ============================================================ */
-body.papillon-pronote .footer-wrapper { background: #fff !important; border-top: 1px solid #e7efee !important; }
 body.papillon-pronote footer.ObjetBandeauPied {
   background: #fff !important; color: #8a9b95 !important;
   font-family: 'Inter', sans-serif !important; font-size: 13px !important;
@@ -257,20 +236,43 @@ body.papillon-pronote footer.ObjetBandeauPied a:hover { color: #29947a !importan
 /* ============================================================
     Responsive
    ============================================================ */
-@media (max-width: 1100px) {
-  body.papillon-pronote .papillon-brand-accueil .papillon-brand__logotype { max-height: 38px !important; }
-  body.papillon-pronote .menu-principal_niveau0 a { padding: 8px 11px !important; font-size: 13px !important; }
-}
 @media (max-width: 760px) {
-  body.papillon-pronote .affichage-bloc-global,
-  body.papillon-pronote .ibe_droite { display: none !important; }
   body.papillon-pronote .papillon-widget-title { font-size: 14px !important; }
 }
 
 /* ============================================================
     Mode sombre — html.papillon-dark posé par pronote.js
+    On ne force PAS le corps entier en blanc ; uniquement
+    les éléments qui doivent changer visuellement.
    ============================================================ */
-html.papillon-dark body.papillon-pronote { background: #000 !important; color: #fff !important; }
+html.papillon-dark body.papillon-pronote {
+  background: transparent !important;
+  color: #fff !important;
+}
+html.papillon-dark body.papillon-pronote .interface_affV_client {
+  background: transparent !important;
+}
+html.papillon-dark body.papillon-pronote .AffichagePageAccueil {
+  background: transparent !important;
+}
+html.papillon-dark body.papillon-pronote .widgets-global-container {
+  background: transparent !important;
+}
+html.papillon-dark body.papillon-pronote .ibe_droite,
+html.papillon-dark body.papillon-pronote [class*="affichage-bloc"],
+html.papillon-dark body.papillon-pronote [class*="affichage_bloc"],
+html.papillon-dark body.papillon-pronote [class*="bloc-droite"],
+html.papillon-dark body.papillon-pronote [class*="bloc_droite"] {
+  background: transparent !important;
+}
+html.papillon-dark body.papillon-pronote section,
+html.papillon-dark body.papillon-pronote table,
+html.papillon-dark body.papillon-pronote td,
+html.papillon-dark body.papillon-pronote th {
+  background: transparent !important;
+  color: inherit !important;
+}
+
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_menu,
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_secondmenu {
   background: #121212 !important; border-bottom-color: #1f1f1f !important;
@@ -284,27 +286,20 @@ html.papillon-dark body.papillon-pronote .menu-principal_niveau0 li.active > a,
 html.papillon-dark body.papillon-pronote .menu-principal_niveau0 li.actif > a {
   background: #1a3028 !important; color: #35bba0 !important;
 }
-html.papillon-dark body.papillon-pronote .menu-principal_niveau0 a[aria-current] .papillon-icon--menu,
-html.papillon-dark body.papillon-pronote .menu-principal_niveau0 li.active > a .papillon-icon--menu,
-html.papillon-dark body.papillon-pronote .menu-principal_niveau0 li.actif > a .papillon-icon--menu { color: #35bba0 !important; }
 html.papillon-dark body.papillon-pronote .titre-onglet { color: #fff !important; }
 html.papillon-dark body.papillon-pronote .precedenteConnexion { color: #6f837b !important; }
 html.papillon-dark body.papillon-pronote .menu-commandes a,
 html.papillon-dark body.papillon-pronote .menu-commandes button,
 html.papillon-dark body.papillon-pronote .menu-commandes [role="button"] {
-  background: #1a1a1a !important; border-color: #2a2a2a !important;
-}
-html.papillon-dark body.papillon-pronote .interface_affV_client { background: #000 !important; }
-html.papillon-dark body.papillon-pronote [class*="_message-informatif"] {
   background: #1a1a1a !important; border-color: #2a2a2a !important; color: #fff !important;
 }
 html.papillon-dark body.papillon-pronote .widget {
-  background: #121212 !important; border-color: #1f1f1f !important;
+  background: #1e1e1e !important; border-color: #2a2a2a !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
 }
 html.papillon-dark body.papillon-pronote .widget .widget-header a,
 html.papillon-dark body.papillon-pronote .widget .widget-header [role="button"] {
-  background: rgba(255,255,255,.06) !important; color: #aaa !important;
+  background: rgba(255,255,255,.08) !important; color: #aaa !important;
 }
 html.papillon-dark body.papillon-pronote .widget .widget-header a:hover,
 html.papillon-dark body.papillon-pronote .widget .widget-header [role="button"]:hover { background: rgba(255,255,255,.09) !important; color: #fff !important; }
@@ -314,16 +309,19 @@ html.papillon-dark body.papillon-pronote .widget h3,
 html.papillon-dark body.papillon-pronote .widget h4,
 html.papillon-dark body.papillon-pronote .widget [class*="titre"],
 html.papillon-dark body.papillon-pronote .widget [class*="title"],
-html.papillon-dark body.papillon-pronote .papillon-widget-title { color: #fff !important; }
-html.papillon-dark body.papillon-pronote .liste-cours li { background: #121212 !important; border-color: #1f1f1f !important; }
+html.papillon-dark body.papillon-pronote .widget .papillon-widget-title { color: #fff !important; }
+html.papillon-dark body.papillon-pronote .liste-cours li {
+  background: #1e1e1e !important; border-color: #2a2a2a !important;
+}
 html.papillon-dark body.papillon-pronote .liste-cours .container-cours,
 html.papillon-dark body.papillon-pronote .titre-matiere { color: #fff !important; }
 html.papillon-dark body.papillon-pronote .liste-cours .container-heures { color: #6f837b !important; }
-html.papillon-dark body.papillon-pronote .conteneur-liste-CDT li { border-bottom-color: #1f1f1f !important; }
+html.papillon-dark body.papillon-pronote .conteneur-liste-CDT li { border-bottom-color: #2a2a2a !important; }
 html.papillon-dark body.papillon-pronote .no-events { color: #6f837b !important; }
 html.papillon-dark body.papillon-pronote a { color: #35bba0 !important; }
-html.papillon-dark body.papillon-pronote .footer-wrapper,
-html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
-  background: #121212 !important; border-top-color: #1f1f1f !important; color: #6f837b !important;
+html.papillon-dark body.papillon-pronote [class*="_message-informatif"] {
+  background: #1e1e1e !important; border-color: #2a2a2a !important; color: #fff !important;
 }
-html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied a { color: #aaa !important; }
+html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
+  background: #1e1e1e !important; border-top-color: #2a2a2a !important; color: #6f837b !important;
+}
