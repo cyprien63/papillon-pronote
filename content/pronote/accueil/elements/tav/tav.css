@@ -1,0 +1,440 @@
+/* ============================================================
+   Élément 4 — TRAVAIL À FAIRE (TAF) façon Papillon
+   Cible : section.widget.travailafaire de l'accueil PRONOTE
+   Structure traitée par tav.js (cards, emoji, toggle).
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote .widget.travailafaire {
+  --pap-tav-title: #10130f;
+  --pap-tav-soft: #8a9b95;
+  --pap-tav-card: #ffffff;
+  --pap-tav-hover: #f2f6f5;
+  --pap-tav-accent: #35bba0;
+  --pap-tav-border: rgba(16, 19, 15, .08);
+  border-radius: 25px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.travailafaire {
+  --pap-tav-title: #e7efec;
+  --pap-tav-soft: #93a79f;
+  --pap-tav-card: #1a211e;
+  --pap-tav-hover: #202926;
+  --pap-tav-accent: #35bba0;
+  --pap-tav-border: #2a3531;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer + hauteur parasite */
+body.papillon-pronote .widget.travailafaire .icone-widget-fond,
+body.papillon-pronote .widget.travailafaire .as-footer {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.travailafaire .content-container {
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote .widget.travailafaire header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+body.papillon-pronote .widget.travailafaire header h2.clickable,
+body.papillon-pronote .widget.travailafaire header h2,
+body.papillon-pronote .widget.travailafaire header h2.sr-only {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-tav-title) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: default !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire header h2.clickable span,
+body.papillon-pronote .widget.travailafaire header h2 span {
+  color: var(--pap-tav-title) !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Titre non cliquable */
+body.papillon-pronote .widget.travailafaire header h2,
+body.papillon-pronote .widget.travailafaire header h2 [id$="_TitreText"],
+body.papillon-pronote .widget.travailafaire header h2 span {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: text !important;
+}
+
+body.papillon-pronote .widget.travailafaire header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .cta-conteneur {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  margin-right: -6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote .widget.travailafaire .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-tav-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-tav-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 7px 12px !important;
+}
+
+/* Icône de flèche retirée du bouton : rien ne doit s'afficher dedans */
+body.papillon-pronote .widget.travailafaire .cta-conteneur button svg,
+body.papillon-pronote .widget.travailafaire .cta-conteneur button .papillon-icon {
+  display: none !important;
+}
+
+/* ---------- Groupes par jour ---------- */
+body.papillon-pronote .widget.travailafaire .conteneur-liste-CDT {
+  margin: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .conteneur-liste-CDT li {
+  border: none !important;
+  list-style: none !important;
+}
+
+body.papillon-pronote .widget.travailafaire .liste-imbriquee {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+body.papillon-pronote .widget.travailafaire .liste-imbriquee > li {
+  background: transparent !important;
+}
+
+/* Date du jour — forcée en noir (même directive que l'EDT) */
+body.papillon-pronote .widget.travailafaire h3[id*="_date_"],
+body.papillon-pronote .widget.travailafaire header ~ * h3 {
+  margin: 0 !important;
+  padding: 2px 2px 4px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #10130f !important;
+  text-transform: capitalize !important;
+  letter-spacing: .02em !important;
+}
+
+body.papillon-pronote .widget.travailafaire h3[id*="_date_"] span {
+  color: #10130f !important;
+  font-weight: 500 !important;
+  margin-right: 4px !important;
+}
+
+/* ---------- Sous-listes / tâches ---------- */
+body.papillon-pronote .widget.travailafaire .sub-liste {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+body.papillon-pronote .widget.travailafaire .sub-liste > li {
+  margin: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .wrap.conteneur-item {
+  position: relative !important;
+  overflow: hidden !important;
+  background: var(--pap-tav-card) !important;
+  border: 1px solid var(--pap-tav-border) !important;
+  border-radius: 18px !important;
+  padding: 11px 13px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  transition: background .15s ease !important;
+}
+
+body.papillon-pronote .widget.travailafaire .wrap.conteneur-item:hover {
+  background: var(--pap-tav-hover) !important;
+}
+
+/* Rangée sujet (as-header) */
+body.papillon-pronote .widget.travailafaire .as-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+body.papillon-pronote .widget.travailafaire .with-color {
+  margin-left: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .titre-matiere {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--pap-tav-tint, var(--couleur-matiere, var(--pap-tav-accent))) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Émoji sujet */
+body.papillon-pronote .widget.travailafaire .pap-tav-emoji {
+  font-size: 20px !important;
+  line-height: 1 !important;
+  flex: 0 0 auto !important;
+}
+
+/* Pastille « Fait / Non Fait » retirée */
+body.papillon-pronote .widget.travailafaire .as-header .tag-style {
+  display: none !important;
+}
+
+/* Icône pièce jointe à côté du sujet */
+body.papillon-pronote .widget.travailafaire .pap-tav-attach {
+  flex: 0 0 auto !important;
+  opacity: .55 !important;
+}
+
+/* Date à droite de la rangée sujet */
+body.papillon-pronote .widget.travailafaire .pap-tav-day {
+  margin-left: auto !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--pap-tav-soft) !important;
+  white-space: nowrap !important;
+  text-transform: capitalize !important;
+}
+
+/* ---------- Contenu (description) ---------- */
+body.papillon-pronote .widget.travailafaire .m-left,
+body.papillon-pronote .widget.travailafaire .as-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .description.widgetTAF {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  color: var(--pap-tav-title) !important;
+  line-height: 1.4 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.travailafaire .description.widgetTAF {
+  color: var(--pap-tav-title) !important;
+}
+
+/* ---------- Pièces jointes ---------- */
+body.papillon-pronote .widget.travailafaire .piece-jointe {
+  margin: 0 !important;
+}
+
+body.papillon-pronote .widget.travailafaire .chips-pj {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+}
+
+body.papillon-pronote .widget.travailafaire .chips-pj .ie-chips,
+body.papillon-pronote .widget.travailafaire .chips-pj .chips-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: var(--pap-tav-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  padding: 5px 10px !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--pap-tav-soft) !important;
+}
+
+body.papillon-pronote .widget.travailafaire .chips-pj .chips-svg svg {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.travailafaire .chips-pj .chips-btn {
+  color: #93a79f !important;
+}
+
+/* ---------- Toggle « Terminé » (comme Task.tsx de Papillon) ---------- */
+@keyframes pap-tav-check-pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pap-tav-text-in {
+  0% { opacity: 0; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb {
+  margin: 0 !important;
+  padding-top: 2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: color-mix(in srgb, var(--pap-tav-tint, var(--pap-tav-accent)) 14%, transparent) !important;
+  border: 1.5px solid color-mix(in srgb, var(--pap-tav-tint, var(--pap-tav-accent)) 45%, transparent) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--pap-tav-tint, var(--pap-tav-accent)) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  transition: background .2s ease, color .2s ease, padding .2s ease,
+    transform .15s ease, box-shadow .2s ease, border-color .2s ease !important;
+}
+
+/* Checkbox PRONOTE hors du layout flex (cause le décalage) */
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb input,
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb .sr-only {
+  display: none !important;
+}
+
+/* Décoché : parfait rond avec le check centré par le flex */
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb:not(.is-checked) {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+}
+
+body.papillon-pronote .widget.travailafaire label.iecb .pap-tav-check {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 auto !important;
+}
+
+/* On masque le svg : le check est dessiné en CSS (centrage parfait) */
+body.papillon-pronote .widget.travailafaire label.iecb .pap-tav-check svg {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.travailafaire label.iecb .pap-tav-check::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 18px !important;
+  height: 10px !important;
+  border-left: 3.5px solid currentColor !important;
+  border-bottom: 3.5px solid currentColor !important;
+  border-radius: 2px !important;
+  transform: translate(-50%, -65%) rotate(-45deg) !important;
+}
+
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08) !important;
+}
+
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb.is-checked {
+  background: var(--pap-tav-tint, var(--pap-tav-accent)) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  border-radius: 32px !important;
+  padding: 5px 12px 5px 7px !important;
+  width: auto !important;
+  height: auto !important;
+  justify-content: flex-start !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .15) !important;
+}
+
+/* Pas de bullets PRONOTE : on ne montre que le check Papicon */
+body.papillon-pronote .widget.travailafaire .flex-contain.conteneur-cb label.iecb svg:not(.pap-tav-check-icon) {
+  display: none !important;
+}
+
+/* Animation du check quand on coche */
+body.papillon-pronote .widget.travailafaire label.iecb.is-checked .pap-tav-check {
+  animation: pap-tav-check-pop .25s ease !important;
+}
+
+/* Check en blanc quand coché (inherite currentColor du svg) */
+body.papillon-pronote .widget.travailafaire label.iecb.is-checked .pap-tav-check {
+  color: #ffffff !important;
+}
+
+/* En mode sombre, le check est blanc dans les deux états */
+html.papillon-dark body.papillon-pronote .widget.travailafaire label.iecb .pap-tav-check {
+  color: #ffffff !important;
+}
+
+/* Texte du toggle : « Terminé » affiché seulement quand coché */
+body.papillon-pronote .widget.travailafaire label.iecb .pap-tav-done-text {
+  display: none !important;
+  white-space: nowrap !important;
+}
+
+body.papillon-pronote .widget.travailafaire label.iecb.is-checked .pap-tav-done-text {
+  display: inline !important;
+  animation: pap-tav-text-in .2s ease !important;
+}
