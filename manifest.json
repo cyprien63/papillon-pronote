@@ -38,11 +38,13 @@
       ],
       "css": [
         "content/pronote/accueil/pronote.css",
-        "content/pronote/accueil/elements/header/header.css"
+        "content/pronote/accueil/elements/header/header.css",
+        "content/pronote/accueil/elements/edt/edt.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
-        "content/pronote/accueil/elements/header/header.js"
+        "content/pronote/accueil/elements/header/header.js",
+        "content/pronote/accueil/elements/edt/edt.js"
       ],
       "run_at": "document_idle"
     }
@@ -75,6 +77,8 @@
         "content/pronote/accueil/pronote.js",
         "content/pronote/accueil/elements/header/header.css",
         "content/pronote/accueil/elements/header/header.js",
+        "content/pronote/accueil/elements/edt/edt.css",
+        "content/pronote/accueil/elements/edt/edt.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",

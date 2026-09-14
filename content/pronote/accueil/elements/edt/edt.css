@@ -1,0 +1,556 @@
+/* ============================================================
+   Élément 3 — EMPLOI DU TEMPS (EDT) façon Papillon
+   Cible : section.widget.edt de l'accueil PRONOTE
+   Structure traitée par edt.js (icônes, couleurs, statuts).
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote .widget.edt {
+  --pap-edt-title: #10130f;
+  --pap-edt-soft: #8a9b95;
+  --pap-edt-hover: #f2f6f5;
+  --pap-edt-accent: #35bba0;
+  border-radius: 25px !important;
+  padding: 16px 18px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.edt {
+  --pap-edt-title: #e7efec;
+  --pap-edt-soft: #93a79f;
+  --pap-edt-hover: #202926;
+  --pap-edt-accent: #35bba0;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer */
+body.papillon-pronote .widget.edt .icone-widget-fond,
+body.papillon-pronote .widget.edt .as-footer {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.edt .content-container {
+  padding: 0 !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote .widget.edt header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+body.papillon-pronote .widget.edt header .sr-only,
+body.papillon-pronote .widget.edt header h2.sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: normal !important;
+  border: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-edt-title) !important;
+  line-height: 1.3 !important;
+}
+
+body.papillon-pronote .widget.edt header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote .widget.edt .cta-conteneur {
+  margin-left: auto !important;
+  margin-right: -8px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote .widget.edt .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-edt-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-edt-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 8px 14px !important;
+}
+
+body.papillon-pronote .widget.edt .cta-conteneur button:hover {
+  filter: brightness(.95) !important;
+}
+
+body.papillon-pronote .widget.edt .cta-conteneur button .papillon-icon {
+  width: 18px;
+  height: 18px;
+  opacity: .7;
+}
+
+/* ---------- Sélecteur de date ---------- */
+body.papillon-pronote .widget.edt .filtre-conteneur {
+  margin: 0 0 12px !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: var(--pap-edt-hover) !important;
+  border-radius: 300px !important;
+  padding: 5px 12px !important;
+  width: fit-content !important;
+  border: none !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate .ocb_cont,
+body.papillon-pronote .widget.edt .ObjetCelluleDate .ocb-libelle {
+  background: transparent !important;
+  border: none !important;
+  color: var(--pap-edt-title) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate .ocb-libelle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 72px !important;
+  text-align: center !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate .ocb_bouton,
+body.papillon-pronote .widget.edt .ObjetCelluleDate .fluid-bloc > .input-wrapper .ocb_bouton {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate .btnImageIcon {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--pap-edt-soft) !important;
+}
+
+body.papillon-pronote .widget.edt .ObjetCelluleDate svg path {
+  fill: currentColor !important;
+}
+
+/* ---------- Libellé de semaine ---------- */
+body.papillon-pronote .widget.edt .text-center.ie-titre-couleur-lowercase {
+  text-align: left !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+  letter-spacing: .2px !important;
+  color: var(--pap-edt-soft) !important;
+  margin: 0 0 8px !important;
+}
+
+/* ---------- Liste des cours ---------- */
+body.papillon-pronote .widget.edt .liste-cours,
+body.papillon-pronote .widget.edt ul.container-cours {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .widget.edt .liste-cours {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+body.papillon-pronote .widget.edt .liste-cours > li {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+body.papillon-pronote .widget.edt .flex-contain {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+/* ---------- Colonne horaire ---------- */
+body.papillon-pronote .widget.edt .container-heures {
+  flex: 0 0 52px !important;
+  width: 52px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+}
+
+body.papillon-pronote .widget.edt .container-heures div {
+  text-align: center !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+body.papillon-pronote .widget.edt .container-heures div:first-child {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 22px !important;
+  color: var(--pap-edt-title) !important;
+}
+
+body.papillon-pronote .widget.edt .container-heures div:last-child {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--pap-edt-soft) !important;
+}
+
+/* ---------- Carte du cours ---------- */
+body.papillon-pronote .widget.edt ul.container-cours {
+  flex: 1 !important;
+  min-width: 0 !important;
+  position: relative !important;
+  border-radius: 16px !important;
+  padding: 12px 14px 12px 24px !important;
+  background: var(--pap-edt-bg, #ffffff) !important;
+  border: 1px solid var(--pap-edt-border, rgba(0, 0, 0, .07)) !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .widget.edt ul.container-cours > li {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Barre colorée verticale (positionnée dans la carte par edt.js) */
+body.papillon-pronote .widget.edt ul.container-cours .trait-matiere {
+  position: absolute !important;
+  left: 10px !important;
+  top: 12px !important;
+  bottom: 12px !important;
+  width: 6px !important;
+  height: auto !important;
+  border-radius: 300px !important;
+}
+
+/* Nom du cours */
+body.papillon-pronote .widget.edt ul.container-cours .libelle-cours {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-edt-txt, var(--pap-edt-title)) !important;
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Rangée métadonnées (prof / salle / groupe) */
+body.papillon-pronote .widget.edt .pap-meta-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px 10px !important;
+  margin-top: 7px !important;
+}
+
+body.papillon-pronote .widget.edt .pap-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-edt-txt, var(--pap-edt-title)) !important;
+  min-width: 0 !important;
+}
+
+body.papillon-pronote .widget.edt .pap-chip .papillon-icon {
+  width: 15px;
+  height: 15px;
+  opacity: .7;
+  flex: 0 0 auto;
+}
+
+body.papillon-pronote .widget.edt .pap-chip.pap-group-chip {
+  color: var(--pap-edt-soft) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+}
+
+/* Statut + durée */
+body.papillon-pronote .widget.edt .pap-status {
+  margin-left: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-edt-soft) !important;
+}
+
+body.papillon-pronote .widget.edt .pap-pill {
+  background: var(--pap-edt-accent) !important;
+  border-radius: 300px !important;
+  padding: 3px 10px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+
+/* ---------- Pauses / séparateurs (greyed) ---------- */
+body.papillon-pronote .widget.edt .liste-cours li.greyed {
+  width: 100% !important;
+}
+
+body.papillon-pronote .widget.edt li.greyed .trait-matiere {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.edt li.greyed ul.container-cours {
+  flex: 1 !important;
+  min-width: 0 !important;
+  padding: 12px 14px !important;
+  background: var(--pap-edt-hover) !important;
+  border: none !important;
+}
+
+body.papillon-pronote .widget.edt .pap-greyed-label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  color: var(--pap-edt-soft) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+body.papillon-pronote .widget.edt .pap-greyed-label .papillon-icon {
+  width: 18px;
+  height: 18px;
+  opacity: .7;
+}
+
+body.papillon-pronote .widget.edt .pap-greyed-label .pap-sep-dur {
+  opacity: .75;
+}
+
+/* ============================================================
+   Popup « Choisir un jour » (date picker du widget EDT)
+   Cible : ObjetFenetre_Date_racine rendu hors du widget.
+   ============================================================ */
+body.papillon-pronote .ObjetFenetre_Date_racine {
+  --pap-picker-bg: #ffffff;
+  --pap-picker-surface: #f2f6f5;
+  --pap-picker-title: #10130f;
+  --pap-picker-text: #10130f;
+  --pap-picker-soft: #8a9b95;
+  --pap-picker-border: #e7efee;
+  --pap-picker-accent: #35bba0;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetFenetre_Date_racine {
+  --pap-picker-bg: #1a211e;
+  --pap-picker-surface: #202926;
+  --pap-picker-title: #e7efec;
+  --pap-picker-text: #e7efec;
+  --pap-picker-soft: #93a79f;
+  --pap-picker-border: #2a3531;
+  --pap-picker-accent: #35bba0;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .Fenetre_Cadre {
+  position: relative !important;
+  background: var(--pap-picker-bg) !important;
+  border: 1px solid var(--pap-picker-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .18) !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .Fenetre_Titre {
+  padding: 16px 18px 0 18px !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .Fenetre_Titre h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-picker-title) !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .Fenetre_Cadre .cta-conteneur {
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .cta-conteneur .btnImageIcon,
+body.papillon-pronote .ObjetFenetre_Date_racine .cta-conteneur .btnImage {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-picker-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .cta-conteneur .btnImageIcon:hover {
+  background: var(--pap-picker-surface) !important;
+  color: var(--pap-picker-accent) !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .combo-selecteur {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .combo-selecteur .btnImageIcon,
+body.papillon-pronote .ObjetFenetre_Date_racine .combo-selecteur .ocb_bouton {
+  color: var(--pap-picker-soft) !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .combo-selecteur .ocb_cont,
+body.papillon-pronote .ObjetFenetre_Date_racine .combo-selecteur .ocb-libelle {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--pap-picker-title) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  text-align: center !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .deroulant-conteneur-show-hide {
+  background: var(--pap-picker-bg) !important;
+  border: 1px solid var(--pap-picker-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .16) !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .deroulant-conteneur-show-hide .as-li {
+  color: var(--pap-picker-text) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .deroulant-conteneur-show-hide .as-li[aria-selected="true"] {
+  background: var(--pap-picker-surface) !important;
+  color: var(--pap-picker-accent) !important;
+  font-weight: 700 !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .deroulant-conteneur-show-hide .as-li:hover {
+  background: var(--pap-picker-surface) !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine table {
+  border-collapse: collapse !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .titre-jours th {
+  color: var(--pap-picker-soft) !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: .05em !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td {
+  border: none !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date {
+  height: 36px !important;
+  min-width: 36px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border-radius: 50% !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--pap-picker-text) !important;
+  opacity: 1 !important;
+  transition: background .15s ease !important;
+  cursor: pointer !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date .actif:hover,
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date.actif:hover {
+  background: var(--pap-picker-surface) !important;
+  color: var(--pap-picker-accent) !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date:not(.actif) {
+  opacity: .35 !important;
+  cursor: default !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date.current-date {
+  color: var(--pap-picker-accent) !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 0 0 2px var(--pap-picker-accent) !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .jours td.date.selected-date {
+  background: var(--pap-picker-accent) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .zone-bas {
+  padding: 0 18px 16px !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .zone-bas .themeBoutonSecondaire {
+  background: var(--pap-picker-surface) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-picker-title) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: 10px 22px !important;
+  transition: background .15s ease !important;
+}
+
+body.papillon-pronote .ObjetFenetre_Date_racine .zone-bas .themeBoutonSecondaire:hover {
+  background: var(--pap-picker-accent) !important;
+  color: #ffffff !important;
+}
