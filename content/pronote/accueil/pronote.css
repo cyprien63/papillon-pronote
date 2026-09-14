@@ -1,0 +1,178 @@
+/* ============================================================
+   Papillon — Base PRONOTE
+   Fichier principal — regroupe fonts, base, thème.
+   Les styles par élément sont dans elements/<nom>/<nom>.css
+   ============================================================ */
+
+/* ---------- Fonts Inter (locales) ---------- */
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/styles/fonts/inter-400-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/styles/fonts/inter-400-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/styles/fonts/inter-500-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/styles/fonts/inter-500-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/styles/fonts/inter-600-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/styles/fonts/inter-600-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/styles/fonts/inter-700-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/styles/fonts/inter-700-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('/styles/fonts/inter-800-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('/styles/fonts/inter-800-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+
+/* ---------- Palette Papillon ---------- */
+:root {
+  --papillon-grad: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%);
+  --papillon-primary: #35bba0;
+  --papillon-green-600: #227e6b;
+  --papillon-bg: #ffffff;
+  --papillon-surface: #ffffff;
+  --papillon-border: #e7efee;
+  --papillon-text: #10130f;
+  --papillon-text-soft: #8a9b95;
+  --papillon-hover: #f2f6f5;
+}
+
+/* ---------- Base ---------- */
+body.papillon-pronote {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  color: #10130f !important;
+  background: var(--papillon-bg) !important;
+}
+
+/* Contenu : texte sombre forcé (ne jamais hériter du blanc du bandeau) */
+body.papillon-pronote .interface_affV_client,
+body.papillon-pronote .AffichagePageAccueil {
+  color: #10130f !important;
+}
+
+/* Icônes via papillon (injectées inline par les modules) */
+body.papillon-pronote .papillon-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+body.papillon-pronote .papillon-icon svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+body.papillon-pronote .papillon-icon svg path { fill: currentColor !important; }
+
+/* ============================================================
+   Mode sombre — html.papillon-dark posé par pronote.js
+   Le fond de TOUTE la page passe en sombre + textes clairs,
+   comme la page options (bg #101513, surface #1a211e).
+   ============================================================ */
+html.papillon-dark body.papillon-pronote {
+  background: #101513 !important; color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .interface_affV_client,
+html.papillon-dark body.papillon-pronote .AffichagePageAccueil,
+html.papillon-dark body.papillon-pronote .widgets-global-container {
+  background: #101513 !important; color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote a { color: #35bba0 !important; }
+
+/* ---------- Widgets ---------- */
+html.papillon-dark body.papillon-pronote .widget {
+  background: #1a211e !important; border-color: #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
+}
+html.papillon-dark body.papillon-pronote .widget header h2,
+html.papillon-dark body.papillon-pronote .widget header h2 span,
+html.papillon-dark body.papillon-pronote .widget header h3,
+html.papillon-dark body.papillon-pronote .titre,
+html.papillon-dark body.papillon-pronote .libelle-cours,
+html.papillon-dark body.papillon-pronote .text-center,
+html.papillon-dark body.papillon-pronote .ie-titre-couleur-lowercase {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .widget .cta-conteneur button {
+  background: #1a211e !important; border-color: #2a3531 !important; color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .widget .cta-conteneur button:hover {
+  background: #202926 !important; color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .widget .widget-header a,
+html.papillon-dark body.papillon-pronote .widget .widget-header [role="button"] {
+  background: rgba(255,255,255,.08) !important; color: #aaa !important;
+}
+html.papillon-dark body.papillon-pronote .widget .widget-header a:hover,
+html.papillon-dark body.papillon-pronote .widget .widget-header [role="button"]:hover {
+  background: rgba(255,255,255,.12) !important; color: #fff !important;
+}
+
+/* ---------- Emploi du temps ---------- */
+html.papillon-dark body.papillon-pronote .liste-cours li {
+  background: #1e2924 !important; border-color: #2a3531 !important;
+}
+html.papillon-dark body.papillon-pronote .liste-cours .container-cours,
+html.papillon-dark body.papillon-pronote .titre-matiere { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .liste-cours .container-heures,
+html.papillon-dark body.papillon-pronote .container-heures div { color: #93a79f !important; }
+
+/* ---------- Travail à faire ---------- */
+html.papillon-dark body.papillon-pronote .conteneur-liste-CDT li { border-bottom-color: #2a3531 !important; }
+html.papillon-dark body.papillon-pronote .liste-imbriquee h3,
+html.papillon-dark body.papillon-pronote .liste-imbriquee h3 span { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote h3[id*="_date_"],
+html.papillon-dark body.papillon-pronote h3[id*="_date_"] span { color: #10130f !important; }
+html.papillon-dark body.papillon-pronote .no-events,
+html.papillon-dark body.papillon-pronote .no-events p,
+html.papillon-dark body.papillon-pronote .no-events h1,
+html.papillon-dark body.papillon-pronote .no-events h2,
+html.papillon-dark body.papillon-pronote .no-events h3,
+html.papillon-dark body.papillon-pronote .no-events span { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .iecb { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .description { color: #cfd9d5 !important; }
+
+/* ---------- Tags / chips / pièces jointes ---------- */
+html.papillon-dark body.papillon-pronote .tag-style { background: #2a3531 !important; color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .tag-style.color-theme { background: #14352c !important; color: #35bba0 !important; }
+html.papillon-dark body.papillon-pronote .ie-chips { background: #2a3531 !important; color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .chips-btn { color: #35bba0 !important; }
+
+/* ---------- Ressources pédagogiques ---------- */
+html.papillon-dark body.papillon-pronote .ie-line-color { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .pj-date-contain .date,
+html.papillon-dark body.papillon-pronote .date { color: #93a79f !important; }
+
+/* ---------- Formulaires ---------- */
+html.papillon-dark body.papillon-pronote textarea,
+html.papillon-dark body.papillon-pronote input {
+  background: #1a211e !important; color: #e7efec !important; border-color: #2a3531 !important;
+}
+
+/* ---------- Sélecteur de date (emploi du temps) ---------- */
+html.papillon-dark body.papillon-pronote .ObjetCelluleDate input,
+html.papillon-dark body.papillon-pronote .ObjetCelluleDate .ocb_cont {
+  background: #1a211e !important; border-color: #2a3531 !important; color: #e7efec !important;
+}
+
+/* ---------- Message informatif ---------- */
+html.papillon-dark body.papillon-pronote [class*="_message-informatif"] {
+  background: #1e2924 !important; border-color: #2a3531 !important; color: #e7efec !important;
+}
+
+/* ---------- Textes restants : tout doit rester clair en sombre ---------- */
+html.papillon-dark body.papillon-pronote .widget .wrap,
+html.papillon-dark body.papillon-pronote .widget .with-color,
+html.papillon-dark body.papillon-pronote .liste-clickable { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .liste-cours .container-cours li { color: #e7efec !important; }
+html.papillon-dark body.papillon-pronote .widget .themeBoutonNeutre,
+html.papillon-dark body.papillon-pronote .widget footer button,
+html.papillon-dark body.papillon-pronote [class*="_footer"] button {
+  background: #2a3531 !important; border-color: #3a4542 !important; color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .widget .themeBoutonNeutre:hover,
+html.papillon-dark body.papillon-pronote .widget footer button:hover,
+html.papillon-dark body.papillon-pronote [class*="_footer"] button:hover {
+  background: #202926 !important; color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .btn-collapse,
+html.papillon-dark body.papillon-pronote .btn-collapse * { color: #93a79f !important; }
+
+/* ---------- Footer ---------- */
+html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
+  background: #1a211e !important; border-top-color: #2a3531 !important; color: #93a79f !important;
+}

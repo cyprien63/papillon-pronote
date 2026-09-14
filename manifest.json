@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Papillon — Portail ENT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Refonte de la page de connexion du portail ENT (cas.ent.auvergnerhonealpes.fr) façon Papillon.",
   "icons": {
     "16": "icons/icon16.png",
@@ -36,8 +36,14 @@
       "matches": [
         "https://*.index-education.net/pronote/*"
       ],
-      "css": ["content/pronote/pronote.css"],
-      "js": ["content/pronote/pronote.js"],
+      "css": [
+        "content/pronote/accueil/pronote.css",
+        "content/pronote/accueil/elements/header/header.css"
+      ],
+      "js": [
+        "content/pronote/accueil/pronote.js",
+        "content/pronote/accueil/elements/header/header.js"
+      ],
       "run_at": "document_idle"
     }
   ],
@@ -65,7 +71,13 @@
     },
     {
       "resources": [
-        "content/pronote/pronote.css",
+        "content/pronote/accueil/pronote.css",
+        "content/pronote/accueil/pronote.js",
+        "content/pronote/accueil/elements/header/header.css",
+        "content/pronote/accueil/elements/header/header.js",
+        "content/pronote/accueil/dashboard.html",
+        "content/pronote/accueil/styles/*",
+        "content/pronote/accueil/scripts/*",
         "styles/fonts/*",
         "assets/brand/*",
         "assets/icons/*"
