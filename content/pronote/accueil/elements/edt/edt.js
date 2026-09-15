@@ -20,7 +20,14 @@
     cutlery: 'cutlery.svg',
     ghost: 'ghost.svg',
     arrow: 'arrow-right-up.svg',
+    cross: 'cross.svg',
+    arrowRight: 'arrow-right.svg',
   };
+
+  /* Marqueurs PRONOTE : cours annulé / reporté / remplacé */
+  const ANNUL_RE = /annul|suppr|repor|remplac/i;
+  /* Marqueurs PRONOTE : changement de salle / déplacement / exceptionnel */
+  const CHANG_RE = /chang|déplac|deplac|transf|modif|except|→/i;
 
   /* Récupère (en cache) le contenu d'un SVG Papicons,
      avec fill/currentColor pour suivre la couleur CSS. */
@@ -81,9 +88,9 @@
     return span;
   }
 
-  function chip(text, iconName, isGroup) {
+  function chip(text, iconName, isGroup, extraClass) {
     const span = document.createElement('span');
-    span.className = `pap-chip${isGroup ? ' pap-group-chip' : ''}`;
+    span.className = `pap-chip${isGroup ? ' pap-group-chip' : ''}${extraClass ? ` ${extraClass}` : ''}`;
     const ico = icon(iconName);
     if (ico) span.appendChild(svgWrap(ico, iconName));
     span.appendChild(document.createTextNode(text));
@@ -98,7 +105,84 @@
     return { isGroup, isRoom, text: t };
   }
 
-  function buildCourse(containerCours, li, dark) {
+  /* État de la carte : annulé / déplacé, déduit de toutes les
+     sources de texte/classes du cours (robuste aux variations). */
+  function detectStatus(li, coursUl) {
+    const sources = [
+      li.className,
+      coursUl.className || '',
+      li.getAttribute('aria-label') || '',
+      coursUl.textContent || '',
+    ].join(' ');
+    return {
+      cancelled: ANNUL_RE.test(sources),
+      changed: CHANG_RE.test(sources),
+    };
+  }
+
+  /* Mois français (minuscules, tronqués) → index 0-11 */
+  const MONTHS = {
+    'janvier': 0, 'janv': 0, 'jan': 0, 'january': 0,
+    'fevrier': 1, 'février': 1, 'fevr': 1, 'févr': 1, 'february': 1,
+    'mars': 2, 'march': 2,
+    'avril': 3, 'avr': 3, 'april': 3,
+    'mai': 4, 'may': 4,
+    'juin': 5, 'june': 5,
+    'juillet': 6, 'juil': 6, 'july': 6,
+    'aout': 7, 'août': 7, 'august': 7,
+    'septembre': 8, 'sept': 8, 'september': 8,
+    'octobre': 9, 'oct': 9, 'october': 9,
+    'novembre': 10, 'nov': 10, 'november': 10,
+    'decembre': 11, 'décembre': 11, 'dec': 11, 'december': 11,
+  };
+
+  function sameDay(a, b) {
+    return a && b && a.getFullYear() === b.getFullYear()
+      && a.getMonth() === b.getMonth()
+      && a.getDate() === b.getDate();
+  }
+
+  /* Date affichée par le sélecteur de date du widget. Retourne un
+     objet Date, ou null si introuvable. */
+  function widgetDate(widget) {
+    const el = widget.querySelector('.ObjetCelluleDate') || widget;
+
+    /* 1) valeur brute d'un <input> : 17/09/2026 ou 2026-09-17 */
+    const inputs = el.querySelectorAll('input');
+    for (const inp of inputs) {
+      const v = (inp.value || '').trim();
+      let m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+      m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+    }
+
+    /* 2) libellés / aria-labels / titres : « Jeudi 17 septembre 2026 */
+    const sources = [el.textContent || ''];
+    el.querySelectorAll('[aria-label],[title]').forEach((n) => {
+      const a = n.getAttribute('aria-label') || n.getAttribute('title');
+      if (a) sources.push(a);
+    });
+    for (const s of sources) {
+      const m = String(s).match(/(\d{1,2})\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|janv|févr|fevr|avr|juil|sept|oct|nov|déc|dec|aout)\.?\s*(\d{4})?/i);
+      if (m && MONTHS[m[2].toLowerCase()] !== undefined) {
+        const day = Number(m[1]);
+        const year = m[3] ? Number(m[3]) : new Date().getFullYear();
+        return new Date(year, MONTHS[m[2].toLowerCase()], day);
+      }
+    }
+    return null;
+  }
+
+  /* Vrai si le widget affiche le jour courant. Si le sélecteur de
+     date est introuvable, on garde l'ancien comportement (badge au
+     temps de l'horloge) plutôt que de casser l'affichage. */
+  function widgetShowsToday(widget) {
+    const shown = widgetDate(widget);
+    return shown ? sameDay(shown, new Date()) : true;
+  }
+
+  function buildCourse(containerCours, li, dark, isToday) {
     const coursUl = li.querySelector('.container-cours');
     if (!coursUl) return;
 
@@ -128,21 +212,31 @@
     const subLis = Array.from(coursUl.querySelectorAll(':scope > li'));
     const others = subLis.filter((c) => c !== nameLi);
 
-    /* Rangée méta (prof · salle · groupe) */
+    /* État de la carte : cours annulé / déplacé (salle changée) */
+    const flags = detectStatus(li, coursUl);
+
+    /* Rangée méta (prof · salle · groupe · statuts) */
     const metaRow = document.createElement('div');
     metaRow.className = 'pap-meta-row';
 
     others.forEach((c) => {
-      const { isGroup, isRoom, text } = classifyLi(c.textContent || '');
-      if (!text) return;
-      if (isGroup) {
+      const raw = (c.textContent || '').trim();
+      const { isGroup, isRoom, text } = classifyLi(raw);
+      if (!text) { c.classList.add('pap-edt-source'); return; }
+      if (ANNUL_RE.test(text)) {
+        metaRow.appendChild(chip(text, 'cross', false, 'pap-chip-annul'));
+      } else if (CHANG_RE.test(text)) {
+        metaRow.appendChild(chip(text, 'arrowRight', false, 'pap-chip-chang'));
+      } else if (isGroup) {
         metaRow.appendChild(chip(text, null, true));
       } else if (isRoom) {
         metaRow.appendChild(chip(text, 'mapPin'));
       } else {
         metaRow.appendChild(chip(text, 'user'));
       }
-      c.remove();
+      /* Masquer la source (au lieu de la supprimer) pour que les
+         re-rendus périodiques du badge « En cours » restent idempotents. */
+      c.classList.add('pap-edt-source');
     });
 
     /* Durée + badge « En cours » */
@@ -155,22 +249,26 @@
 
     const now = new Date();
     const nowMin = now.getHours() * 60 + now.getMinutes();
-    const isNow = times.length >= 2 && times[0] != null && times[1] != null
+    const isNow = isToday !== false && times.length >= 2 && times[0] != null && times[1] != null
       && nowMin >= times[0] && nowMin <= times[1];
 
     const status = document.createElement('div');
     status.className = 'pap-status';
-    if (isNow) {
+    if (isNow && !flags.cancelled) {
       const pill = document.createElement('span');
       pill.className = 'pap-pill';
       pill.textContent = 'En cours';
       status.appendChild(pill);
     }
-    if (duration) status.appendChild(document.createTextNode(duration));
+    if (duration && !flags.cancelled) status.appendChild(document.createTextNode(duration));
+
+    /* Marquer l'état sur la carte */
+    coursUl.classList.toggle('pap-edt-cancelled', flags.cancelled);
+    coursUl.classList.toggle('pap-edt-changed', flags.changed);
 
     /* Assembler */
     coursUl.appendChild(metaRow);
-    if (isNow || duration) coursUl.appendChild(status);
+    if (status.childNodes.length) coursUl.appendChild(status);
   }
 
   function buildPause(coursUl, li) {
@@ -207,6 +305,7 @@
 
   function processWidget(widget) {
     const isDark = document.documentElement.classList.contains('papillon-dark');
+    const isToday = widgetShowsToday(widget);
 
     /* En-tête : rendre le titre visible + icône calendrier */
     const header = widget.querySelector('header');
@@ -224,11 +323,14 @@
       const coursUl = li.querySelector('.container-cours');
       if (!coursUl) return;
 
-      const isPause = li.classList.contains('greyed') || coursUl.classList.contains('demi-pension');
+      /* Une vraie pause est grisée SANS matière : pas de libelle-cours.
+         Les cours annulés ont un libellé → on les garde en carte. */
+      const hasName = !!coursUl.querySelector('.libelle-cours');
+      const isPause = (li.classList.contains('greyed') && !hasName) || coursUl.classList.contains('demi-pension');
       if (isPause) {
         buildPause(coursUl, li);
       } else {
-        buildCourse(coursUl, li, isDark);
+        buildCourse(coursUl, li, isDark, isToday);
       }
       li.dataset.papEdt = '1';
     });
@@ -240,15 +342,27 @@
     Promise.all(loadAll).then(() => {
       processAll();
 
-      /* Recapter les re-rendus PRONOTE (changement de jour/semaine) */
+      /* Cache identifiant les cartes déjà traitées (pas de boucle). */
+      const resetCache = () => {
+        document.querySelectorAll('.widget.edt .liste-cours > li').forEach((li) => delete li.dataset.papEdt);
+      };
+
+      /* Re-rendus PRONOTE (changement de jour/semaine) : les nouveaux
+         <li> n'ont pas papEdt → traits, badges et chips sont recalculés. */
       const observer = new MutationObserver(() => processAll());
       observer.observe(document.body, { childList: true, subtree: true });
 
+      /* Badge « En cours » : rafraîchir à chaque changement de minute
+         pour apparaître dès le début du cours et s'éteindre à la fin. */
+      setInterval(() => {
+        resetCache();
+        processAll();
+      }, 30 * 1000);
+
       /* Recolorer si le thème change */
       new MutationObserver(() => {
-        const dark = document.documentElement.classList.contains('papillon-dark');
-        document.querySelectorAll('.widget.edt .liste-cours > li').forEach((li) => delete li.dataset.papEdt);
-        processAll(dark);
+        resetCache();
+        processAll();
       }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     });
   }

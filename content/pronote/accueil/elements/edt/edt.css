@@ -173,6 +173,13 @@ body.papillon-pronote .widget.edt ul.container-cours {
   padding: 0 !important;
 }
 
+/* Sous-éléments source (prof / salle / groupe) masqués par edt.js,
+   remplacés par les chips Papillon. Gardés masqués (pas supprimés)
+   pour que les re-rendus périodiques restent idempotents. */
+body.papillon-pronote .widget.edt ul.container-cours > li.pap-edt-source {
+  display: none !important;
+}
+
 body.papillon-pronote .widget.edt .liste-cours {
   display: flex !important;
   flex-direction: column !important;
@@ -319,6 +326,85 @@ body.papillon-pronote .widget.edt .pap-pill {
   font-size: 12px !important;
   font-weight: 700 !important;
   color: #fff !important;
+}
+
+/* ============================================================
+   Cours annulé — carte rougie + libellé barré
+   ============================================================ */
+body.papillon-pronote .widget.edt ul.container-cours.pap-edt-cancelled {
+  background: #fbf0ee !important;
+  border-color: #eec8c2 !important;
+  --pap-edt-bg: #fbf0ee !important;
+  --pap-edt-txt: #b93a2c !important;
+  --pap-edt-soft: #c9706a !important;
+  --pap-edt-border: #eec8c2 !important;
+}
+
+body.papillon-pronote .widget.edt ul.container-cours.pap-edt-cancelled .libelle-cours {
+  text-decoration: line-through !important;
+  text-decoration-thickness: 1.5px !important;
+  opacity: .6 !important;
+}
+
+/* Chip « Cours annulé » / « Reporté » / « Remplacé » */
+body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-annul {
+  color: #c0392b !important;
+  background: rgba(192, 57, 43, .12) !important;
+  border: 1px solid rgba(192, 57, 43, .35) !important;
+  border-radius: 300px !important;
+  padding: 2px 8px !important;
+  font-weight: 700 !important;
+}
+body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-annul .papillon-icon {
+  opacity: 1 !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.edt ul.container-cours.pap-edt-cancelled {
+  background: #2a1f1d !important;
+  border-color: #5a3430 !important;
+  --pap-edt-bg: #2a1f1d !important;
+  --pap-edt-txt: #f3a097 !important;
+  --pap-edt-soft: #c97e74 !important;
+  --pap-edt-border: #5a3430 !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-annul {
+  color: #ffb3ab !important;
+  background: rgba(214, 69, 65, .2) !important;
+  border-color: rgba(214, 69, 65, .45) !important;
+}
+
+/* ============================================================
+   Changement de salle / déplacement — carte encadrée
+   ============================================================ */
+body.papillon-pronote .widget.edt ul.container-cours.pap-edt-changed {
+  border: 2px solid #f0a500 !important;
+  --pap-edt-border: #f0a500 !important;
+  box-shadow: 0 0 0 1px rgba(240, 165, 0, .25) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.edt ul.container-cours.pap-edt-changed {
+  border-color: #ffc247 !important;
+  box-shadow: 0 0 0 1px rgba(240, 165, 0, .35) !important;
+}
+
+/* Chip « salle changée » / « déplacement » */
+body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-chang {
+  color: #b57700 !important;
+  background: rgba(240, 165, 0, .15) !important;
+  border: 1px solid rgba(240, 165, 0, .45) !important;
+  border-radius: 300px !important;
+  padding: 2px 8px !important;
+  font-weight: 700 !important;
+}
+body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-chang .papillon-icon {
+  opacity: 1 !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.edt .pap-meta-row .pap-chip-chang {
+  color: #ffd27a !important;
+  background: rgba(240, 165, 0, .18) !important;
+  border-color: rgba(255, 194, 71, .5) !important;
 }
 
 /* ---------- Pauses / séparateurs (greyed) ---------- */

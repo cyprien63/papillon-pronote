@@ -72,7 +72,30 @@ body.papillon-pronote .menu-principal_niveau0 li.actif > a {
   background: #ddf2ec !important; color: #157a63 !important;
 }
 
+/* Sous-menu déroulant — fond blanc cohérent pills (cache la liste blanc sur blanc) */
+body.papillon-pronote .submenu-wrapper,
+body.papillon-pronote .menu-principal_niveau1,
+body.papillon-pronote .menu-principal_niveau2 {
+  background: #ffffff !important; color: #10130f !important;
+  border: 1px solid #e7efee !important; border-radius: 14px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.12) !important;
+}
+body.papillon-pronote .menu-principal_niveau1 li,
+body.papillon-pronote .menu-principal_niveau2 li {
+  border-bottom: 1px solid #e7efee !important;
+}
+body.papillon-pronote .menu-principal_niveau1 li:last-child,
+body.papillon-pronote .menu-principal_niveau2 li:last-child { border-bottom: none !important; }
+body.papillon-pronote .menu-principal_niveau1 li:hover,
+body.papillon-pronote .menu-principal_niveau2 li:hover {
+  background: #f1f1f1 !important;
+}
+
 /* ---------- Second menu (titre page) ---------- */
+/* Masquer le second menu UNIQUEMENT sur la page d'accueil */
+body.papillon-pronote nav.objetBandeauEntete_secondmenu:has(h1[aria-label="Page d'accueil"]) {
+  display: none !important;
+}
 body.papillon-pronote .objetBandeauEntete_secondmenu {
   background: #fff !important; border-bottom: 1px solid #e7efee !important;
 }
@@ -93,6 +116,41 @@ body.papillon-pronote .menu-commandes [role="button"] {
   border: 1px solid #e7efee !important; box-shadow: none !important;
   font-family: 'Inter', sans-serif !important; font-size: 13px !important; font-weight: 600 !important;
   color: #10130f !important;
+}
+
+/* Boutons d'action du bandeau (Communication, notifs, aide) — pills façon Papillon */
+body.papillon-pronote .objetBandeauEntete_boutons {
+  display: flex !important; align-items: center !important; gap: 6px !important;
+}
+body.papillon-pronote .objetBandeauEntete_boutons .btnImage {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important;
+  width: 34px !important; height: 34px !important; border-radius: 999px !important;
+  background: #f1f1f1 !important; border: 1px solid #e7efee !important;
+  color: #10130f !important; transition: background .15s ease, color .15s ease, border-color .15s ease !important;
+}
+body.papillon-pronote .objetBandeauEntete_boutons .btnImage:hover {
+  background: #ddf2ec !important; border-color: #81c9b6 !important; color: #157a63 !important;
+}
+body.papillon-pronote .objetBandeauEntete_boutons .icone-svg,
+body.papillon-pronote .objetBandeauEntete_boutons .btnImage svg {
+  width: 17px !important; height: 17px !important;
+}
+body.papillon-pronote .objetBandeauEntete_boutons .icone-svg,
+body.papillon-pronote .objetBandeauEntete_boutons .icone-svg * { fill: currentColor !important; }
+
+/* Séparateur (discret) */
+body.papillon-pronote .objetBandeauEntete_boutons .objetBandeauEntete_sep_boutons hr {
+  border-color: #e7efee !important; margin: 0 4px !important;
+}
+
+/* Compteurs de notifications — teal, comme le badge */
+body.papillon-pronote .objetBandeauEntete_boutons .bcne_compteur_notif,
+body.papillon-pronote .objetBandeauEntete_boutons .bcne_compteur_aide {
+  background: #29947a !important; color: #fff !important;
+  border-radius: 999px !important; font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important; font-weight: 700 !important; min-width: 17px !important;
+  height: 17px !important; line-height: 17px !important; padding: 0 4px !important;
+  text-align: center !important; box-sizing: border-box !important;
 }
 
 /* ---------- Badges de notification ---------- */
@@ -132,9 +190,34 @@ html.papillon-dark body.papillon-pronote .menu-commandes button,
 html.papillon-dark body.papillon-pronote .menu-commandes [role="button"] {
   background: #1a211e !important; border-color: #2a3531 !important; color: #e7efec !important;
 }
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_boutons .btnImage {
+  background: #1a211e !important; border-color: #2a3531 !important; color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_boutons .btnImage:hover {
+  background: #14352c !important; border-color: #29947a !important; color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_boutons .objetBandeauEntete_sep_boutons hr {
+  border-color: #2a3531 !important;
+}
 html.papillon-dark body.papillon-pronote .label-submenu,
 html.papillon-dark body.papillon-pronote .item-menu_niveau1 .label-submenu,
 html.papillon-dark body.papillon-pronote .item-menu_niveau2 .label-submenu,
 html.papillon-dark body.papillon-pronote .fil-ariane { color: #cfd9d5 !important; }
 html.papillon-dark body.papillon-pronote .item-menu_niveau1:hover .label-submenu,
 html.papillon-dark body.papillon-pronote .item-menu_niveau2:hover .label-submenu { color: #35bba0 !important; }
+
+/* Sous-menu déroulant — fond sombre (cachait une liste blanche illisible) */
+html.papillon-dark body.papillon-pronote .submenu-wrapper,
+html.papillon-dark body.papillon-pronote .menu-principal_niveau1,
+html.papillon-dark body.papillon-pronote .menu-principal_niveau2 {
+  background: #1a211e !important; color: #cfd9d5 !important;
+  border-color: #2a3531 !important; box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+html.papillon-dark body.papillon-pronote .menu-principal_niveau1 li,
+html.papillon-dark body.papillon-pronote .menu-principal_niveau2 li {
+  border-bottom-color: #2a3531 !important;
+}
+html.papillon-dark body.papillon-pronote .menu-principal_niveau1 li:hover,
+html.papillon-dark body.papillon-pronote .menu-principal_niveau2 li:hover {
+  background: rgba(255,255,255,.06) !important;
+}
