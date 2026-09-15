@@ -1,0 +1,253 @@
+/* ============================================================
+   Élément 5 — DERNIÈRES NOTES façon Papillon
+   Cible : section.widget.notes de l'accueil PRONOTE
+   Notes en cartes connectées façon Papillon (Grade.tsx).
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote .widget.notes {
+  --pap-grade-title: #10130f;
+  --pap-grade-soft: #8a9b95;
+  --pap-grade-card: #ffffff;
+  --pap-grade-border: rgba(16, 19, 15, .12);
+  --pap-grade-hover: #f2f6f5;
+  --pap-grade-accent: #35bba0;
+  border-radius: 25px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.notes {
+  --pap-grade-title: #e7efec;
+  --pap-grade-soft: #93a79f;
+  --pap-grade-card: #1a211e;
+  --pap-grade-border: rgba(231, 239, 236, .14);
+  --pap-grade-hover: #202926;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer + hauteur parasite */
+body.papillon-pronote .widget.notes .icone-widget-fond,
+body.papillon-pronote .widget.notes .as-footer {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.notes .content-container {
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote .widget.notes header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+body.papillon-pronote .widget.notes header h2.clickable,
+body.papillon-pronote .widget.notes header h2,
+body.papillon-pronote .widget.notes header h2.sr-only {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-grade-title) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: default !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body.papillon-pronote .widget.notes header h2.clickable span,
+body.papillon-pronote .widget.notes header h2 span {
+  color: var(--pap-grade-title) !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Titre non cliquable */
+body.papillon-pronote .widget.notes header h2,
+body.papillon-pronote .widget.notes header h2 [id$="_TitreText"],
+body.papillon-pronote .widget.notes header h2 span {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: text !important;
+}
+
+body.papillon-pronote .widget.notes header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote .widget.notes .cta-conteneur {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  margin-right: -6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote .widget.notes .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-grade-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-grade-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 7px 12px !important;
+}
+
+/* Icône de flèche retirée du bouton : rien ne doit s'afficher dedans */
+body.papillon-pronote .widget.notes .cta-conteneur button svg,
+body.papillon-pronote .widget.notes .cta-conteneur button .papillon-icon {
+  display: none !important;
+}
+
+/* ---------- Liste des notes ---------- */
+body.papillon-pronote .widget.notes .liste-clickable {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Carte d'une note (façon Grade.tsx : bloc arrondi connecté) */
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 14px !important;
+  margin: 0 !important;
+  background: var(--pap-grade-card) !important;
+  border: 1px solid var(--pap-grade-border) !important;
+  border-top-width: 0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08) !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade:hover {
+  background: var(--pap-grade-hover) !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade:first-child {
+  border-top-width: 1px !important;
+  border-top-left-radius: 22px !important;
+  border-top-right-radius: 22px !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade:last-child {
+  border-bottom-left-radius: 22px !important;
+  border-bottom-right-radius: 22px !important;
+  margin-bottom: 4px !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade:only-child {
+  border-top-width: 1px !important;
+  border-radius: 22px !important;
+  margin-bottom: 4px !important;
+}
+
+/* Socle PRONOTE à neutraliser */
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade .wrap {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade .wrap h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade a.sr-only {
+  display: none !important;
+}
+
+/* Matière */
+body.papillon-pronote .widget.notes .pap-grade-subject {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: var(--pap-grade-title) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+}
+
+/* Date */
+body.papillon-pronote .widget.notes .pap-grade-date {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: var(--pap-grade-soft) !important;
+}
+
+/* ---------- Pilule de note ---------- */
+body.papillon-pronote .widget.notes .as-info.pap-grade-score {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  padding: 1px 10px !important;
+  background: var(--pap-grade-bg) !important;
+  border-radius: 20px !important;
+  color: var(--pap-grade-color) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+}
+
+body.papillon-pronote .widget.notes .as-info.pap-grade-score small {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+  opacity: .8 !important;
+  margin-bottom: 1px !important;
+}
+
+/* Note parfaite : pilule pleine couleur, texte blanc */
+body.papillon-pronote .widget.notes .pap-grade-max .pap-grade-score {
+  background: var(--pap-grade-max) !important;
+  color: #ffffff !important;
+}
+
+body.papillon-pronote .widget.notes .pap-grade-max .pap-grade-score small {
+  opacity: .85 !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.notes .pap-grade-max .pap-grade-score {
+  color: #ffffff !important;
+}

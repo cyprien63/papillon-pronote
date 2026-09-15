@@ -40,13 +40,21 @@
         "content/pronote/accueil/pronote.css",
         "content/pronote/accueil/elements/header/header.css",
         "content/pronote/accueil/elements/edt/edt.css",
-        "content/pronote/accueil/elements/tav/tav.css"
+        "content/pronote/accueil/elements/tav/tav.css",
+        "content/pronote/accueil/elements/grades/grades.css",
+        "content/pronote/accueil/elements/viescolaire/viescolaire.css",
+        "content/pronote/accueil/elements/informations/informations.css",
+        "content/pronote/accueil/elements/ressources/ressources.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
         "content/pronote/accueil/elements/header/header.js",
         "content/pronote/accueil/elements/edt/edt.js",
-        "content/pronote/accueil/elements/tav/tav.js"
+        "content/pronote/accueil/elements/tav/tav.js",
+        "content/pronote/accueil/elements/grades/grades.js",
+        "content/pronote/accueil/elements/viescolaire/viescolaire.js",
+        "content/pronote/accueil/elements/informations/informations.js",
+        "content/pronote/accueil/elements/ressources/ressources.js"
       ],
       "run_at": "document_idle"
     }
@@ -83,6 +91,14 @@
         "content/pronote/accueil/elements/edt/edt.js",
         "content/pronote/accueil/elements/tav/tav.css",
         "content/pronote/accueil/elements/tav/tav.js",
+        "content/pronote/accueil/elements/grades/grades.css",
+        "content/pronote/accueil/elements/grades/grades.js",
+        "content/pronote/accueil/elements/viescolaire/viescolaire.css",
+        "content/pronote/accueil/elements/viescolaire/viescolaire.js",
+        "content/pronote/accueil/elements/informations/informations.css",
+        "content/pronote/accueil/elements/informations/informations.js",
+        "content/pronote/accueil/elements/ressources/ressources.css",
+        "content/pronote/accueil/elements/ressources/ressources.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",

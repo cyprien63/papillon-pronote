@@ -1,0 +1,264 @@
+/* ============================================================
+   Élément 8 — DERNIÈRES RESSOURCES PÉDAGOGIQUES façon Papillon
+   Cible : section.widget.ressourcepedagogique de l'accueil PRONOTE
+   Cartes façon Papillon : pavé folder teinté matière, nom de
+   fichier (lien conservé), date, icône lien.
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote .widget.ressourcepedagogique {
+  --pap-ress-title: #10130f;
+  --pap-ress-soft: #8a9b95;
+  --pap-ress-card: #ffffff;
+  --pap-ress-border: rgba(16, 19, 15, .12);
+  --pap-ress-hover: #f2f6f5;
+  --pap-ress-accent: #35bba0;
+  border-radius: 25px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.ressourcepedagogique {
+  --pap-ress-title: #e7efec;
+  --pap-ress-soft: #93a79f;
+  --pap-ress-card: #1a211e;
+  --pap-ress-border: rgba(231, 239, 236, .14);
+  --pap-ress-hover: #202926;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer + hauteur parasite */
+body.papillon-pronote .widget.ressourcepedagogique .icone-widget-fond {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .as-footer {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .content-container {
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote .widget.ressourcepedagogique header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique header h2.clickable,
+body.papillon-pronote .widget.ressourcepedagogique header h2,
+body.papillon-pronote .widget.ressourcepedagogique header h2.sr-only {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-ress-title) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: default !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique header h2.clickable span,
+body.papillon-pronote .widget.ressourcepedagogique header h2 span {
+  color: var(--pap-ress-title) !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique header h2,
+body.papillon-pronote .widget.ressourcepedagogique header h2 [id$="_TitreText"],
+body.papillon-pronote .widget.ressourcepedagogique header h2 span {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: text !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .cta-conteneur {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  margin-right: -6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-ress-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-ress-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 7px 12px !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .cta-conteneur button svg,
+body.papillon-pronote .widget.ressourcepedagogique .cta-conteneur button .papillon-icon {
+  display: none !important;
+}
+
+/* ---------- Liste des ressources ---------- */
+body.papillon-pronote .widget.ressourcepedagogique .one-line {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* Carte d'une ressource */
+body.papillon-pronote .widget.ressourcepedagogique .one-line > li.pap-ress-item {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  background: var(--pap-ress-card) !important;
+  border: 1px solid var(--pap-ress-border) !important;
+  border-radius: 18px !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .one-line > li.pap-ress-item:hover {
+  background: var(--pap-ress-hover) !important;
+}
+
+/* Pavé folder teinté matière */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-lead {
+  flex: 0 0 auto !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 14px !important;
+  background: var(--pap-ress-lead-bg) !important;
+  color: var(--pap-ress-lead-ic) !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-lead svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Contenu texte */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-item .wrap {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Matière (teintée) */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-subject {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--pap-ress-subject) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Conteneur chips PRONOTE neutralisé */
+body.papillon-pronote .widget.ressourcepedagogique .pj-date-contain {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .pj-date-contain .iconic {
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .pj-date-contain .iconic::before,
+body.papillon-pronote .widget.ressourcepedagogique .pj-date-contain .iconic .chips-svg,
+body.papillon-pronote .widget.ressourcepedagogique .pj-date-contain .iconic svg {
+  display: none !important;
+}
+
+/* Nom du fichier : lien conservé, style titre */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-file {
+  display: block !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: var(--pap-ress-title) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+}
+
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-file .text,
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-file span {
+  color: inherit !important;
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Date */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-date {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: var(--pap-ress-soft) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Icône lien en bout de ligne */
+body.papillon-pronote .widget.ressourcepedagogique .pap-ress-link {
+  flex: 0 0 auto !important;
+  opacity: .4 !important;
+  color: var(--pap-ress-title) !important;
+}

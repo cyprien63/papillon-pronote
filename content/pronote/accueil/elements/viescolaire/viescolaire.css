@@ -1,0 +1,191 @@
+/* ============================================================
+   Élément 6 — CARNET DE CORRESPONDANCE façon Papillon
+   Cible : section.widget.viescolaire de l'accueil PRONOTE
+   En-tête + état vide (EmptyItem.tsx) + cartes d'évènements.
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote .widget.viescolaire {
+  --pap-vs-title: #10130f;
+  --pap-vs-soft: #8a9b95;
+  --pap-vs-card: #ffffff;
+  --pap-vs-border: rgba(16, 19, 15, .12);
+  --pap-vs-hover: #f2f6f5;
+  --pap-vs-accent: #35bba0;
+  border-radius: 25px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.viescolaire {
+  --pap-vs-title: #e7efec;
+  --pap-vs-soft: #93a79f;
+  --pap-vs-card: #1a211e;
+  --pap-vs-border: rgba(231, 239, 236, .14);
+  --pap-vs-hover: #202926;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer + hauteur parasite */
+body.papillon-pronote .widget.viescolaire .icone-widget-fond,
+body.papillon-pronote .widget.viescolaire .as-footer {
+  display: none !important;
+}
+
+body.papillon-pronote .widget.viescolaire .content-container {
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote .widget.viescolaire header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+body.papillon-pronote .widget.viescolaire header h2.clickable,
+body.papillon-pronote .widget.viescolaire header h2,
+body.papillon-pronote .widget.viescolaire header h2.sr-only {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-vs-title) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: default !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body.papillon-pronote .widget.viescolaire header h2.clickable span,
+body.papillon-pronote .widget.viescolaire header h2 span {
+  color: var(--pap-vs-title) !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Titre non cliquable */
+body.papillon-pronote .widget.viescolaire header h2,
+body.papillon-pronote .widget.viescolaire header h2 [id$="_TitreText"],
+body.papillon-pronote .widget.viescolaire header h2 span {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: text !important;
+}
+
+body.papillon-pronote .widget.viescolaire header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote .widget.viescolaire .cta-conteneur {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  margin-right: -6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote .widget.viescolaire .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-vs-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-vs-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 7px 12px !important;
+}
+
+/* Icône de flèche retirée du bouton : rien ne doit s'afficher dedans */
+body.papillon-pronote .widget.viescolaire .cta-conteneur button svg,
+body.papillon-pronote .widget.viescolaire .cta-conteneur button .papillon-icon {
+  display: none !important;
+}
+
+/* ---------- État vide (façon EmptyItem de Papillon) ---------- */
+body.papillon-pronote .widget.viescolaire .no-events.pap-vs-empty {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 22px 12px 18px !important;
+  margin: 0 !important;
+  border: 1.5px dashed var(--pap-vs-border) !important;
+  border-radius: 18px !important;
+  background: var(--pap-vs-card) !important;
+}
+
+body.papillon-pronote .widget.viescolaire .pap-vs-empty-icon {
+  opacity: .5 !important;
+  padding: 12px !important;
+  border-radius: 100% !important;
+  background: var(--pap-vs-hover) !important;
+  color: var(--pap-vs-accent) !important;
+  display: inline-flex !important;
+}
+
+body.papillon-pronote .widget.viescolaire .no-events.pap-vs-empty p {
+  margin: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--pap-vs-title) !important;
+  text-align: center !important;
+}
+
+/* ---------- Cartes génériques quand il y a des évènements ---------- */
+body.papillon-pronote .widget.viescolaire .pap-vs-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+body.papillon-pronote .widget.viescolaire .pap-vs-list > li,
+body.papillon-pronote .widget.viescolaire .pap-vs-list .pap-vs-item {
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  background: var(--pap-vs-card) !important;
+  border: 1px solid var(--pap-vs-border) !important;
+  border-radius: 18px !important;
+  color: var(--pap-vs-title) !important;
+  font-family: 'Inter', sans-serif !important;
+  list-style: none !important;
+}
+
+html.papillon-dark body.papillon-pronote .widget.viescolaire .no-events.pap-vs-empty p {
+  color: var(--pap-vs-title);
+}
+
+html.papillon-dark body.papillon-pronote .widget.viescolaire .pap-vs-empty-icon {
+  color: #35bba0 !important;
+  background: var(--pap-vs-hover) !important;
+}

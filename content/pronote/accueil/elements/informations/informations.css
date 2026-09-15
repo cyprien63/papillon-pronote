@@ -1,0 +1,264 @@
+/* ============================================================
+   Élément 7 — INFORMATIONS façon Papillon
+   Cible : section.widget contenant une « diffusion
+   d'information » (svg.icone-svg-diffuser_information).
+   Chaque info = carte façon news.tsx : avatar rond coloré
+   (initiales), titre, auteur ; bouton d'affichage des
+   infos masquées restylé en pill.
+   Détection via :has() (le svg reste dans le DOM).
+   ============================================================ */
+
+/* ---------- Carte du widget ---------- */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) {
+  --pap-info-title: #10130f;
+  --pap-info-soft: #8a9b95;
+  --pap-info-card: #ffffff;
+  --pap-info-border: rgba(16, 19, 15, .12);
+  --pap-info-hover: #f2f6f5;
+  --pap-info-accent: #35bba0;
+  border-radius: 25px !important;
+  padding: 14px 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--papillon-border) !important;
+}
+
+html.papillon-dark body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) {
+  --pap-info-title: #e7efec;
+  --pap-info-soft: #93a79f;
+  --pap-info-card: #1a211e;
+  --pap-info-border: rgba(231, 239, 236, .14);
+  --pap-info-hover: #202926;
+  border: 1px solid #2a3531 !important;
+}
+
+/* Décor de fond de PRONOTE à masquer + hauteur parasite */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .icone-widget-fond {
+  display: none !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .content-container {
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ---------- En-tête du widget ---------- */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2.clickable,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2.sr-only {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  flex-wrap: nowrap !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-info-title) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: default !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: hidden !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2.clickable span,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2 span {
+  color: var(--pap-info-title) !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2 [id$="_TitreText"],
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header h2 span {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: text !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) header .papillon-icon {
+  flex: 0 0 auto !important;
+  opacity: .6 !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .cta-conteneur {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  margin-right: -6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .cta-conteneur button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--pap-info-hover) !important;
+  border: none !important;
+  border-radius: 300px !important;
+  color: var(--pap-info-accent) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  padding: 7px 12px !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .cta-conteneur button svg,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .cta-conteneur button .papillon-icon {
+  display: none !important;
+}
+
+/* ---------- Liste des informations ---------- */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .liste-imbriquee {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .liste-imbriquee > li {
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .liste-clickable {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* Carte d'une information (façon news.tsx) */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .liste-clickable > li.pap-info-item {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  background: var(--pap-info-card) !important;
+  border: 1px solid var(--pap-info-border) !important;
+  border-radius: 18px !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .liste-clickable > li.pap-info-item:hover {
+  background: var(--pap-info-hover) !important;
+}
+
+/* Icône native (megaphone) masquée — reste dans le DOM pour :has() */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) svg.pap-info-native-icon,
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) li.pap-info-item a.sr-only {
+  display: none !important;
+}
+
+/* Items repliés (« +N ») : rester réellement masqués (le display:flex de nos
+   cartes ne doit pas annuler le repli PRONOTE → pas de zone vide) */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) li.pap-info-item.more.masked {
+  display: none !important;
+}
+
+/* Avatar rond avec initiales */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .pap-info-avatar {
+  flex: 0 0 auto !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 100% !important;
+  background: var(--pap-info-avatar-bg) !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: -.01em !important;
+}
+
+/* Contenu texte */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .pap-info-item .wrap {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .pap-info-title {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: var(--pap-info-title) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .pap-info-author {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: var(--pap-info-soft) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ---------- Pied de liste : « +N informations masquées » ---------- */
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .as-footer {
+  justify-content: center !important;
+  padding: 6px 0 2px !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .as-footer .btn-collapse {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 6px 14px !important;
+  border-radius: 300px !important;
+  background: var(--pap-info-hover) !important;
+  color: var(--pap-info-accent) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .as-footer .btn-collapse:hover {
+  filter: brightness(.95) !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .as-footer .icon_eye_open {
+  display: none !important;
+}
+
+body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) .as-footer .btn-collapse .counter {
+  font-weight: 700 !important;
+}
