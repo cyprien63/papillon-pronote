@@ -134,6 +134,20 @@
     if (file) file.classList.add('pap-ress-file');
     const dateEl = wrap.querySelector('.date');
     if (dateEl) dateEl.classList.add('pap-ress-date');
+
+    /* Toute la carte est cliquable → ouvre le fichier (pas juste le texte).
+       Le clic direct sur le lien garde son comportement natif. */
+    if (!li.dataset.papRessClick) {
+      li.dataset.papRessClick = '1';
+      li.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        const link = li.querySelector('a.chips-btn[href], a[href]');
+        if (link) {
+          e.preventDefault();
+          link.click();
+        }
+      });
+    }
   }
 
   /* Traite un widget « Ressources pédagogiques » complet */
