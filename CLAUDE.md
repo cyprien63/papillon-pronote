@@ -42,7 +42,7 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
 - **Manifest** : chaque nouveau `.css`/`.js` de contenu doit être ajouté en doublon à
   `manifest.json` : dans `content_scripts` (le `css` cible la page, le `js` exécute le
   script) **et** dans `web_accessible_resources` (`chrome.runtime.getURL(...)` sert les
-  SVG, PNG, woff2 — uniquement ce qui se trouve là est accessible).
+  SVG, PNG, woff2 — uniquement ce qui s'y trouve est accessible).
 - **Thème** : s'applique via la classe `html.papillon-dark` posée par `pronote.js`
   (`applyTheme`), jamais par `@media (prefers-color-scheme)`. Redéclarer chaque nouveau
   sélecteur en sombre (`html.papillon-dark …`) pour que les textes restent clairs.
@@ -62,8 +62,9 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
 
 ## Pièges connus
 
-- `normalizeSubject`/`EMOJI_MAP` (matières → émoji) et `adjust(hex, pct)` sont des
-  helpers partagés par les modules `elements/` — les réutiliser plutôt que dupliquer.
+- `adjust(hex, pct)` et `svgWrap(...)` sont redéfinis dans chaque module `elements/`
+  (tav, edt, grades, informations, viescolaire) — suivre la même signature.
+  `normalizeSubject`/`EMOJI_MAP` (matières → émoji) n'existent que dans `tav.js`.
 - L'élément témoin de la classe `pap-edt-*` masque le texte source ; ne pas le supprimer
   du DOM, sinon le badge « En cours » se duplique au re-rendu.
 - Le thème est relu en direct via `chrome.storage.onChanged` ; re-tester la bascule
