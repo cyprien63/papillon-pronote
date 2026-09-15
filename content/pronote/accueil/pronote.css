@@ -172,6 +172,540 @@ html.papillon-dark body.papillon-pronote [class*="_footer"] button:hover {
 html.papillon-dark body.papillon-pronote .btn-collapse,
 html.papillon-dark body.papillon-pronote .btn-collapse * { color: #93a79f !important; }
 
+/* ============================================================
+   Popup « Contacter l'établissement » (ObjetFicheEtablissement)
+   Même rendu que le date picker EDT.
+   ============================================================ */
+body.papillon-pronote .ObjetFicheEtablissement_racine {
+  --pap-popup-bg: #ffffff;
+  --pap-popup-surface: #f2f6f5;
+  --pap-popup-title: #10130f;
+  --pap-popup-text: #10130f;
+  --pap-popup-soft: #8a9b95;
+  --pap-popup-border: #e7efee;
+  --pap-popup-accent: #35bba0;
+}
+html.papillon-dark body.papillon-pronote .ObjetFicheEtablissement_racine {
+  --pap-popup-bg: #1a211e;
+  --pap-popup-surface: #202926;
+  --pap-popup-title: #e7efec;
+  --pap-popup-text: #e7efec;
+  --pap-popup-soft: #93a79f;
+  --pap-popup-border: #2a3531;
+  --pap-popup-accent: #35bba0;
+}
+
+/* Cadre */
+body.papillon-pronote .ObjetFicheEtablissement_racine .Fenetre_Cadre {
+  position: relative !important;
+  background: var(--pap-popup-bg) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+}
+html.papillon-dark body.papillon-pronote .ObjetFicheEtablissement_racine .Fenetre_Cadre {
+  box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+
+/* Bandeau titre */
+body.papillon-pronote .ObjetFicheEtablissement_racine .bandeau-header {
+  padding: 16px 18px 0 18px !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .Fenetre_Titre h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-popup-title) !important;
+  margin: 0 !important;
+}
+
+/* Boutons fermer / déplacer */
+body.papillon-pronote .ObjetFicheEtablissement_racine .bandeau-header .cta-conteneur {
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .cta-conteneur .btnImageIcon,
+body.papillon-pronote .ObjetFicheEtablissement_racine .cta-conteneur .btnImage {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-popup-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .cta-conteneur .btnImageIcon:hover,
+body.papillon-pronote .ObjetFicheEtablissement_racine .cta-conteneur .btnImage:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Corps de la fiche */
+body.papillon-pronote .ObjetFicheEtablissement_racine .ObjetFenetre_Edition {
+  padding: 12px 18px 18px 18px !important;
+  background: transparent !important;
+}
+
+/* Onglet établissement */
+body.papillon-pronote .ObjetFicheEtablissement_racine .menu-tabs .tab-item .tab-content {
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .menu-tabs .tab-item .libelle {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-soft) !important;
+  border-radius: 10px !important;
+  padding: 6px 14px !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .menu-tabs .tab-item .libelle.sel,
+body.papillon-pronote .ObjetFicheEtablissement_racine .menu-tabs .tab-item .libelle:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Contenu fiche établissement */
+body.papillon-pronote .ObjetFicheEtablissement_racine .fiche-etablissement {
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  padding-top: 10px !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .fiche-etablissement .logo {
+  display: none !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .infos-contain {
+  background: var(--pap-popup-surface) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .infos-contain p,
+body.papillon-pronote .ObjetFicheEtablissement_racine .infos-contain a {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: var(--pap-popup-text) !important;
+  margin: 2px 0 !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .infos-contain a {
+  color: var(--pap-popup-accent) !important;
+  text-decoration: none !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .infos-contain a:hover {
+  text-decoration: underline !important;
+}
+
+/* Footer bouton fermer */
+body.papillon-pronote .ObjetFicheEtablissement_racine .zone-bas {
+  background: transparent !important;
+  border-top: 1px solid var(--pap-popup-border) !important;
+  padding: 10px 18px !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .zone-bas .themeBoutonSecondaire {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-text) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 10px !important;
+  padding: 6px 16px !important;
+  cursor: pointer !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheEtablissement_racine .zone-bas .themeBoutonSecondaire:hover {
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   Popup de confirmation générique (is-info)
+   Ex : « Confirmez-vous la déconnexion ? »
+   ============================================================ */
+body.papillon-pronote .ObjetFenetre_Espace.is-info {
+  --pap-popup-bg: #ffffff;
+  --pap-popup-surface: #f2f6f5;
+  --pap-popup-title: #10130f;
+  --pap-popup-text: #10130f;
+  --pap-popup-soft: #8a9b95;
+  --pap-popup-border: #e7efee;
+  --pap-popup-accent: #35bba0;
+}
+html.papillon-dark body.papillon-pronote .ObjetFenetre_Espace.is-info {
+  --pap-popup-bg: #1a211e;
+  --pap-popup-surface: #202926;
+  --pap-popup-title: #e7efec;
+  --pap-popup-text: #e7efec;
+  --pap-popup-soft: #93a79f;
+  --pap-popup-border: #2a3531;
+  --pap-popup-accent: #35bba0;
+}
+
+/* Cadre */
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Cadre {
+  position: relative !important;
+  background: var(--pap-popup-bg) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+  min-width: 320px !important;
+  max-width: 420px !important;
+}
+html.papillon-dark body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Cadre {
+  box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+
+/* Titre */
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Titre {
+  padding: 16px 18px 0 18px !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Titre h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-popup-title) !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Titre h1 svg {
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Boutons fermer / déplacer */
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Cadre .cta-conteneur {
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .cta-conteneur .btnImageIcon,
+body.papillon-pronote .ObjetFenetre_Espace.is-info .cta-conteneur .btnImage {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-popup-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .cta-conteneur .btnImageIcon:hover,
+body.papillon-pronote .ObjetFenetre_Espace.is-info .cta-conteneur .btnImage:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Contenu */
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Espace,
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Contenu {
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .Fenetre_Contenu p {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-text) !important;
+  padding: 12px 18px 16px 18px !important;
+  margin: 0 !important;
+}
+
+/* Footer boutons Oui / Non */
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas {
+  background: transparent !important;
+  border-top: 1px solid var(--pap-popup-border) !important;
+  padding: 12px 18px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas .btn-conteneur {
+  display: flex !important;
+  gap: 8px !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas .themeBoutonPrimaire {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 18px !important;
+  cursor: pointer !important;
+  transition: filter .15s ease !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas .themeBoutonPrimaire:hover {
+  filter: brightness(.92) !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas .themeBoutonSecondaire {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-text) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 10px !important;
+  padding: 8px 18px !important;
+  cursor: pointer !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFenetre_Espace.is-info .zone-bas .themeBoutonSecondaire:hover {
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   Popup QR Code (ObjetFicheAppliMobile_racine)
+   ============================================================ */
+body.papillon-pronote .ObjetFicheAppliMobile_racine {
+  --pap-popup-bg: #ffffff;
+  --pap-popup-surface: #f2f6f5;
+  --pap-popup-title: #10130f;
+  --pap-popup-text: #10130f;
+  --pap-popup-soft: #8a9b95;
+  --pap-popup-border: #e7efee;
+  --pap-popup-accent: #35bba0;
+}
+html.papillon-dark body.papillon-pronote .ObjetFicheAppliMobile_racine {
+  --pap-popup-bg: #1a211e;
+  --pap-popup-surface: #202926;
+  --pap-popup-title: #e7efec;
+  --pap-popup-text: #e7efec;
+  --pap-popup-soft: #93a79f;
+  --pap-popup-border: #2a3531;
+  --pap-popup-accent: #35bba0;
+}
+
+/* Cadre */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Cadre {
+  position: relative !important;
+  background: var(--pap-popup-bg) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+}
+html.papillon-dark body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Cadre {
+  box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+
+/* Titre */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Titre {
+  padding: 16px 18px 0 18px !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Titre h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-popup-title) !important;
+  margin: 0 !important;
+}
+
+/* Boutons fermer / déplacer */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Cadre .cta-conteneur {
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  display: flex !important;
+  gap: 4px !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .cta-conteneur .btnImageIcon,
+body.papillon-pronote .ObjetFicheAppliMobile_racine .cta-conteneur .btnImage {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-popup-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .cta-conteneur .btnImageIcon:hover,
+body.papillon-pronote .ObjetFicheAppliMobile_racine .cta-conteneur .btnImage:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Contenu */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Espace,
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu {
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu p {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-text) !important;
+  margin: 0 !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--pap-popup-title) !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu input.as-input {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-text) !important;
+  background: var(--pap-popup-surface) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  margin-left: 8px !important;
+  outline: none !important;
+  transition: border-color .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu input.as-input:focus {
+  border-color: var(--pap-popup-accent) !important;
+}
+
+/* Bouton Générer le QR Code */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu .ieBouton {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 18px !important;
+  cursor: pointer !important;
+  transition: filter .15s ease !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu .ieBouton:hover {
+  filter: brightness(.92) !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .Fenetre_Contenu .ieBouton[disabled] {
+  opacity: .45 !important;
+  cursor: not-allowed !important;
+  filter: none !important;
+}
+
+/* Lien mobile */
+body.papillon-pronote .ObjetFicheAppliMobile_racine .ie-texte-small {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  color: var(--pap-popup-soft) !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .ie-texte-small a {
+  color: var(--pap-popup-accent) !important;
+  text-decoration: none !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine .ie-texte-small a:hover {
+  text-decoration: underline !important;
+}
+
+/* Instructions (liste numérotée) */
+body.papillon-pronote .ObjetFicheAppliMobile_racine ul {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-text) !important;
+  padding-left: 20px !important;
+  margin: 10px 0 !important;
+}
+body.papillon-pronote .ObjetFicheAppliMobile_racine li {
+  color: var(--pap-popup-text) !important;
+  margin: 4px 0 !important;
+}
+
+/* QR code container */
+body.papillon-pronote .ObjetFicheAppliMobile_racine #id_141 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* ============================================================
+   Menu contextuel compte (header dropdown)
+   ObjetMenuContexutel
+   ============================================================ */
+body.papillon-pronote .ObjetMenuContexutel {
+  --pap-menu-bg: #ffffff;
+  --pap-menu-surface: #f2f6f5;
+  --pap-menu-text: #10130f;
+  --pap-menu-soft: #8a9b95;
+  --pap-menu-border: #e7efee;
+  --pap-menu-accent: #35bba0;
+  --pap-menu-shadow: 0 8px 32px rgba(0,0,0,.14);
+}
+html.papillon-dark body.papillon-pronote .ObjetMenuContexutel {
+  --pap-menu-bg: #1a211e;
+  --pap-menu-surface: #202926;
+  --pap-menu-text: #e7efec;
+  --pap-menu-soft: #93a79f;
+  --pap-menu-border: #2a3531;
+  --pap-menu-accent: #35bba0;
+  --pap-menu-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+
+body.papillon-pronote .ObjetMenuContexutel {
+  background: var(--pap-menu-bg) !important;
+  border: 1px solid var(--pap-menu-border) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--pap-menu-shadow) !important;
+  padding: 6px !important;
+  min-width: 200px !important;
+  z-index: 10000 !important;
+}
+
+/* Items */
+body.papillon-pronote .ObjetMenuContexutel li[role="menuitem"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: background .12s ease !important;
+  color: var(--pap-menu-text) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+}
+body.papillon-pronote .ObjetMenuContexutel li[role="menuitem"]:hover,
+body.papillon-pronote .ObjetMenuContexutel li[role="menuitem"].active-color {
+  background: var(--pap-menu-surface) !important;
+  color: var(--pap-menu-accent) !important;
+}
+
+/* Icônes */
+body.papillon-pronote .ObjetMenuContexutel .mc-icon-contain {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+  color: var(--pap-menu-soft) !important;
+}
+body.papillon-pronote .ObjetMenuContexutel li[role="menuitem"]:hover .mc-icon-contain,
+body.papillon-pronote .ObjetMenuContexutel li[role="menuitem"].active-color .mc-icon-contain {
+  color: var(--pap-menu-accent) !important;
+}
+body.papillon-pronote .ObjetMenuContexutel .mc-icon-contain svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Libellé */
+body.papillon-pronote .ObjetMenuContexutel .libelle-contain {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+body.papillon-pronote .ObjetMenuContexutel .libelle {
+  color: inherit !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Séparateur */
+body.papillon-pronote .ObjetMenuContexutel li.separateur {
+  height: 1px !important;
+  background: var(--pap-menu-border) !important;
+  margin: 4px 10px !important;
+  padding: 0 !important;
+}
+
 /* ---------- Footer ---------- */
 html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
   background: #1a211e !important; border-top-color: #2a3531 !important; color: #93a79f !important;
