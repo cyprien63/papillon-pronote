@@ -13,7 +13,8 @@
 body.papillon-pronote .ObjetCompte {
   display: flex !important;
   flex-wrap: wrap !important; /* le bouton QR passe sous les cartes */
-  align-items: stretch !important;
+  align-items: flex-start !important; /* cartes en hauteur naturelle : le bouton
+                                          ne colle plus au bord bas de l'écran */
   gap: 20px !important;
   padding: 20px 24px !important;
   background: transparent !important;
@@ -269,12 +270,12 @@ body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur > p.valeur-co
 body.papillon-pronote ul.btns-contain[data-ulpres="mark"] {
   list-style: none !important;
   padding: 0 !important;
-  margin: 18px 0 0 !important;
+  margin: 18px 0 24px !important;   /* respire sous le bouton */
   display: flex !important;
   flex: 1 0 100% !important;         /* ligne complète sous les cartes */
   order: 10 !important;
   align-items: center !important;
-  justify-content: flex-end !important; /* bouton aligné à droite du conteneur */
+  justify-content: flex-end !important; /* bouton aligné à droite */
   gap: 10px !important;
   /* Le <ul> porte background-color:var(--theme-neutre-legere) natif :
      on neutralise pour ne garder que la « pilule » du bouton. */
