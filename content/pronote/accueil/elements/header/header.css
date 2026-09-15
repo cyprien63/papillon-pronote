@@ -155,6 +155,14 @@ body.papillon-pronote .objetBandeauEntete_menu {
   border-bottom: 1px solid #e7efee !important;
 }
 
+/* Header supprimé : le menu remonte et se colle en haut de page */
+body.papillon-pronote nav.objetBandeauEntete_menu {
+  margin-top: 0 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 990 !important;
+}
+
 /* Items du menu principal — style pills */
 body.papillon-pronote .menu-principal_niveau0 a {
   display: inline-flex !important; align-items: center !important; gap: 8px !important;
@@ -197,6 +205,13 @@ body.papillon-pronote .menu-principal_niveau2 li:hover {
 /* Masquer le second menu UNIQUEMENT sur la page d'accueil */
 body.papillon-pronote nav.objetBandeauEntete_secondmenu:has(h1[aria-label="Page d'accueil"]) {
   display: none !important;
+}
+/* Second menu collé sous le menu principal (--pap-menu-h posé en JS) */
+body.papillon-pronote nav.objetBandeauEntete_secondmenu {
+  margin-top: 0 !important;
+  position: sticky !important;
+  top: var(--pap-menu-h, 60px) !important;
+  z-index: 980 !important;
 }
 body.papillon-pronote .objetBandeauEntete_secondmenu {
   background: #fff !important; border-bottom: 1px solid #e7efee !important;

@@ -706,6 +706,455 @@ body.papillon-pronote .ObjetMenuContexutel li.separateur {
   padding: 0 !important;
 }
 
+/* ============================================================
+   Popup « Notifications » (ObjetCentraleNotifications)
+   ============================================================ */
+body.papillon-pronote .ObjetCentraleNotifications {
+  --pap-popup-bg: #ffffff;
+  --pap-popup-surface: #f2f6f5;
+  --pap-popup-title: #10130f;
+  --pap-popup-text: #10130f;
+  --pap-popup-soft: #8a9b95;
+  --pap-popup-border: #e7efee;
+  --pap-popup-accent: #35bba0;
+}
+html.papillon-dark body.papillon-pronote .ObjetCentraleNotifications {
+  --pap-popup-bg: #1a211e;
+  --pap-popup-surface: #202926;
+  --pap-popup-title: #e7efec;
+  --pap-popup-text: #e7efec;
+  --pap-popup-soft: #93a79f;
+  --pap-popup-border: #2a3531;
+  --pap-popup-accent: #35bba0;
+}
+
+/* Cadre */
+body.papillon-pronote .ObjetCentraleNotifications {
+  position: relative !important;
+  background: var(--pap-popup-bg) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+}
+html.papillon-dark body.papillon-pronote .ObjetCentraleNotifications {
+  box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+
+/* Le header a été supprimé : on ancre la popup en fixed,
+   juste sous le menu principal, alignée à droite (bouton cloche). */
+body.papillon-pronote .ObjetCentraleNotifications {
+  position: fixed !important;
+  top: calc(var(--pap-menu-h, 60px) + 8px) !important;
+  right: 24px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 420px !important;
+  max-width: calc(100vw - 48px) !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transform-origin: top right !important;
+}
+
+/* Même animation d'ouverture/fermeture que la popup d'aide :
+   transition max-height 0.5s, déclenchée par la classe .bcne_open
+   ajoutée par PRONOTE sur le conteneur de la popup. */
+body.papillon-pronote .ObjetCentraleNotifications,
+body.papillon-pronote .bcne_conteneur {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+body.papillon-pronote .bcne_open,
+body.papillon-pronote .bcne_open .ObjetCentraleNotifications,
+body.papillon-pronote .ObjetCentraleNotifications.bcne_open {
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - 24px) !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_liste_notifs {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - 24px) !important;
+  overflow: auto !important;
+}
+
+/* Header / bandeau titre */
+body.papillon-pronote .ObjetCentraleNotifications .cn-header {
+  padding: 16px 18px 0 18px !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_titre_notif {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--pap-popup-title) !important;
+  margin: 0 !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_compteurTotal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+  border-radius: 300px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 6px !important;
+  margin-left: 8px !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_compteurTotal div,
+body.papillon-pronote .ObjetCentraleNotifications .cn_compteurTotal label {
+  margin: 0 !important;
+}
+
+/* Bouton fermer */
+body.papillon-pronote .ObjetCentraleNotifications .cn_fermeture {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_fermeture .btnImageIcon,
+body.papillon-pronote .ObjetCentraleNotifications .cn_fermeture .btnImage {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-popup-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_fermeture .btnImageIcon:hover,
+body.papillon-pronote .ObjetCentraleNotifications .cn_fermeture .btnImage:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Icône papillon centrale */
+body.papillon-pronote .ObjetCentraleNotifications .image_centrale_notification {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 14px 0 0 0 !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .image_centrale_notification svg {
+  width: 48px !important;
+  height: 48px !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Liste */
+body.papillon-pronote .ObjetCentraleNotifications .cn_liste_notifs {
+  padding: 12px 18px 18px 18px !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_scroll,
+body.papillon-pronote .ObjetCentraleNotifications .cb_contenu_scroll {
+  background: transparent !important;
+}
+
+/* Titre de section */
+body.papillon-pronote .ObjetCentraleNotifications .cn_section_titre {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 0 !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_section_titre h2.cn-header-texte {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--pap-popup-soft) !important;
+  margin: 0 !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .cn_section_lu {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: var(--pap-popup-accent) !important;
+  background: var(--pap-popup-surface) !important;
+  border-radius: 300px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Articles */
+body.papillon-pronote .ObjetCentraleNotifications .sc_article {
+  background: var(--pap-popup-surface) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 12px !important;
+  margin: 8px 0 !important;
+  transition: border-color .15s ease, transform .15s ease !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .sc_article:hover {
+  border-color: var(--pap-popup-accent) !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .sc_article_contenu > div,
+body.papillon-pronote .ObjetCentraleNotifications .sc_article_contenu {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--pap-popup-text) !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .sc_article_gauche > div {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--pap-popup-accent) !important;
+  background: var(--pap-popup-accent) !important;
+  color: #fff !important;
+  border-radius: 300px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+body.papillon-pronote .ObjetCentraleNotifications .sc_btnCoin {
+  color: var(--pap-popup-soft) !important;
+}
+
+/* ============================================================
+   Popup « Aide » (ObjetAideContextuelle) — même design que Notifications
+   ============================================================ */
+body.papillon-pronote .bcne_conteneur_aide {
+  position: fixed !important;
+  top: calc(var(--pap-menu-h, 60px) + 8px) !important;
+  right: 24px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 420px !important;
+  max-width: calc(100vw - 48px) !important;
+  margin: 0 !important;
+  transform-origin: top right !important;
+}
+
+body.papillon-pronote .ObjetAideContextuelle {
+  --pap-popup-bg: #ffffff;
+  --pap-popup-surface: #f2f6f5;
+  --pap-popup-title: #10130f;
+  --pap-popup-text: #10130f;
+  --pap-popup-soft: #8a9b95;
+  --pap-popup-border: #e7efee;
+  --pap-popup-accent: #35bba0;
+}
+html.papillon-dark body.papillon-pronote .ObjetAideContextuelle {
+  --pap-popup-bg: #1a211e;
+  --pap-popup-surface: #202926;
+  --pap-popup-title: #e7efec;
+  --pap-popup-text: #e7efec;
+  --pap-popup-soft: #93a79f;
+  --pap-popup-border: #2a3531;
+  --pap-popup-accent: #35bba0;
+}
+
+body.papillon-pronote .ObjetAideContextuelle {
+  background: var(--pap-popup-bg) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+}
+html.papillon-dark body.papillon-pronote .ObjetAideContextuelle {
+  box-shadow: 0 12px 40px rgba(0,0,0,.4) !important;
+}
+
+/* Animation ouverture/fermeture (même mécanique que les notifications) */
+body.papillon-pronote .bcne_conteneur_aide {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+body.papillon-pronote .bcne_conteneur_aide.bcne_open {
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - 24px) !important;
+}
+body.papillon-pronote .ObjetAideContextuelle {
+  position: relative !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_liste_aide {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - 24px) !important;
+  overflow: auto !important;
+}
+
+/* Header / bandeau titre */
+body.papillon-pronote .ObjetAideContextuelle .cn_header,
+body.papillon-pronote .ObjetAideContextuelle .cn_titre_aide {
+  background: transparent !important;
+  border: none !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_titre_aide h3 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--pap-popup-title) !important;
+  margin: 0 !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .flex-contain.justify-between {
+  padding: 16px 18px 0 18px !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_titre_aide {
+  padding: 0 !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .flex-contain.cn_support {
+  padding: 4px 18px 10px 18px !important;
+  gap: 6px !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_support a {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--pap-popup-accent) !important;
+  text-decoration: none !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_support a:hover {
+  text-decoration: underline !important;
+}
+
+/* Bouton fermer */
+body.papillon-pronote .ObjetAideContextuelle .icon_fermeture_widget,
+body.papillon-pronote .ObjetAideContextuelle .btnImageIcon {
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--pap-popup-soft) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .btnImageIcon:hover {
+  background: var(--pap-popup-surface) !important;
+  color: var(--pap-popup-accent) !important;
+}
+
+/* Icône base de connaissance */
+body.papillon-pronote .ObjetAideContextuelle .Image_BaseDeConnaissance {
+  display: none !important;
+}
+
+/* Liste */
+body.papillon-pronote .ObjetAideContextuelle .cn_liste_aide {
+  padding: 0 18px 18px 18px !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_scroll,
+body.papillon-pronote .ObjetAideContextuelle .cb_contenu_scroll {
+  background: transparent !important;
+}
+
+/* Titre de section */
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  border-radius: 10px !important;
+  background: var(--pap-popup-surface) !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre .sc_header_contenu {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--pap-popup-soft) !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre.aide-faq,
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre.aide-mode-emploi,
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre.aide-tutoriel {
+  color: var(--pap-popup-soft) !important;
+  background: var(--pap-popup-surface) !important;
+}
+
+/* Articles */
+body.papillon-pronote .ObjetAideContextuelle .sc_contenu {
+  padding: 0 !important;
+  list-style: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_contenu li {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_contenu {
+  background: transparent !important;
+}
+/* Suppression du « vide » entre les sections de l'aide */
+body.papillon-pronote .ObjetAideContextuelle .cn_section {
+  margin-bottom: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cb_contenu_scroll {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .cn_section_titre {
+  margin-bottom: 0 !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_contenu li a {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  margin: 6px 0 !important;
+  border-radius: 12px !important;
+  background: var(--pap-popup-surface) !important;
+  border: 1px solid var(--pap-popup-border) !important;
+  text-decoration: none !important;
+  transition: border-color .15s ease, transform .15s ease !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_contenu li a:hover {
+  border-color: var(--pap-popup-accent) !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_contenu {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: var(--pap-popup-text) !important;
+}
+
+/* Icônes des articles : la police d'icônes PRONOTE ne charge pas
+   (carrés blancs). On la masque et on dessine des SVG inline. */
+body.papillon-pronote .ObjetAideContextuelle .sc_article_gauche {
+  flex: 0 0 auto !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 12px !important;
+  background: var(--pap-popup-surface) !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_gauche i {
+  font-size: 0 !important;
+  color: transparent !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  -webkit-mask-repeat: no-repeat !important;
+  -webkit-mask-position: center !important;
+  -webkit-mask-size: contain !important;
+  mask-repeat: no-repeat !important;
+  mask-position: center !important;
+  mask-size: contain !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_gauche.aide-faq i {
+  background: var(--pap-popup-accent) !important;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5.42858C13.8278 5.42858 15.1586 5.45018 16.0338 5.47186C16.8865 5.49298 18 5.32502 18 4.47205C18 4.31594 17.9684 4.17836 17.919 4.05863C17.697 3.52049 17.045 3.36906 16.4669 3.30076C15.627 3.20154 14.1608 3.08075 12 3.08075C9.83921 3.08075 8.37298 3.20154 7.5331 3.30076C6.95497 3.36906 6.30302 3.52049 6.08097 4.05863C6.03157 4.17836 6 4.31594 6 4.47205C6 5.32502 7.11353 5.49298 7.96623 5.47186C8.84135 5.45018 10.1722 5.42858 12 5.42858Z'/%3E%3Cpath d='M12 7.42857C14.5892 7.42857 15.8838 7.42873 16.4725 7.78436C16.665 7.90068 16.7339 7.9537 16.8948 8.10831C17.3868 8.58096 17.5762 9.53652 17.9554 11.1197L18.6656 14.0819C18.951 15.2733 19.0929 15.8691 18.9334 16.4337C18.7739 16.9984 18.3377 17.4429 17.4646 18.3308L15.5074 20.32C15.4644 20.3638 15.422 20.4069 15.3801 20.4495C14.5946 21.2479 14.2018 21.6472 13.7049 21.4437C13.2081 21.2403 13.2081 20.6551 13.2081 19.4848V16.5894C13.9293 16.1867 14.4161 15.4373 14.4161 14.5763C14.4161 13.2908 13.3343 12.2484 12 12.2484C10.6657 12.2484 9.58395 13.2907 9.58386 14.5763C9.58386 15.4374 10.0706 16.1867 10.7919 16.5894V19.4848C10.7919 20.6558 10.7919 21.2413 10.2951 21.4448C9.79824 21.6482 9.40528 21.2489 8.61938 20.4501C8.57727 20.4073 8.53462 20.364 8.49141 20.32L6.53537 18.3308C5.66229 17.4429 5.22612 16.9984 5.06657 16.4337C4.90709 15.8691 5.04901 15.2733 5.33438 14.0819L6.04459 11.1197C6.42377 9.53653 6.61322 8.58096 7.10519 8.10831C7.26608 7.95375 7.33502 7.90066 7.52754 7.78436C8.11627 7.42878 9.41092 7.42857 12 7.42857Z'/%3E%3C/svg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5.42858C13.8278 5.42858 15.1586 5.45018 16.0338 5.47186C16.8865 5.49298 18 5.32502 18 4.47205C18 4.31594 17.9684 4.17836 17.919 4.05863C17.697 3.52049 17.045 3.36906 16.4669 3.30076C15.627 3.20154 14.1608 3.08075 12 3.08075C9.83921 3.08075 8.37298 3.20154 7.5331 3.30076C6.95497 3.36906 6.30302 3.52049 6.08097 4.05863C6.03157 4.17836 6 4.31594 6 4.47205C6 5.32502 7.11353 5.49298 7.96623 5.47186C8.84135 5.45018 10.1722 5.42858 12 5.42858Z'/%3E%3Cpath d='M12 7.42857C14.5892 7.42857 15.8838 7.42873 16.4725 7.78436C16.665 7.90068 16.7339 7.9537 16.8948 8.10831C17.3868 8.58096 17.5762 9.53652 17.9554 11.1197L18.6656 14.0819C18.951 15.2733 19.0929 15.8691 18.9334 16.4337C18.7739 16.9984 18.3377 17.4429 17.4646 18.3308L15.5074 20.32C15.4644 20.3638 15.422 20.4069 15.3801 20.4495C14.5946 21.2479 14.2018 21.6472 13.7049 21.4437C13.2081 21.2403 13.2081 20.6551 13.2081 19.4848V16.5894C13.9293 16.1867 14.4161 15.4373 14.4161 14.5763C14.4161 13.2908 13.3343 12.2484 12 12.2484C10.6657 12.2484 9.58395 13.2907 9.58386 14.5763C9.58386 15.4374 10.0706 16.1867 10.7919 16.5894V19.4848C10.7919 20.6558 10.7919 21.2413 10.2951 21.4448C9.79824 21.6482 9.40528 21.2489 8.61938 20.4501C8.57727 20.4073 8.53462 20.364 8.49141 20.32L6.53537 18.3308C5.66229 17.4429 5.22612 16.9984 5.06657 16.4337C4.90709 15.8691 5.04901 15.2733 5.33438 14.0819L6.04459 11.1197C6.42377 9.53653 6.61322 8.58096 7.10519 8.10831C7.26608 7.95375 7.33502 7.90066 7.52754 7.78436C8.11627 7.42878 9.41092 7.42857 12 7.42857Z'/%3E%3C/svg%3E") !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_gauche.aide-mode-emploi i {
+  background: var(--pap-popup-accent) !important;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.5003 3C12.9251 3 13.3309 3.00598 13.7181 3.01758C17.8214 3.14057 20.8588 6.17892 20.9817 10.2822C20.9933 10.6694 21.0003 11.0752 21.0003 11.5C21.0003 11.9248 20.9933 12.3306 20.9817 12.7178C20.8588 16.8211 17.8214 19.8594 13.7181 19.9824C13.3309 19.994 12.9251 20 12.5003 20C12.0754 20 11.6688 19.994 11.2815 19.9824C10.5767 19.9613 9.90317 19.8532 9.2708 19.6689C8.7758 19.525 8.1667 19.6887 7.68681 19.877C7.37512 19.9992 6.96512 20.1196 6.44169 20.2734C5.14068 20.6557 4.48998 20.8465 4.09404 20.5645C4.00374 20.5001 3.92405 20.4213 3.85966 20.3311C3.57739 19.9351 3.76928 19.2837 4.15166 17.9824C4.3002 17.4769 4.41786 17.0766 4.53544 16.7686C4.69208 16.3581 4.74954 15.867 4.58427 15.46C4.24483 14.6243 4.04735 13.7016 4.01787 12.7178C4.00627 12.3306 4.00029 11.9248 4.00029 11.5C4.00029 11.0752 4.00627 10.6694 4.01787 10.2822C4.14084 6.17899 7.17834 3.14066 11.2815 3.01758C11.6688 3.00597 12.0754 3 12.5003 3ZM7.50029 10.5C6.67186 10.5 6.00029 11.1716 6.00029 12C6.00029 12.8284 6.67186 13.5 7.50029 13.5C8.32857 13.4998 9.00029 12.8283 9.00029 12C9.00029 11.1717 8.32857 10.5002 7.50029 10.5ZM12.5003 10.5C11.6719 10.5 11.0003 11.1716 11.0003 12C11.0003 12.8284 11.6719 13.5 12.5003 13.5C13.3286 13.4998 14.0003 12.8283 14.0003 12C14.0003 11.1717 13.3286 10.5002 12.5003 10.5ZM17.5003 10.5C16.6719 10.5 16.0003 11.1716 16.0003 12C16.0003 12.8284 16.6719 13.5 17.5003 13.5C18.3286 13.4998 19.0003 12.8283 19.0003 12C19.0003 11.1717 18.3286 10.5002 17.5003 10.5Z'/%3E%3C/svg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.5003 3C12.9251 3 13.3309 3.00598 13.7181 3.01758C17.8214 3.14057 20.8588 6.17892 20.9817 10.2822C20.9933 10.6694 21.0003 11.0752 21.0003 11.5C21.0003 11.9248 20.9933 12.3306 20.9817 12.7178C20.8588 16.8211 17.8214 19.8594 13.7181 19.9824C13.3309 19.994 12.9251 20 12.5003 20C12.0754 20 11.6688 19.994 11.2815 19.9824C10.5767 19.9613 9.90317 19.8532 9.2708 19.6689C8.7758 19.525 8.1667 19.6887 7.68681 19.877C7.37512 19.9992 6.96512 20.1196 6.44169 20.2734C5.14068 20.6557 4.48998 20.8465 4.09404 20.5645C4.00374 20.5001 3.92405 20.4213 3.85966 20.3311C3.57739 19.9351 3.76928 19.2837 4.15166 17.9824C4.3002 17.4769 4.41786 17.0766 4.53544 16.7686C4.69208 16.3581 4.74954 15.867 4.58427 15.46C4.24483 14.6243 4.04735 13.7016 4.01787 12.7178C4.00627 12.3306 4.00029 11.9248 4.00029 11.5C4.00029 11.0752 4.00627 10.6694 4.01787 10.2822C4.14084 6.17899 7.17834 3.14066 11.2815 3.01758C11.6688 3.00597 12.0754 3 12.5003 3ZM7.50029 10.5C6.67186 10.5 6.00029 11.1716 6.00029 12C6.00029 12.8284 6.67186 13.5 7.50029 13.5C8.32857 13.4998 9.00029 12.8283 9.00029 12C9.00029 11.1717 8.32857 10.5002 7.50029 10.5ZM12.5003 10.5C11.6719 10.5 11.0003 11.1716 11.0003 12C11.0003 12.8284 11.6719 13.5 12.5003 13.5C13.3286 13.4998 14.0003 12.8283 14.0003 12C14.0003 11.1717 13.3286 10.5002 12.5003 10.5ZM17.5003 10.5C16.6719 10.5 16.0003 11.1716 16.0003 12C16.0003 12.8284 16.6719 13.5 17.5003 13.5C18.3286 13.4998 19.0003 12.8283 19.0003 12C19.0003 11.1717 18.3286 10.5002 17.5003 10.5Z'/%3E%3C/svg%3E") !important;
+}
+body.papillon-pronote .ObjetAideContextuelle .sc_article_gauche.aide-tutoriel i {
+  background: var(--pap-popup-accent) !important;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.6468 16.8589C11.56 19.0445 11.0166 20.1373 10.2354 20.4022C9.8188 20.5435 9.36724 20.5435 8.95064 20.4022C8.16948 20.1373 7.62607 19.0445 6.53925 16.8589C5.38268 16.6575 4.8044 16.5569 4.66322 16.5099C2.77517 15.8825 2.86171 13.1828 4.78608 12.6776C4.92997 12.6398 5.4664 12.5815 6.53925 12.4649C7.60286 10.2132 8.13467 9.08735 8.90409 8.80503C9.34888 8.64183 9.83716 8.64183 10.2819 8.80503C11.0514 9.08735 11.5832 10.2132 12.6468 12.4649C13.8235 12.5794 14.4118 12.6367 14.5561 12.6728C16.5154 13.1637 16.5948 15.9188 14.667 16.5217C14.5251 16.5661 13.899 16.6637 12.6468 16.8589Z'/%3E%3Cpath d='M14.294 9.11395L14.0434 8.97309C13.0998 8.44293 12.628 8.17785 12.4953 7.86028C12.3686 7.55716 12.3988 7.21115 12.5763 6.93464C12.7621 6.64495 13.2728 6.46582 14.294 6.10755C15.0622 4.67727 15.4462 3.96213 15.9765 3.76466C16.3142 3.63891 16.6858 3.63891 17.0235 3.76466C17.5538 3.96213 17.9378 4.67727 18.7059 6.10755C19.7272 6.46582 20.2379 6.64495 20.4237 6.93464C20.6011 7.21115 20.6314 7.55716 20.5047 7.86028C20.372 8.17785 19.9002 8.44293 18.9566 8.97309L18.7059 9.11396C17.9167 10.5043 17.5221 11.1995 16.9801 11.3826C16.6687 11.4878 16.3313 11.4878 16.0199 11.3826C15.4779 11.1995 15.0833 10.5043 14.294 9.11395Z'/%3E%3C/svg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.6468 16.8589C11.56 19.0445 11.0166 20.1373 10.2354 20.4022C9.8188 20.5435 9.36724 20.5435 8.95064 20.4022C8.16948 20.1373 7.62607 19.0445 6.53925 16.8589C5.38268 16.6575 4.8044 16.5569 4.66322 16.5099C2.77517 15.8825 2.86171 13.1828 4.78608 12.6776C4.92997 12.6398 5.4664 12.5815 6.53925 12.4649C7.60286 10.2132 8.13467 9.08735 8.90409 8.80503C9.34888 8.64183 9.83716 8.64183 10.2819 8.80503C11.0514 9.08735 11.5832 10.2132 12.6468 12.4649C13.8235 12.5794 14.4118 12.6367 14.5561 12.6728C16.5154 13.1637 16.5948 15.9188 14.667 16.5217C14.5251 16.5661 13.899 16.6637 12.6468 16.8589Z'/%3E%3Cpath d='M14.294 9.11395L14.0434 8.97309C13.0998 8.44293 12.628 8.17785 12.4953 7.86028C12.3686 7.55716 12.3988 7.21115 12.5763 6.93464C12.7621 6.64495 13.2728 6.46582 14.294 6.10755C15.0622 4.67727 15.4462 3.96213 15.9765 3.76466C16.3142 3.63891 16.6858 3.63891 17.0235 3.76466C17.5538 3.96213 17.9378 4.67727 18.7059 6.10755C19.7272 6.46582 20.2379 6.64495 20.4237 6.93464C20.6011 7.21115 20.6314 7.55716 20.5047 7.86028C20.372 8.17785 19.9002 8.44293 18.9566 8.97309L18.7059 9.11396C17.9167 10.5043 17.5221 11.1995 16.9801 11.3826C16.6687 11.4878 16.3313 11.4878 16.0199 11.3826C15.4779 11.1995 15.0833 10.5043 14.294 9.11395Z'/%3E%3C/svg%3E") !important;
+}
+
 /* ---------- Footer ---------- */
 html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
   background: #1a211e !important; border-top-color: #2a3531 !important; color: #93a79f !important;

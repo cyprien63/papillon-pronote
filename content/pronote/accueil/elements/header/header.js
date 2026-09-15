@@ -1,7 +1,8 @@
 /* ============================================================
    Élément 1 — HEADER (JS)
-   Cible : header.ObjetBandeauEspace (.ibe_gauche .ibe_logo Image_Logo_PronoteBarreHaut)
-   Action : remplacer le logo Pronote par le logo Papillon.
+   Cible : header.ObjetBandeauEspace + menus sticky
+   Action : remplacer le logo Pronote par le logo Papillon, et
+   caler le second menu juste sous le menu principal.
    ============================================================ */
 
 (function () {
@@ -34,6 +35,17 @@
 
     band.appendChild(img);
     zone.prepend(band);
+
+    /* Header supprimé : le second menu doit se coller sous le menu principal.
+       Le CSS lit --pap-menu-h pour positionner la barre sticky du second menu. */
+    const menu = document.querySelector('nav.objetBandeauEntete_menu');
+    if (menu) {
+      const apply = () => {
+        document.documentElement.style.setProperty('--pap-menu-h', menu.offsetHeight + 'px');
+      };
+      apply();
+      new ResizeObserver(apply).observe(menu);
+    }
   }
 
   if (document.readyState === 'loading') {
