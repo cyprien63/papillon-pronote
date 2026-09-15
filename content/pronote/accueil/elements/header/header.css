@@ -12,7 +12,11 @@
 body.papillon-pronote header.ObjetBandeauEspace,
 body.papillon-pronote div.ObjetBandeauEspace {
   background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 72px !important;
+  padding: 10px 16px !important;
   border-bottom: none !important;
 }
 
@@ -30,7 +34,17 @@ body.papillon-pronote .papillon-brand-accueil .papillon-brand__logotype {
   display: block !important; max-height: 32px !important; height: auto !important;
 }
 
-/* Masquer la photo utilisateur */
+/* Zone centrale : flex étirable pour tout faire tenir */
+body.papillon-pronote .ObjetBandeauEspace .ibe_centre {
+  display: flex !important; align-items: center !important;
+  gap: 12px !important;
+  overflow: visible !important;
+  flex: 1 1 auto !important; min-width: 0 !important;
+  width: 100% !important;
+  padding: 0 8px !important;
+}
+
+/* Masquer la photo utilisateur (comme demandé) */
 body.papillon-pronote .ibe_util_photo { display: none !important; }
 
 /* Bandeau : texte blanc UNIQUEMENT dans les zones posées sur le dégradé */
@@ -40,6 +54,88 @@ body.papillon-pronote .ObjetBandeauEspace .ibe_droite { color: #fff !important; 
 body.papillon-pronote .ObjetBandeauEspace .ibe_etab,
 body.papillon-pronote .ObjetBandeauEspace .ibe_etab_util { color: #eafff9 !important; }
 body.papillon-pronote .ObjetBandeauEspace .ibe_util a { color: #fff !important; }
+
+/* ---------- Top bar Papillon : zone centrale ---------- */
+body.papillon-pronote .ObjetBandeauEspace {
+  width: 100% !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_droite {
+  display: none !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_gauche {
+  width: auto !important;
+}
+
+/* Nom de l'établissement */
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab_cont {
+  margin: 0 !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important; font-weight: 700 !important;
+  letter-spacing: .01em !important; color: #fff !important;
+  display: flex !important; align-items: center !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+}
+
+/* Bouton "contacter l'établissement" — pill givré */
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab .btnImage {
+  display: inline-flex !important; align-items: center !important;
+  justify-content: center !important; width: 30px !important; height: 30px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.14) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: #fff !important;
+  transition: background .15s ease, border-color .15s ease !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab .btnImage:hover {
+  background: rgba(255,255,255,.28) !important;
+  border-color: rgba(255,255,255,.35) !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab .btnImage .icone-svg,
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab .btnImage svg {
+  width: 15px !important; height: 15px !important; fill: currentColor !important;
+}
+
+/* Texte compte ("Espace Élèves - ...") */
+body.papillon-pronote .ObjetBandeauEspace .ibe_util_texte {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important; font-weight: 500 !important;
+  color: #eafff9 !important; opacity: .92 !important;
+  white-space: nowrap !important;
+  max-width: 200px !important; overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Zone icônes (QR code, déconnexion) — pills givrés */
+body.papillon-pronote .ObjetBandeauEspace .ibe_util {
+  display: flex !important; align-items: center !important;
+  gap: 6px !important; flex-shrink: 0 !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_etab_util {
+  display: flex !important; align-items: center !important;
+  gap: 6px !important; flex: 1 1 auto !important;
+  justify-content: flex-start !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_iconebtn {
+  display: inline-flex !important; align-items: center !important;
+  justify-content: center !important; width: 34px !important; height: 34px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.14) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: #fff !important;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_iconebtn:hover {
+  background: rgba(255,255,255,.28) !important;
+  border-color: rgba(255,255,255,.35) !important;
+  transform: translateY(-1px) !important;
+}
+body.papillon-pronote .ObjetBandeauEspace .ibe_iconebtn .icone-svg,
+body.papillon-pronote .ObjetBandeauEspace .ibe_iconebtn svg {
+  width: 17px !important; height: 17px !important; fill: currentColor !important;
+}
 
 /* Zones à fond blanc : texte sombre forcé, ne jamais hériter du blanc */
 body.papillon-pronote .objetBandeauEntete_menu,
