@@ -113,7 +113,7 @@ body.papillon-pronote .widget.viescolaire .cta-conteneur button {
   background: var(--pap-vs-hover) !important;
   border: none !important;
   border-radius: 300px !important;
-  color: var(--pap-vs-accent) !important;
+  color: var(--pap-vs-title) !important;
   font-weight: 600 !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 14px !important;
@@ -122,9 +122,20 @@ body.papillon-pronote .widget.viescolaire .cta-conteneur button {
 }
 
 /* Icône de flèche retirée du bouton : rien ne doit s'afficher dedans */
-body.papillon-pronote .widget.viescolaire .cta-conteneur button svg,
-body.papillon-pronote .widget.viescolaire .cta-conteneur button .papillon-icon {
+body.papillon-pronote .widget.viescolaire .cta-conteneur button > svg {
   display: none !important;
+}
+body.papillon-pronote .widget.viescolaire .cta-conteneur button .papillon-icon svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+body.papillon-pronote .widget.viescolaire .cta-conteneur button .papillon-icon {
+  display: inline-flex !important;
+  width: 18px !important;
+  height: 18px !important;
+  opacity: .8 !important;
+  color: var(--pap-vs-accent) !important;
 }
 
 /* ---------- État vide (façon EmptyItem de Papillon) ---------- */

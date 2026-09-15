@@ -4,6 +4,12 @@
    Principe : on ne casse PAS la structure Pronote. On injecte le style Papillon par-dessus.
    ============================================================ */
 
+/* ---------- Header entièrement supprimé (demande utilisateur) ---------- */
+body.papillon-pronote header.ObjetBandeauEspace,
+body.papillon-pronote div.ObjetBandeauEspace {
+  display: none !important;
+}
+
 /* ---------- Header principal : gradient Papillon ----------
    Attention : on ne pose PAS color:#fff sur le <header> lui-même.
    Le blanc serait alors hérité par tous les descendants (menu,
