@@ -1,0 +1,387 @@
+/* ============================================================
+   Élément 9 — PAGE COMPTE façon Papillon
+   Cible : div.ObjetCompte de la page « Compte » PRONOTE
+   (« Les informations liées à mon compte »).
+   Restyle purement visuel : arbre de gauche + détails de
+   droite en cartes arrondies, photo ronde, textes lisibles
+   en clair (noir sur blanc) et en sombre (blanc sur #101513).
+   Aucun comportement natif n'est modifié (déploiement de
+   l'arbre, champs désactivés, bouton QR).
+   ============================================================ */
+
+/* ---------- Conteneur de page ---------- */
+body.papillon-pronote .ObjetCompte {
+  display: flex !important;
+  flex-wrap: wrap !important; /* le bouton QR passe sous les cartes */
+  align-items: stretch !important;
+  gap: 20px !important;
+  padding: 20px 24px !important;
+  background: transparent !important;
+}
+
+/* Garde du fond : le wrapper extérieur (.interface_affV) porte un
+   background-color:var(--color-background) inline qui pourrait rester
+   clair en sombre → forcer le fond Papillon, scoped à cette page. */
+body.papillon-pronote .interface_affV:has(.ObjetCompte) {
+  background-color: #ffffff !important;
+}
+
+body.papillon-pronote main.interface_affV_client:has(.ObjetCompte) {
+  background-color: transparent !important;
+}
+
+html.papillon-dark body.papillon-pronote .interface_affV:has(.ObjetCompte) {
+  background-color: #101513 !important;
+}
+
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.ObjetCompte) {
+  background-color: transparent !important;
+}
+
+/* ---------- Neutralisation des surfaces blanches natives ----------
+   PRONOTE peint en blanc plusieurs couches internes (arbre et détails)
+   qui masqueraient la carte en mode sombre → on force transparent
+   partout sauf sur les cartes .ObjetListe / .details-contain /
+   .item-conteneur stylées plus bas. */
+body.papillon-pronote .ObjetCompte .menu-contain,
+body.papillon-pronote .ObjetCompte .liste-contain,
+body.papillon-pronote .ObjetCompte .liste_zone,
+body.papillon-pronote .ObjetCompte .liste_zoneFils,
+body.papillon-pronote .ObjetCompte .liste-heriar,
+body.papillon-pronote .ObjetCompte .liste_content,
+body.papillon-pronote .ObjetCompte .liste_content_lignes,
+body.papillon-pronote .ObjetCompte .liste_contenu_cellule,
+body.papillon-pronote .ObjetCompte .liste_contenu_cellule_contenu,
+body.papillon-pronote .ObjetCompte .liste_contenu_ligne,
+body.papillon-pronote .ObjetCompte .liste_conteneurCadreSelection,
+body.papillon-pronote .ObjetCompte .liste_cont_btnscroll,
+body.papillon-pronote .ObjetCompte .zone-centrale,
+body.papillon-pronote .ObjetCompte .zone-principale,
+body.papillon-pronote .ObjetCompte .compte-contain,
+body.papillon-pronote .ObjetCompte .valeur-contain,
+body.papillon-pronote .ObjetCompte .groupe-champs-conteneur,
+body.papillon-pronote .ObjetCompte .bloc-identite,
+body.papillon-pronote .ObjetCompte .champ-conteneur,
+body.papillon-pronote .ObjetCompte .photo-contain {
+  background: transparent !important;
+}
+
+/* Le conteneur de listing perd aussi son ombre/bordure native
+   (la carte .ObjetListe porte la bordure Papillon). */
+body.papillon-pronote .ObjetCompte .liste_zone,
+body.papillon-pronote .ObjetCompte .liste_content {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ============================================================
+   Panneau gauche — menu (arbre d'accordéon)
+   ============================================================ */
+body.papillon-pronote .ObjetCompte .menu-contain .ObjetListe {
+  background: #ffffff !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Cellules / lignes */
+body.papillon-pronote .ObjetCompte .fd_ligne {
+  border-radius: 14px !important;
+  margin: 2px 0 !important;
+}
+
+body.papillon-pronote .ObjetCompte .fd_ligne:hover {
+  background: var(--papillon-hover, #f2f6f5) !important;
+}
+
+body.papillon-pronote .ObjetCompte .titre-principal {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text, #10130f) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* En-têtes de section (niveau 1 : Compte, Communication, Préférences) */
+body.papillon-pronote .ObjetCompte [role="treeitem"][aria-level="1"] .titre-principal {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+}
+
+/* Ligne sélectionnée (« Mon profil ») */
+body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .12) !important;
+  border: 1px solid rgba(53, 187, 160, .35) !important;
+  box-shadow: 0 1px 4px rgba(53, 187, 160, .15) !important;
+}
+
+body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected .titre-principal {
+  color: #227e6b !important;
+}
+
+/* Icônes des entrées du menu */
+body.papillon-pronote .ObjetCompte .icon {
+  color: var(--papillon-text-soft, #8a9b95) !important;
+}
+
+body.papillon-pronote .ObjetCompte .icon svg {
+  width: 17px !important;
+  height: 17px !important;
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .ObjetCompte .icon svg path {
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected .icon {
+  color: #35bba0 !important;
+}
+
+/* Flèches de déploiement (restent cliquables) */
+body.papillon-pronote .ObjetCompte .zone-deploiement .btn-deploiement {
+  color: #35bba0 !important;
+}
+
+body.papillon-pronote .ObjetCompte .zone-deploiement .btn-deploiement svg,
+body.papillon-pronote .ObjetCompte .zone-deploiement .btn-deploiement svg path {
+  fill: currentColor !important;
+}
+
+/* Séparateurs natifs masqués (purement décoratifs) */
+body.papillon-pronote .ObjetCompte hr.liste_sepligne {
+  display: none !important;
+  border: 0 !important;
+  margin: 0 !important;
+}
+
+/* ============================================================
+   Panneau droit — détails du compte
+   ============================================================ */
+body.papillon-pronote .ObjetCompte .details-contain {
+  background: #ffffff !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  padding: 24px 28px !important;
+  overflow: hidden !important;
+}
+
+/* Sous-cartes (« Coordonnées », « Numéro INE ») */
+body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur {
+  background: #f7faf9 !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 20px !important;
+  padding: 18px 20px !important;
+  margin-bottom: 14px !important;
+}
+
+/* Titres de section */
+body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur h2 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.01em !important;
+  line-height: 1.25 !important;
+  color: var(--papillon-text, #10130f) !important;
+  margin: 0 0 12px !important;
+}
+
+/* Photo de profil : ronde avec anneau vert */
+body.papillon-pronote .ObjetCompte .compte-contain .photo-contain img {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border: 3px solid #35bba0 !important;
+  box-shadow: 0 2px 10px rgba(53, 187, 160, .25) !important;
+  margin-bottom: 14px !important;
+}
+
+/* Libellés de champs (avec icône native) */
+body.papillon-pronote .ObjetCompte .compte-contain .champ-libelle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  margin: 0 0 4px !important;
+}
+
+body.papillon-pronote .ObjetCompte .compte-contain .champ-libelle svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex: 0 0 auto !important;
+  fill: currentColor !important;
+  opacity: .7 !important;
+}
+
+body.papillon-pronote .ObjetCompte .compte-contain .champ-libelle svg path {
+  fill: currentColor !important;
+}
+
+/* Valeurs de champs */
+body.papillon-pronote .ObjetCompte .compte-contain .champ-valeur {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+/* Champs désactivés (téléphone) : garder la logique PRONOTE,
+   juste les habiller comme du texte */
+body.papillon-pronote .ObjetCompte .compte-contain .champ-valeur input[disabled] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Numéro INE */
+body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur > p.valeur-contain {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: var(--papillon-text, #10130f) !important;
+  margin: 0 !important;
+}
+
+/* ============================================================
+   Bouton « QR code de l'application »
+   ============================================================ */
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 18px 0 0 !important;
+  display: flex !important;
+  flex: 1 0 100% !important;         /* ligne complète sous les cartes */
+  order: 10 !important;
+  align-items: center !important;
+  justify-content: flex-end !important; /* bouton aligné à droite du conteneur */
+  gap: 10px !important;
+  /* Le <ul> porte background-color:var(--theme-neutre-legere) natif :
+     on neutralise pour ne garder que la « pilule » du bouton. */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] li {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] button.small-bt.themeBoutonNeutre {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 10px 18px !important;
+  border: none !important;
+  border-radius: 300px !important;
+  background: var(--papillon-hover, #f2f6f5) !important;
+  color: var(--papillon-text, #10130f) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+  transition: filter .15s ease !important;
+}
+
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] button.small-bt.themeBoutonNeutre:hover {
+  filter: brightness(.96) !important;
+}
+
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] .ieBoutonIcon svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: currentColor !important;
+  color: #35bba0 !important;
+}
+
+body.papillon-pronote ul.btns-contain[data-ulpres="mark"] .ieBoutonIcon svg path {
+  fill: currentColor !important;
+}
+
+/* ============================================================
+   Mode sombre — html.papillon-dark posé par pronote.js
+   Textes clairs (#e7efec) sur fond #101513 / #1a211e.
+   ============================================================ */
+html.papillon-dark body.papillon-pronote .ObjetCompte .menu-contain .ObjetListe {
+  background: #1a211e !important;
+  border: 1px solid #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .fd_ligne:hover {
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .titre-principal {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte [role="treeitem"][aria-level="1"] .titre-principal {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .18) !important;
+  border-color: rgba(53, 187, 160, .45) !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected .titre-principal {
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .icon {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .details-contain {
+  background: #1a211e !important;
+  border: 1px solid #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur {
+  background: #202926 !important;
+  border: 1px solid #2a3531 !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur h2 {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .compte-contain .champ-libelle {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .ObjetCompte .compte-contain .champ-valeur,
+html.papillon-dark body.papillon-pronote .ObjetCompte .compte-contain .item-conteneur > p.valeur-contain {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote ul.btns-contain[data-ulpres="mark"] button.small-bt.themeBoutonNeutre {
+  background: #202926 !important;
+  background-image: none !important;
+  color: #e7efec !important;
+}

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Papillon — Portail ENT",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Refonte de la page de connexion du portail ENT (cas.ent.auvergnerhonealpes.fr) façon Papillon.",
   "icons": {
     "16": "icons/icon16.png",
@@ -45,7 +45,8 @@
         "content/pronote/accueil/elements/viescolaire/viescolaire.css",
         "content/pronote/accueil/elements/informations/informations.css",
         "content/pronote/accueil/elements/ressources/ressources.css",
-        "content/pronote/accueil/elements/deconnexion/deconnexion.css"
+        "content/pronote/accueil/elements/deconnexion/deconnexion.css",
+        "content/pronote/Compte/compte.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
@@ -56,7 +57,8 @@
         "content/pronote/accueil/elements/viescolaire/viescolaire.js",
         "content/pronote/accueil/elements/informations/informations.js",
         "content/pronote/accueil/elements/ressources/ressources.js",
-        "content/pronote/accueil/elements/deconnexion/deconnexion.js"
+        "content/pronote/accueil/elements/deconnexion/deconnexion.js",
+        "content/pronote/Compte/compte.js"
       ],
       "run_at": "document_idle"
     }
@@ -103,6 +105,8 @@
         "content/pronote/accueil/elements/ressources/ressources.js",
         "content/pronote/accueil/elements/deconnexion/deconnexion.css",
         "content/pronote/accueil/elements/deconnexion/deconnexion.js",
+        "content/pronote/Compte/compte.css",
+        "content/pronote/Compte/compte.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",
