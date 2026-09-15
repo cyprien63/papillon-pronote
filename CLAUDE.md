@@ -24,6 +24,7 @@ automatiquement quand la tâche touche `content/`, `styles/` ou `options/`).
 
 ## Structure
 
+
 ```
 content/portal/            Content script + thème de la page ENT (portal.css/js)
 content/educonnect/        Content script + thème de la page EduConnect
