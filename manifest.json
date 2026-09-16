@@ -46,7 +46,8 @@
         "content/pronote/accueil/elements/informations/informations.css",
         "content/pronote/accueil/elements/ressources/ressources.css",
         "content/pronote/accueil/elements/deconnexion/deconnexion.css",
-        "content/pronote/Compte/compte.css"
+        "content/pronote/Compte/compte.css",
+        "content/pronote/Documents/Documents.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
@@ -58,7 +59,8 @@
         "content/pronote/accueil/elements/informations/informations.js",
         "content/pronote/accueil/elements/ressources/ressources.js",
         "content/pronote/accueil/elements/deconnexion/deconnexion.js",
-        "content/pronote/Compte/compte.js"
+        "content/pronote/Compte/compte.js",
+        "content/pronote/Documents/Documents.js"
       ],
       "run_at": "document_idle"
     }
@@ -107,6 +109,8 @@
         "content/pronote/accueil/elements/deconnexion/deconnexion.js",
         "content/pronote/Compte/compte.css",
         "content/pronote/Compte/compte.js",
+        "content/pronote/Documents/Documents.css",
+        "content/pronote/Documents/Documents.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",

@@ -1,0 +1,544 @@
+/* ============================================================
+   Élément 10 — PAGE DOCUMENTS façon Papillon
+   Cible : .DonneesListe_RubriqueDocuments (catégories à gauche)
+   + .DonneesListe_DAT_MesDocuments (documents à droite) de la
+   page « Échanges de documents avec l'établissement ».
+   Restyle purement visuel : cartes rondes, sélection de rubrique
+   en vert Papillon, toolbar en pills, état vide EmptyItem.
+   Aucun comportement natif n'est modifié (sélection de rubrique,
+   filtre « Natures », checkbox « Non lus », téléchargement).
+   ============================================================ */
+
+/* ---------- Fond de page ----------
+   Le wrapper extérieur (.interface_affV) porte un
+   background-color:var(--color-background) inline qui pourrait
+   rester clair en sombre → forcer le fond Papillon, scoped. */
+body.papillon-pronote .interface_affV:has(.pap-docs) {
+  background-color: #ffffff !important;
+}
+
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) {
+  background-color: transparent !important;
+}
+
+/* ---------- Espacement uniforme autour des cartes ----------
+   Le conteneur flex .ly-triple-ecrans est la grille à deux
+   colonnes. En lui ajoutant un padding uniforme, les deux
+   cartes flottent avec le même espace sur chaque bord.
+   box-sizing:border-box pour que le padding ne fasse pas
+   déborder/être masqué le contenu en bas. */
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) .ly-triple-ecrans {
+  padding: 8px !important;
+  gap: 8px !important;
+  box-sizing: border-box !important;
+}
+
+/* Les wrappers .full-height des deux colonnes ont des paddings
+   natifs différents (p-top-xl à gauche) qui désalignent les hauts
+   de cartes → tout remettre à zéro : les deux cartes partent du
+   même niveau, juste sous la bordure du .ly-triple-ecrans. */
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) .ly-triple-ecrans .full-height {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---------- Neutralisation des surfaces blanches natives ----------
+   PRONOTE peint en blanc les couches internes des deux listes
+   (rubriques et documents) → transparent partout sauf sur les
+   cartes .pap-docs / .pap-docs-right stylées plus bas. */
+body.papillon-pronote .pap-docs .liste_zone,
+body.papillon-pronote .pap-docs .liste_zoneFils,
+body.papillon-pronote .pap-docs .liste-heriar,
+body.papillon-pronote .pap-docs .liste_content,
+body.papillon-pronote .pap-docs .liste_content_lignes,
+body.papillon-pronote .pap-docs .liste_contenu_cellule,
+body.papillon-pronote .pap-docs .liste_contenu_cellule_contenu,
+body.papillon-pronote .pap-docs .liste_contenu_ligne,
+body.papillon-pronote .pap-docs .liste_conteneurCadreSelection,
+body.papillon-pronote .pap-docs .liste_cont_btnscroll,
+body.papillon-pronote .pap-docs .zone-centrale,
+body.papillon-pronote .pap-docs .zone-principale,
+body.papillon-pronote .pap-docs .liste_celluleGrid,
+body.papillon-pronote .pap-docs-right .liste_zone,
+body.papillon-pronote .pap-docs-right .liste_zoneFils,
+body.papillon-pronote .pap-docs-right .liste-heriar,
+body.papillon-pronote .pap-docs-right .liste_content,
+body.papillon-pronote .pap-docs-right .liste_content_lignes,
+body.papillon-pronote .pap-docs-right .liste_contenu_cellule,
+body.papillon-pronote .pap-docs-right .liste_contenu_cellule_contenu,
+body.papillon-pronote .pap-docs-right .liste_contenu_ligne,
+body.papillon-pronote .pap-docs-right .liste_conteneurCadreSelection,
+body.papillon-pronote .pap-docs-right .liste_cont_btnscroll {
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-docs .liste_zone,
+body.papillon-pronote .pap-docs .liste_content,
+body.papillon-pronote .pap-docs-right .liste_zone,
+body.papillon-pronote .pap-docs-right .liste_content {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Neutralisation du fond des colonnes parentes (.multi, .nav-content,
+   .main-content) pour que les cartes flottent sur le fond de page
+   et non sur les surfaces blanches natives de PRONOTE. */
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) .multi,
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) .nav-content,
+body.papillon-pronote main.interface_affV_client:has(.pap-docs) .main-content {
+  background: transparent !important;
+}
+
+/* ============================================================
+   Cartes — les deux ObjetListe deviennent des cartes rondes.
+   .pap-docs = liste des rubriques (gauche), .pap-docs-right =
+   liste des documents (droite). L'espacement est porté par le
+   padding du conteneur .ly-triple-ecrans (ci-dessus).
+   ============================================================ */
+body.papillon-pronote .pap-docs,
+body.papillon-pronote .pap-docs-right {
+  background: #ffffff !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+/* ============================================================
+   Rubriques (panneau gauche, aria-level=1)
+   ============================================================ */
+body.papillon-pronote .pap-docs .fd_ligne {
+  border-radius: 14px !important;
+  margin: 2px 0 !important;
+  cursor: pointer !important;
+  transition: background .15s ease !important;
+}
+
+/* ============================================================
+   Lignes de documents (panneau droit) — mêmes traitements que
+   les rubriques pour rester cohérent quand la catégorie contient
+   des fichiers.
+   ============================================================ */
+body.papillon-pronote .pap-docs-right .fd_ligne {
+  border-radius: 14px !important;
+  margin: 2px 0 !important;
+  transition: background .15s ease !important;
+}
+
+body.papillon-pronote .pap-docs .fd_ligne:hover {
+  background: var(--papillon-hover, #f2f6f5) !important;
+}
+
+/* Ligne sélectionnée */
+body.papillon-pronote .pap-docs .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .12) !important;
+  border: 1px solid rgba(53, 187, 160, .35) !important;
+  box-shadow: 0 1px 4px rgba(53, 187, 160, .15) !important;
+}
+
+/* Titre principal */
+body.papillon-pronote .pap-docs .titre-principal {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text, #10130f) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .pap-docs .fd_ligne.with-select.selected .titre-principal {
+  color: #227e6b !important;
+}
+
+/* Intertitres (« Documents reçus », « Dépôts de documents ») */
+body.papillon-pronote .pap-docs .fd_intertitre {
+  padding: 8px 10px 4px !important;
+}
+
+body.papillon-pronote .pap-docs .fd_intertitre .h5 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  margin: 0 !important;
+}
+
+/* Icônes des rubriques (SVG inline natifs PRONOTE) */
+body.papillon-pronote .pap-docs .icon {
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  display: inline-flex !important;
+}
+
+body.papillon-pronote .pap-docs .icon svg {
+  width: 17px !important;
+  height: 17px !important;
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-docs .icon svg path {
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-docs .fd_ligne.with-select.selected .icon {
+  color: #35bba0 !important;
+}
+
+/* ----- Lignes du panneau droit : hover + sélection + texte ----- */
+body.papillon-pronote .pap-docs-right .fd_ligne:hover {
+  background: var(--papillon-hover, #f2f6f5) !important;
+}
+
+body.papillon-pronote .pap-docs-right .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .12) !important;
+  border: 1px solid rgba(53, 187, 160, .35) !important;
+}
+
+body.papillon-pronote .pap-docs-right .titre-principal {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text, #10130f) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .pap-docs-right .fd_ligne.with-select.selected .titre-principal {
+  color: #227e6b !important;
+}
+
+body.papillon-pronote .pap-docs-right .icon {
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  display: inline-flex !important;
+}
+
+body.papillon-pronote .pap-docs-right .icon svg {
+  width: 17px !important;
+  height: 17px !important;
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-docs-right .icon svg path {
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-docs-right .zone-principale div[class],
+body.papillon-pronote .pap-docs-right .titre-principal + div {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+}
+
+/* Séparateurs natifs masqués (purement décoratifs) */
+body.papillon-pronote .pap-docs hr.liste_sepligne,
+body.papillon-pronote .pap-docs-right hr.liste_sepligne {
+  display: none !important;
+  border: 0 !important;
+  margin: 0 !important;
+}
+
+/* ============================================================
+   Toolbar du panneau droit (recherche, filtre, checkbox)
+   PRONOTE fixe une largeur inline (width:700px) qui déborde de
+   la carte arrondie → on force la largeur au contenu disponible
+   et on aligne les boutons à droite, sans qu'ils débordent.
+   ============================================================ */
+body.papillon-pronote .pap-docs-right .liste_btnentete {
+  width: auto !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 4px 6px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_btnentete_droite {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_zone {
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage,
+body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  flex: 0 0 auto !important;
+  border-radius: 300px !important;
+  background: var(--papillon-hover, #f2f6f5) !important;
+  border: none !important;
+  color: var(--papillon-text, #10130f) !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage:hover,
+body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond:hover {
+  background: #ddf2ec !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage svg,
+body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond svg {
+  width: 17px !important;
+  height: 17px !important;
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage svg path,
+body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond svg path {
+  fill: currentColor !important;
+}
+
+/* Bouton désactivé (« Aucune donnée ») : on ne touche pas à la
+   logique PRONOTE, on assombrit juste la pill. */
+body.papillon-pronote .pap-docs-right .liste_btnentete .btnImageDisable {
+  opacity: .45 !important;
+}
+
+/* Libellé du filtre « Natures » */
+body.papillon-pronote .pap-docs-right .ocb-libelle {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--papillon-text, #10130f) !important;
+  background: var(--papillon-hover, #f2f6f5) !important;
+  border-radius: 300px !important;
+  padding: 6px 12px !important;
+}
+
+/* Menu déroulant du filtre : option cochée surlignée */
+body.papillon-pronote .pap-docs-right .deroulant-conteneur-show-hide {
+  border-radius: 14px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .14) !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste-as-options .as-li {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+body.papillon-pronote .pap-docs-right .liste-as-options .as-li[aria-selected="true"] {
+  background: rgba(53, 187, 160, .12) !important;
+  color: #157a63 !important;
+}
+
+/* Checkbox « Uniquement les non lus » */
+body.papillon-pronote .pap-docs-right .iecb {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+body.papillon-pronote .pap-docs-right .iecb .icone-svg-case_on {
+  color: #35bba0 !important;
+}
+
+/* ============================================================
+   État vide du panneau droit (EmptyItem Papillon)
+   Colonne centrée, icône ghost en pastille, texte gris,
+   bordure pointillée. La classe .pap-docs-empty est posée par
+   Documents.js sur .liste_messageVide.
+   ============================================================ */
+body.papillon-pronote .pap-docs-right .pap-docs-empty {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 22px 12px 18px !important;
+  margin: 0 !important;
+  border: 1.5px dashed var(--papillon-border, #e7efee) !important;
+  border-radius: 18px !important;
+  background: var(--papillon-surface, #ffffff) !important;
+}
+
+body.papillon-pronote .pap-docs-right .pap-docs-empty .pap-docs-empty-icon {
+  opacity: .5 !important;
+  padding: 12px !important;
+  border-radius: 100% !important;
+  background: var(--papillon-hover, #f2f6f5) !important;
+  color: var(--papillon-primary, #35bba0) !important;
+  display: inline-flex !important;
+}
+
+body.papillon-pronote .pap-docs-right .pap-docs-empty p {
+  margin: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--papillon-text, #10130f) !important;
+  text-align: center !important;
+}
+
+/* ============================================================
+   Titre du second menu (« Échanges de documents… »)
+   Le titre natif est 22px/800 et déborde sur cette page (libellé
+   long). On le réduit et on lui donne de l'air, scoped à la page
+   Documents — la police Inter reste celle de Papillon.
+   ============================================================ */
+body.papillon-pronote .interface_affV:has(.pap-docs) .titre-onglet {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  line-height: 1.2 !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ============================================================
+   Mode sombre — html.papillon-dark posé par pronote.js
+   Textes clairs (#e7efec) sur fond #101513 / #1a211e.
+   ============================================================ */
+html.papillon-dark body.papillon-pronote .interface_affV:has(.pap-docs) {
+  background-color: #101513 !important;
+}
+
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) {
+  background-color: transparent !important;
+}
+
+/* Neutralisation des couches intermédiaires (colonnes .multi,
+   conteneur .ly-triple-ecrans, wrappers) : PRONOTE les peint en
+   blanc, ce qui laissait des zones claires en mode sombre. */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) .ly-triple-ecrans,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) .multi,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) .full-height,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) .nav-content,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-docs) .main-content {
+  background: transparent !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs,
+html.papillon-dark body.papillon-pronote .pap-docs-right {
+  background: #1a211e !important;
+  border: 1px solid #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .fd_ligne:hover {
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .18) !important;
+  border-color: rgba(53, 187, 160, .45) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .titre-principal {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .fd_ligne.with-select.selected .titre-principal {
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .fd_intertitre .h5 {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .icon {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs .fd_ligne.with-select.selected .icon {
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .fd_ligne:hover {
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .fd_ligne.with-select.selected {
+  background: rgba(53, 187, 160, .18) !important;
+  border-color: rgba(53, 187, 160, .45) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .titre-principal {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .fd_ligne.with-select.selected .titre-principal {
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .icon {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .zone-principale div[class],
+html.papillon-dark body.papillon-pronote .pap-docs-right .titre-principal + div {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage,
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond {
+  background: #202926 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste_btnentete .btnImage:hover,
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste_btnentete .avecFond:hover {
+  background: #14352c !important;
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .ocb-libelle {
+  color: #e7efec !important;
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .deroulant-conteneur-show-hide {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste-as-options .as-li {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .liste-as-options .as-li[aria-selected="true"] {
+  background: rgba(53, 187, 160, .18) !important;
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .iecb {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .pap-docs-empty {
+  border-color: #2a3531 !important;
+  background: #1a211e !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .pap-docs-empty .pap-docs-empty-icon {
+  color: #35bba0 !important;
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-docs-right .pap-docs-empty p {
+  color: #e7efec !important;
+}
