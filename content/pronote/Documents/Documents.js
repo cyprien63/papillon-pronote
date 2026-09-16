@@ -46,17 +46,25 @@
   function markPage() {
     const docs = document.querySelector('.DonneesListe_RubriqueDocuments');
     if (!docs) return;
-    if (!docs.dataset.papDocs) {
+    if (!docs.classList.contains('pap-docs')) {
       docs.classList.add('pap-docs');
       docs.dataset.papDocs = '1';
     }
     /* Le panneau droit (documents de la catégorie) reçoit lui aussi
-       une classe dédiée pour le restyle de sa toolbar et de sa liste. */
-    const right = document.querySelector('.DonneesListe_DAT_MesDocuments');
-    if (right && !right.dataset.papDocsRight) {
-      right.classList.add('pap-docs-right');
-      right.dataset.papDocsRight = '1';
-    }
+       une classe dédiée pour le restyle de sa toolbar et de sa liste.
+       Attention : sa classe change selon la rubrique sélectionnée
+       (DonneesListe_DAT_Bulletins, _DAT_Autres, _DAT_Collecte,
+       _DAT_Enseignants…) → on cible par préfixe, jamais par un nom
+       exact, sinon le restyle saute dès qu'on change de catégorie.
+       Le test porte sur la classe (et non le dataset) car PRONOTE
+       peut réutiliser le même nœud en écrasant ses classes ; le
+       dataset data.papDocsRight survivrait à l'écrasement. */
+    document.querySelectorAll('[class*="DonneesListe_DAT_"]').forEach((right) => {
+      if (!right.classList.contains('pap-docs-right')) {
+        right.classList.add('pap-docs-right');
+        right.dataset.papDocsRight = '1';
+      }
+    });
   }
 
   /* État vide : « Aucun document à télécharger » → EmptyItem Papillon */
