@@ -155,9 +155,18 @@ body.papillon-pronote .objetBandeauEntete_menu {
   border-bottom: 1px solid #e7efee !important;
 }
 
+/* Le wrapper contenant le header supprimé ne doit occuper aucun espace :
+   sinon il pousse le menu et le second menu vers le bas. */
+body.papillon-pronote .objetbandeauentete_global > div {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
 /* Header supprimé : le menu remonte et se colle en haut de page */
 body.papillon-pronote nav.objetBandeauEntete_menu {
-  margin-top: 0 !important;
+  margin: 0 !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 990 !important;
@@ -201,6 +210,107 @@ body.papillon-pronote .menu-principal_niveau2 li:hover {
   background: #f1f1f1 !important;
 }
 
+/* ---------- Troisième menu (filtres de page) ----------
+   Ex. page « Contenus et ressources » : nav#ligne_bandeau.objetBandeauEntete_thirdmenu
+   avec les chips « Vue chronologique / hebdomadaire », le sélecteur de date
+   et le filtre « Tous les thèmes ». Sans restyle, la bande reste blanche en
+   sombre et se fait tronquer en haut → on la recolle sous le second menu.
+
+   ATTENTION : sur la page d'accueil, PRONOTE émet le même <nav id="ligne_bandeau">
+   vide avec la classe .sr-only (réservé lecteur d'écran). Il faut l'exclure
+   (:not(.sr-only)) sinon la bande blanche réapparaît en haut de l'accueil. */
+body.papillon-pronote .objetbandeauentete_global,
+body.papillon-pronote .main-header,
+body.papillon-pronote .objetbandeauentete_niveau1,
+body.papillon-pronote .objetbandeauentete_niveau2 {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 0 !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.papillon-pronote nav.objetBandeauEntete_thirdmenu:not(.sr-only):has(*) {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  padding: 8px 16px !important;
+  margin-top: 8px !important;
+  background: #fff !important;
+  border-bottom: 1px solid #e7efee !important;
+  color: #10130f !important;
+  /* La bande de filtres est sticky SOUS le second menu : elle doit
+     suivre le scroll sans passer derrière la barre sticky du titre
+     (qui porte z-index:980). --pap-second-h est mesuré en JS et ne
+     descend jamais sous 54px. Le margin-top:8px laisse un filet d'air
+     entre les deux barres (en flow comme quand elles sont collées). */
+  position: sticky !important;
+  top: calc(var(--pap-menu-h, 60px) + var(--pap-second-h, 54px)) !important;
+  z-index: 970 !important;
+}
+/* Troisième menu SANS contenu : certaines pages (Documents, …) émettent
+   un <nav id="ligne_bandeau"> vide avec display:none inline. Ne pas
+   l'afficher : le flex forcé ci-dessus écraserait le inline et laisserait
+   une bande blanche vide sous le titre du second menu. */
+body.papillon-pronote nav.objetBandeauEntete_thirdmenu:not(:has(*)) {
+  display: none !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .element-bandeau-wrapper {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .objetBandeauEntete_fullsize {
+  flex: 1 1 auto !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid #e7efee !important;
+  background: #f2f6f5 !important;
+  color: #10130f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background .15s ease, color .15s ease, border-color .15s ease !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips.is-checked {
+  background: #ddf2ec !important;
+  border-color: #81c9b6 !important;
+  color: #157a63 !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips .sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetCelluleDate .ocb_cont,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetSaisie.Combo .ocb_cont {
+  background: #fff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 999px !important;
+  color: #10130f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb-libelle {
+  color: #10130f !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .EspaceGauche {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #10130f !important;
+}
+
 /* ---------- Second menu (titre page) ---------- */
 /* Masquer le second menu UNIQUEMENT sur la page d'accueil */
 body.papillon-pronote nav.objetBandeauEntete_secondmenu:has(h1[aria-label="Page d'accueil"]) {
@@ -215,6 +325,13 @@ body.papillon-pronote nav.objetBandeauEntete_secondmenu {
 }
 body.papillon-pronote .objetBandeauEntete_secondmenu {
   background: #fff !important; border-bottom: 1px solid #e7efee !important;
+  /* Hauteur confortable pour la barre de titre : sans min-height, le
+     contenu est tassé et le thirdmenu qui la suit manque d'air. */
+  display: flex !important;
+  align-items: center !important;
+  min-height: 54px !important;
+  padding: 6px 16px !important;
+  box-sizing: border-box !important;
 }
 body.papillon-pronote .titre-onglet {
   font-family: 'Inter', sans-serif !important; font-size: 22px !important; font-weight: 800 !important;
@@ -284,6 +401,33 @@ html.papillon-dark body.papillon-pronote .objetBandeauEntete_menu {
 }
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_secondmenu {
   background: #1a211e !important; border-bottom-color: #2a3531 !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) {
+  background: #1a211e !important;
+  border-bottom-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips.is-checked {
+  background: #14352c !important;
+  border-color: #29947a !important;
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetCelluleDate .ocb_cont,
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetSaisie.Combo .ocb_cont {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb-libelle {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .EspaceGauche {
+  color: #e7efec !important;
 }
 html.papillon-dark body.papillon-pronote .label-menu_niveau0,
 html.papillon-dark body.papillon-pronote .menu-principal_niveau0 a {

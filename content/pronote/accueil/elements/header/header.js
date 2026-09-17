@@ -2,28 +2,66 @@
    Élément 1 — HEADER (JS)
    Cible : header.ObjetBandeauEspace + menus sticky
    Action : remplacer le logo Pronote par le logo Papillon, et
-   caler le second menu juste sous le menu principal.
+   caler le second menu / le thirdmenu juste sous le menu.
+
+   IMPORTANT — le header PRONOTE est construit de façon asynchrone
+   (après DOMContentLoaded). On n'appelle donc PAS une fonction
+   « init » unique : un MutationObserver scrute le body en continu
+   et, dès qu'une barre (nav.objetBandeauEntete_menu /
+   nav.objetBandeauEntete_secondmenu) apparaît, on la mesure et on
+   la suit via un ResizeObserver. Sans cela, --pap-menu-h et
+   --pap-second-h ne sont jamais posés et les barres sticky se
+   chevauchent au scroll (fallback CSS 60px/54px au hasard).
    ============================================================ */
 
 (function () {
   'use strict';
 
-  /* Attendre que le DOM soit stable */
-  function init() {
+  /* ----- Mesures des barres sticky ----- */
+  let ro = null;
+
+  const measure = () => {
+    const menu = document.querySelector('nav.objetBandeauEntete_menu');
+    const second = document.querySelector('nav.objetBandeauEntete_secondmenu');
+    const menuH = menu ? menu.offsetHeight : 60;
+    /* Plancher 54px = min-height CSS du second menu : si la barre est
+       provisoirement masquée (offsetHeight = 0, ex. page d'accueil),
+       on ne retombe pas sous 54px, sinon le thirdmenu pointerait trop
+       haut et passerait SOUS le second menu au scroll. */
+    const secondH = Math.max(second ? second.offsetHeight : 0, 54);
+    document.documentElement.style.setProperty('--pap-menu-h', menuH + 'px');
+    document.documentElement.style.setProperty('--pap-second-h', secondH + 'px');
+  };
+
+  /* Observe les barres non encore suivies (ResizeObserver = hauteur
+     qui change quand le titre passe à 2 lignes). Retourne true si au
+     moins une nouvelle barre a été prise en charge. */
+  const ensureObserved = () => {
+    if (!ro) ro = new ResizeObserver(measure);
+    let added = false;
+    document.querySelectorAll('nav.objetBandeauEntete_menu, nav.objetBandeauEntete_secondmenu')
+      .forEach((el) => {
+        if (!el.dataset.papHeaderObserved) {
+          el.dataset.papHeaderObserved = '1';
+          ro.observe(el);
+          added = true;
+        }
+      });
+    return added;
+  };
+
+  /* ----- Branding Papillon (idempotent, indépendant de la mesure) ----- */
+  const injectBranding = () => {
+    if (document.getElementById('papillon-brand-accueil')) return;
     const zone = document.querySelector('.ibe_gauche');
     if (!zone) return;
 
-    /* Si le branding est déjà présent, rien à faire */
-    if (document.getElementById('papillon-brand-accueil')) return;
-
-    /* Nettoyer le logo Pronote existant dans cette zone */
     const oldLogo = zone.querySelector('.ibe_logo, .ibe_logo_image, img[src*="logo.png"]');
     if (oldLogo) {
       const parent = oldLogo.closest('.ibe_image_etab') || oldLogo.parentElement;
       if (parent) parent.remove();
     }
 
-    /* Créer le branding Papillon */
     const band = document.createElement('div');
     band.id = 'papillon-brand-accueil';
     band.className = 'papillon-brand-accueil';
@@ -35,22 +73,24 @@
 
     band.appendChild(img);
     zone.prepend(band);
+  };
 
-    /* Header supprimé : le second menu doit se coller sous le menu principal.
-       Le CSS lit --pap-menu-h pour positionner la barre sticky du second menu. */
-    const menu = document.querySelector('nav.objetBandeauEntete_menu');
-    if (menu) {
-      const apply = () => {
-        document.documentElement.style.setProperty('--pap-menu-h', menu.offsetHeight + 'px');
-      };
-      apply();
-      new ResizeObserver(apply).observe(menu);
-    }
-  }
+  const boot = () => {
+    ensureObserved();
+    measure();
+    injectBranding();
+
+    /* PRONOTE reconstruit header/menus à chaque navigation : on garde
+       l'œil ouvert en permanence (pas de dépendance au moment initial). */
+    new MutationObserver(() => {
+      if (ensureObserved()) measure();
+      injectBranding();
+    }).observe(document.body, { childList: true, subtree: true });
+  };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    init();
+    boot();
   }
 })();
