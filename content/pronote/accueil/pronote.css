@@ -5,16 +5,16 @@
    ============================================================ */
 
 /* ---------- Fonts Inter (locales) ---------- */
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/styles/fonts/inter-400-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/styles/fonts/inter-400-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/styles/fonts/inter-500-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/styles/fonts/inter-500-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/styles/fonts/inter-600-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/styles/fonts/inter-600-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/styles/fonts/inter-700-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/styles/fonts/inter-700-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('/styles/fonts/inter-800-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('/styles/fonts/inter-800-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../../styles/fonts/inter-400-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('../../../styles/fonts/inter-400-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('../../../styles/fonts/inter-500-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('../../../styles/fonts/inter-500-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('../../../styles/fonts/inter-600-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('../../../styles/fonts/inter-600-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../../styles/fonts/inter-700-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('../../../styles/fonts/inter-700-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('../../../styles/fonts/inter-800-latin.woff2') format('woff2'); unicode-range: U+0000-00FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: swap; src: url('../../../styles/fonts/inter-800-latin-ext.woff2') format('woff2'); unicode-range: U+0100-024F; }
 
 /* ---------- Palette Papillon ---------- */
 :root {
@@ -149,7 +149,14 @@ html.papillon-dark body.papillon-pronote .ObjetCelluleDate .ocb_cont {
   background: #1a211e !important; border-color: #2a3531 !important; color: #e7efec !important;
 }
 
-/* ---------- Message informatif ---------- */
+/* ---------- Message informatif ----------
+   Bandes d'information natives (ex. « Les documents déposés ne sont plus
+   modifiables… ») : masquées partout, pas seulement sur la page Documents.
+   Purement visuel — le contenu reste dans le DOM. */
+body.papillon-pronote [class*="_message-informatif"] {
+  display: none !important;
+}
+
 html.papillon-dark body.papillon-pronote [class*="_message-informatif"] {
   background: #1e2924 !important; border-color: #2a3531 !important; color: #e7efec !important;
 }
