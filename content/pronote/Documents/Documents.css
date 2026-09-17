@@ -28,9 +28,13 @@ body.papillon-pronote main.interface_affV_client:has(.pap-docs) {
    box-sizing:border-box pour que le padding ne fasse pas
    déborder/être masqué le contenu en bas. */
 body.papillon-pronote main.interface_affV_client:has(.pap-docs) .ly-triple-ecrans {
-  padding: 8px !important;
+  padding: 8px 8px 16px !important;
   gap: 8px !important;
   box-sizing: border-box !important;
+  /* Les colonnes ne doivent pas s'étirer à la hauteur du <main> :
+     sinon la carte droite (et sa hauteur inline fixe) colle au bord
+     bas et perd ses coins arrondis. */
+  align-items: flex-start !important;
 }
 
 /* Les wrappers .full-height des deux colonnes ont des paddings
@@ -41,6 +45,11 @@ body.papillon-pronote main.interface_affV_client:has(.pap-docs) .ly-triple-ecran
   padding: 0 !important;
   margin: 0 !important;
 }
+
+/* Le bandeau info natif au-dessus de la liste des documents
+   (« Les documents déposés ne sont plus modifiables… ») est masqué par
+   la règle globale de pronote.css ([class*="_message-informatif"]) :
+   inutile de le re-masquer ici. */
 
 /* ---------- Neutralisation des surfaces blanches natives ----------
    PRONOTE peint en blanc les couches internes des deux listes
@@ -103,6 +112,22 @@ body.papillon-pronote .pap-docs-right {
   box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
   padding: 12px !important;
   overflow: hidden !important;
+}
+
+/* ----- Viewport de liste borné -----
+   PRONOTE pose une hauteur inline fixe (height: 865px/751px) sur le
+   conteneur de défilement (#…_Zone_1), héritée de la hauteur du
+   <main>. Comme le header a été supprimé, cette hauteur dépasse et
+   pousse la carte droite sous le bord bas (coins coupés). On la
+   transforme en max-height rapportée au viewport : la liste défile
+   alors DANS la carte, qui garde toujours sa marge du bas. */
+body.papillon-pronote .pap-docs .liste_content > div[style],
+body.papillon-pronote .pap-docs-right .liste_content > div[style] {
+  height: auto !important;
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - 96px) !important;
+  min-height: 240px !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
 }
 
 /* ============================================================
@@ -371,6 +396,15 @@ body.papillon-pronote .pap-docs-right .pap-docs-empty {
   border: 1.5px dashed var(--papillon-border, #e7efee) !important;
   border-radius: 18px !important;
   background: var(--papillon-surface, #ffffff) !important;
+  /* PRONOTE écrit le message sous forme de nœud texte nu (pas de <p>) :
+     le texte est un item flex anonyme → on pose la typo sur le conteneur
+     pour qu'il l'hérite (Inter, gras, sombre). */
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: var(--papillon-text, #10130f) !important;
+  text-align: center !important;
 }
 
 body.papillon-pronote .pap-docs-right .pap-docs-empty .pap-docs-empty-icon {
@@ -405,8 +439,21 @@ body.papillon-pronote .interface_affV:has(.pap-docs) .titre-onglet {
   padding: 0 12px !important;
   margin: 0 !important;
   max-width: 100% !important;
+  /* Le libellé long (« Échanges de documents avec l'établissement »)
+     ne doit jamais chevaucher les commandes du second menu : il s'étire
+     sans casser la barre (pas de retour à la ligne) et se tronque avec
+     une ellipse quand l'espace manque. min-width:0 autorise le wrapper
+     flex (.flex-contain) à rétrécir sous la largeur de son contenu. */
+  min-width: 0 !important;
+  flex: 0 1 auto !important;
+  white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .interface_affV:has(.pap-docs) nav.objetBandeauEntete_secondmenu .flex-contain {
+  min-width: 0 !important;
+  overflow: hidden !important;
 }
 
 /* ============================================================
@@ -532,6 +579,7 @@ html.papillon-dark body.papillon-pronote .pap-docs-right .iecb {
 html.papillon-dark body.papillon-pronote .pap-docs-right .pap-docs-empty {
   border-color: #2a3531 !important;
   background: #1a211e !important;
+  color: #e7efec !important;
 }
 
 html.papillon-dark body.papillon-pronote .pap-docs-right .pap-docs-empty .pap-docs-empty-icon {
