@@ -50,7 +50,8 @@
         "content/pronote/Compte/compte.css",
         "content/pronote/Documents/Documents.css",
         "content/pronote/Contenus/Contenus.css",
-        "content/pronote/TravailAFaire/TravailAFaire.css"
+        "content/pronote/TravailAFaire/TravailAFaire.css",
+        "content/pronote/Forums/Forums.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
@@ -66,7 +67,8 @@
         "content/pronote/Compte/compte.js",
         "content/pronote/Documents/Documents.js",
         "content/pronote/Contenus/Contenus.js",
-        "content/pronote/TravailAFaire/TravailAFaire.js"
+        "content/pronote/TravailAFaire/TravailAFaire.js",
+        "content/pronote/Forums/Forums.js"
       ],
       "run_at": "document_idle"
     }
@@ -123,6 +125,8 @@
         "content/pronote/Contenus/Contenus.js",
         "content/pronote/TravailAFaire/TravailAFaire.css",
         "content/pronote/TravailAFaire/TravailAFaire.js",
+        "content/pronote/Forums/Forums.css",
+        "content/pronote/Forums/Forums.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",
