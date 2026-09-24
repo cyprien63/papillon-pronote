@@ -49,7 +49,8 @@
         "content/pronote/accueil/elements/devoirsurveille/devoirsurveille.css",
         "content/pronote/Compte/compte.css",
         "content/pronote/Documents/Documents.css",
-        "content/pronote/Contenus/Contenus.css"
+        "content/pronote/Contenus/Contenus.css",
+        "content/pronote/TravailAFaire/TravailAFaire.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
@@ -64,7 +65,8 @@
         "content/pronote/accueil/elements/devoirsurveille/devoirsurveille.js",
         "content/pronote/Compte/compte.js",
         "content/pronote/Documents/Documents.js",
-        "content/pronote/Contenus/Contenus.js"
+        "content/pronote/Contenus/Contenus.js",
+        "content/pronote/TravailAFaire/TravailAFaire.js"
       ],
       "run_at": "document_idle"
     }
@@ -119,6 +121,8 @@
         "content/pronote/Documents/Documents.js",
         "content/pronote/Contenus/Contenus.css",
         "content/pronote/Contenus/Contenus.js",
+        "content/pronote/TravailAFaire/TravailAFaire.css",
+        "content/pronote/TravailAFaire/TravailAFaire.js",
         "content/pronote/accueil/dashboard.html",
         "content/pronote/accueil/styles/*",
         "content/pronote/accueil/scripts/*",

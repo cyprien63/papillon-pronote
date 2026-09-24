@@ -1,0 +1,86 @@
+/* ============================================================
+   PAGE « TRAVAIL À FAIRE » (Cahier de textes — CDT)
+   façon Papillon — fondations
+   Cible : page CDT (devoirs par date), mêmes colonnes que la page
+   « Contenus » (matières à gauche + devoirs par date à droite).
+   Fondations uniquement : fond de page, grille deux cartes,
+   wrappers transparents (le restyle détaillé des cartes et items
+   suit dans une prochaine étape). Aucun comportement natif n'est
+   modifié (sélection de matière, dates, thèmes, pièces jointes).
+
+   Classes de marquage posées par TravailAFaire.js :
+   - .pap-taf        sur le .conteneur-CDT de la page
+   - .pap-taf-left   sur la liste des matières (gauche)
+   - .pap-taf-right  sur le conteneur des devoirs (droite)
+   ============================================================ */
+
+/* ---------- Fond de page ----------
+   Le wrapper extérieur (.interface_affV) porte un
+   background-color:var(--color-background) inline qui pourrait
+   rester clair en sombre → forcer le fond Papillon, scoped. */
+body.papillon-pronote .interface_affV:has(.pap-taf) {
+  background-color: #ffffff !important;
+}
+
+body.papillon-pronote main.interface_affV_client:has(.pap-taf) {
+  background-color: transparent !important;
+}
+
+html.papillon-dark body.papillon-pronote .interface_affV:has(.pap-taf) {
+  background-color: #101513 !important;
+}
+
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-taf) {
+  background-color: transparent !important;
+}
+
+/* ---------- Grille : deux cartes côte à côte -----------
+   Le .conteneur-CDT est la grille à deux colonnes, comme sur la
+   page « Contenus ». Padding et espacement uniformes. */
+body.papillon-pronote .pap-taf {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Les wrappers des deux colonnes ont des paddings natifs qui
+   désalignent les hauts de cartes → remise à zéro. */
+body.papillon-pronote .pap-taf > .fix-bloc,
+body.papillon-pronote .pap-taf > .fluid-bloc.conteneur-droite,
+body.papillon-pronote .pap-taf .fluid-bloc.conteneur-droite > .fluid-bloc {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Wrappers externes des deux colonnes : PRONOTE peint la couche qui
+   entoure les cartes en blanc (plusieurs .fluid-bloc imbriqués +
+   .AvecSelectionTexte) → transparent, sinon halo clair en sombre. */
+body.papillon-pronote .pap-taf > .fix-bloc,
+body.papillon-pronote .pap-taf > .fluid-bloc,
+body.papillon-pronote .pap-taf .conteneur-droite .fluid-bloc,
+body.papillon-pronote .pap-taf .AvecSelectionTexte {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   Cartes des deux colonnes — en place pour la prochaine étape :
+   fond, bordures et rayons façon Papillon (voir Contenus.css
+   comme référence). En attendant, fonds natifs neutralisés. */
+body.papillon-pronote .pap-taf-left .liste_zone,
+body.papillon-pronote .pap-taf-left .liste_zoneFils,
+body.papillon-pronote .pap-taf-left .liste-heriar,
+body.papillon-pronote .pap-taf-left .liste_content,
+body.papillon-pronote .pap-taf-left .liste_content_lignes,
+body.papillon-pronote .pap-taf-left .liste_contenu_cellule,
+body.papillon-pronote .pap-taf-left .liste_contenu_cellule_contenu,
+body.papillon-pronote .pap-taf-right .conteneur-item {
+  background: transparent !important;
+}
