@@ -112,6 +112,9 @@ body.papillon-pronote .pap-forums-middle .liste_btnentete {
   align-items: center !important;
   justify-content: flex-end !important;
   gap: 6px !important;
+  flex-wrap: nowrap !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
   padding: 2px 4px 8px !important;
   background: transparent !important;
   border: none !important;
@@ -121,7 +124,24 @@ body.papillon-pronote .pap-forums-middle .liste_btnentete_droite {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
   margin-left: auto !important;
+}
+
+/* Enveloppes des deux boutons : éléments neutres, sinon le padding /
+   min-width natifs font dépasser les pills de la toolbar */
+body.papillon-pronote .pap-forums-middle .liste_btnentete > div,
+body.papillon-pronote .pap-forums-middle .liste_contbtnRechercheEntete,
+body.papillon-pronote .pap-forums-middle .liste_btnentete_droite .text-end {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  line-height: normal !important;
 }
 
 body.papillon-pronote .pap-forums-middle .liste_btnentete .btnImage {
