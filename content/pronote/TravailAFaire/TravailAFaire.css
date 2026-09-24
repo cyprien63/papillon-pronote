@@ -84,3 +84,124 @@ body.papillon-pronote .pap-taf-left .liste_contenu_cellule_contenu,
 body.papillon-pronote .pap-taf-right .conteneur-item {
   background: transparent !important;
 }
+
+/* ============================================================
+   Toggle « J'ai terminé » (label.iecb.cb-termine) façon Papillon
+   Même traitement que le widget TAF de l'accueil : ronds/pill
+   sous la couleur de la matière, check dessiné en CSS, texte
+   « Terminé » seulement quand coché. Aucun comportement natif
+   n'est modifié (le label reste le même élément interactive).
+   ============================================================ */
+@keyframes pap-taf-check-pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pap-taf-text-in {
+  0% { opacity: 0; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+body.papillon-pronote .pap-taf label.iecb.cb-termine {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: color-mix(in srgb, var(--pap-taf-tint, #29947a) 14%, transparent) !important;
+  border: 1.5px solid color-mix(in srgb, var(--pap-taf-tint, #29947a) 45%, transparent) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--pap-taf-tint, #29947a) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  transition: background .2s ease, color .2s ease, padding .2s ease,
+    transform .15s ease, box-shadow .2s ease, border-color .2s ease !important;
+}
+
+/* Checkbox PRONOTE hors du layout flex (cause le décalage) */
+body.papillon-pronote .pap-taf label.iecb.cb-termine input,
+body.papillon-pronote .pap-taf label.iecb.cb-termine .sr-only {
+  display: none !important;
+}
+
+/* Décoché : parfait rond avec le check centré par le flex */
+body.papillon-pronote .pap-taf label.iecb.cb-termine:not(.is-checked) {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+}
+
+body.papillon-pronote .pap-taf label.iecb .pap-taf-check {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 auto !important;
+}
+
+/* On masque le svg : le check est dessiné en CSS (centrage parfait) */
+body.papillon-pronote .pap-taf label.iecb .pap-taf-check svg {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-taf label.iecb .pap-taf-check::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 18px !important;
+  height: 10px !important;
+  border-left: 3.5px solid currentColor !important;
+  border-bottom: 3.5px solid currentColor !important;
+  border-radius: 2px !important;
+  transform: translate(-50%, -65%) rotate(-45deg) !important;
+}
+
+body.papillon-pronote .pap-taf label.iecb.cb-termine:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08) !important;
+}
+
+body.papillon-pronote .pap-taf label.iecb.cb-termine.is-checked {
+  background: var(--pap-taf-tint, #29947a) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  border-radius: 32px !important;
+  padding: 5px 12px 5px 7px !important;
+  width: auto !important;
+  height: auto !important;
+  justify-content: flex-start !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .15) !important;
+}
+
+/* Pas de bullets PRONOTE : on ne montre que le check Papicon */
+body.papillon-pronote .pap-taf label.iecb.cb-termine svg:not(.pap-taf-check-icon) {
+  display: none !important;
+}
+
+/* Animation du check quand on coche */
+body.papillon-pronote .pap-taf label.iecb.cb-termine.is-checked .pap-taf-check {
+  animation: pap-taf-check-pop .25s ease !important;
+  color: #ffffff !important;
+}
+
+/* En mode sombre, le check est blanc dans les deux états */
+html.papillon-dark body.papillon-pronote .pap-taf label.iecb .pap-taf-check {
+  color: #ffffff !important;
+}
+
+/* Texte du toggle : « Terminé » affiché seulement quand coché */
+body.papillon-pronote .pap-taf label.iecb .pap-taf-done-text {
+  display: none !important;
+  white-space: nowrap !important;
+}
+
+body.papillon-pronote .pap-taf label.iecb.cb-termine.is-checked .pap-taf-done-text {
+  display: inline !important;
+  animation: pap-taf-text-in .2s ease !important;
+}
