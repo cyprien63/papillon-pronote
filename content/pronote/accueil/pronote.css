@@ -139,8 +139,54 @@ html.papillon-dark body.papillon-pronote .date { color: #93a79f !important; }
 
 /* ---------- Formulaires ---------- */
 html.papillon-dark body.papillon-pronote textarea,
-html.papillon-dark body.papillon-pronote input {
+html.papillon-dark body.papillon-pronote input,
+html.papillon-dark body.papillon-pronote select {
   background: #1a211e !important; color: #e7efec !important; border-color: #2a3531 !important;
+}
+
+/* ---------- Menus déroulants des combos (as-select) ----------
+   Utilisés par la bande de filtres (période du CDT, thèmes, natures…).
+   Sans spécificité, le popup reste blanc — dissonant en sombre. */
+body.papillon-pronote .deroulant-conteneur-show-hide {
+  background: #ffffff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .14) !important;
+  overflow: hidden !important;
+}
+body.papillon-pronote .deroulant-conteneur-show-hide .as-li,
+body.papillon-pronote .liste-as-options .as-li {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #10130f !important;
+}
+body.papillon-pronote .deroulant-conteneur-show-hide .as-li[aria-selected="true"],
+body.papillon-pronote .liste-as-options .as-li[aria-selected="true"] {
+  background: rgba(53, 187, 160, .12) !important;
+  color: #157a63 !important;
+}
+body.papillon-pronote .deroulant-conteneur-show-hide .as-li:hover,
+body.papillon-pronote .liste-as-options .as-li:hover {
+  background: #f2f6f5 !important;
+}
+html.papillon-dark body.papillon-pronote .deroulant-conteneur-show-hide {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .4) !important;
+}
+html.papillon-dark body.papillon-pronote .deroulant-conteneur-show-hide .as-li,
+html.papillon-dark body.papillon-pronote .liste-as-options .as-li {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .deroulant-conteneur-show-hide .as-li[aria-selected="true"],
+html.papillon-dark body.papillon-pronote .liste-as-options .as-li[aria-selected="true"] {
+  background: #14352c !important;
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .deroulant-conteneur-show-hide .as-li:hover,
+html.papillon-dark body.papillon-pronote .liste-as-options .as-li:hover {
+  background: #202926 !important;
 }
 
 /* ---------- Sélecteur de date (emploi du temps) ---------- */

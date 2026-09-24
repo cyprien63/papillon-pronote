@@ -291,6 +291,10 @@ body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .iecb.as-chips
   clip: rect(0 0 0 0) !important;
   overflow: hidden !important;
 }
+/* Générique : le sélecteur de période « du 21 sept. au 25 sept. » de la
+   page Contenus vit dans un .input-wrapper SANS ancêtre .ObjetCelluleDate
+   ni .ObjetSaisie.Combo → on rattrape tous les .ocb_cont de la bande. */
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_cont,
 body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetCelluleDate .ocb_cont,
 body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetSaisie.Combo .ocb_cont {
   background: #fff !important;
@@ -309,6 +313,29 @@ body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .EspaceGauche 
   font-size: 13px !important;
   font-weight: 600 !important;
   color: #10130f !important;
+}
+/* Wrappers natifs autour des combos (période, « depuis », thèmes) :
+   PRONOTE les peint en blanc → transparents sur la bande. */
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .input-wrapper,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .zone-identite,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .form-groupe,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .form-control {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Flèche des combos : hérite de la couleur du libellé */
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  color: #8a9b95 !important;
+}
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton svg,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton svg path,
+body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton path {
+  fill: currentColor !important;
 }
 
 /* ---------- Second menu (titre page) ---------- */
@@ -417,6 +444,7 @@ html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-o
   border-color: #29947a !important;
   color: #35bba0 !important;
 }
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_cont,
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetCelluleDate .ocb_cont,
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ObjetSaisie.Combo .ocb_cont {
   background: #1a211e !important;
@@ -428,6 +456,17 @@ html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-o
 }
 html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .EspaceGauche {
   color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .input-wrapper,
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .zone-identite,
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .form-groupe,
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .form-control {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton {
+  color: #93a79f !important;
 }
 html.papillon-dark body.papillon-pronote .label-menu_niveau0,
 html.papillon-dark body.papillon-pronote .menu-principal_niveau0 a {

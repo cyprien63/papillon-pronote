@@ -62,6 +62,19 @@ body.papillon-pronote .pap-contenus .fluid-bloc.conteneur-droite > .fluid-bloc {
   min-width: 0 !important;
 }
 
+/* Wrappers externes des deux colonnes : PRONOTE peint la couche qui
+   entoure les cartes en blanc (plusieurs .fluid-bloc imbriqués +
+   .AvecSelectionTexte) → visible en sombre comme un halo clair autour
+   des cartes. On les passe en transparent (la carte reste colorée). */
+body.papillon-pronote .pap-contenus > .fix-bloc,
+body.papillon-pronote .pap-contenus > .fluid-bloc,
+body.papillon-pronote .pap-contenus .conteneur-droite .fluid-bloc,
+body.papillon-pronote .pap-contenus .AvecSelectionTexte {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* ---------- Neutralisation des surfaces blanches natives ----------
    PRONOTE peint en blanc les couches internes des deux listes
    → transparent partout sauf sur les cartes marquées plus bas. */
