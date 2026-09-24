@@ -181,8 +181,10 @@
     if (subjectEl) subjectEl.classList.add('pap-grade-subject');
     if (scoreEl) {
       scoreEl.classList.add('pap-grade-score');
-      /* Pilule score : note + /20 */
-      if (num !== null) {
+      /* Pilule score : note + /20 — uniquement si la note est déjà sur 20.
+         Quand PRONOTE fournit un barème natif (ex. span.bareme « /10 »),
+         on le garde tel quel : un 7/10 n'est pas un 7/20. */
+      if (num !== null && !scoreEl.querySelector('.bareme')) {
         const small = document.createElement('small');
         small.className = 'pap-grade-outof';
         small.textContent = '/20';

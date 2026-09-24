@@ -248,6 +248,15 @@ body.papillon-pronote .widget.notes .as-info.pap-grade-score small {
   margin-bottom: 1px !important;
 }
 
+/* Barème natif PRONOTE (note non sur 20, ex. « /10 ») : même traitement que /20 */
+body.papillon-pronote .widget.notes .as-info.pap-grade-score .bareme {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+  opacity: .65 !important;
+  margin-bottom: 1px !important;
+}
+
 /* Note parfaite : pilule pleine couleur, texte blanc */
 body.papillon-pronote .widget.notes .pap-grade-max .pap-grade-score {
   background: var(--pap-grade-max) !important;
