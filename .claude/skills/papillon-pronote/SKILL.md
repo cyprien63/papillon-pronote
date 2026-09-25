@@ -17,6 +17,28 @@ ou restyle doit respecter ces règles pour rester cohérent avec le reste du rep
   `content/pronote/accueil/` (espace PRONOTE).
 - Chaque widget PRONOTE vit dans `content/pronote/accueil/elements/<nom>/<nom>.{css,js}`
   (header, edt, tav, grades, viescolaire, informations, ressources).
+- Chaque **page** PRONOTE (hors accueil) vit dans son propre dossier
+  `content/pronote/<rubrique>/<page>/<page>.{css,js}` (`Cahier de textes/Contenus`,
+  `Cahier de textes/TravailAFaire`, `Cahier de textes/Forums`,
+  `Cahier de textes/Contenus/Vue hebdomadaire`, `Mes données/Documents`,
+  `Mes données/Compte`). Pattern commun à ces modules :
+  1. **détection** de la page par une ancre stable (fil d'Ariane
+     `h1#breadcrumbBandeau[aria-label="…"]`, sélecteur métier
+     `.ObjetListe.DonneesListe_RessourceMatiere`, `#conteneur-page.Timeline`) ;
+     si l'ancre manque → `return` immédiat, le module ne pose aucune classe ;
+  2. **classes de marquage** `pap-*` + jeton `dataset.pap*` par élément
+     (`.pap-contenus` / `.pap-contenus-left` / `.pap-contenus-right`,
+     `.pap-vh` / `.pap-vh-day` / `.pap-vh-head` / `.pap-vh-panel` /
+     `.pap-vh-event`) ;
+  3. **CSS scopé** sur ces classes, et fond de page via `:has()`
+     (`.interface_affV:has(.pap-contenus)`, `…:has(.pap-vh)`) puisque les
+     wrappers natifs sont des ancêtres, pas des descendants.
+- **DOM identique sur deux pages → un seul CSS, un `.js` par page** : quand
+  plusieurs pages partagent la même structure (les deux vues
+  hebdomadaires « Contenus » et « Travail à faire »), on pose les mêmes
+  classes depuis un module JS par page (seule l'ancre
+  `h1#breadcrumbBandeau[aria-label]` change) et on **ne duplique pas** la
+  feuille de style, déclarée une seule fois dans `manifest.json`.
 - Chaque `css`/`js` doit être déclaré dans `manifest.json` dans `content_scripts`
   ET dans `web_accessible_resources` (fonts, PNG, SVG chargés via
   `chrome.runtime.getURL(...)`).
@@ -97,6 +119,44 @@ PRONOTE réécrit son DOM à chaque navigation et fait des re-rendus périodique
    - jeton par élément traité (`dataset.papTav`, etc.) pour ne pas re-transformer ;
    - pour les re-rendus, **masquer** la source (classe `pap-edt-source`) plutôt que
      la supprimer du DOM.
+
+## Vues à colonnes (timeline, vues multi-affichage)
+
+Pages qui proposent plusieurs affichages de la même donnée (Cahier de textes →
+Contenus : *Vue chronologique* / *Vue hebdomadaire* ; la vue hebdo
+`#conteneur-page.Timeline` = une colonne `div[role="group"]` par jour, en-tête
+`.PetitEspaceHaut > .conteneurBandeauGrille`, panneau défilant
+`.ObjetTimeline_classScrollPanel`, cartes de contenu `.DivBloc.ArrondisBloc`
+avec `.celluleMarqueur` pour la couleur) :
+
+- **Le DOM est reconstruit à chaque changement de semaine** : le JS doit
+  re-marquage sans doublon (jeton par élément) et le CSS ne doit pas dépendre
+  d'un ordre de colonnes stable.
+- **Dimensions inline à neutraliser** : PRONOTE pose `width`/`height`/`border`
+  en inline sur la grille et les colonnes (`780px` par colonne, `819px` sur
+  `#conteneur-page`) → `width:auto`, `height:auto` et
+  `max-height:calc(100vh - var(--pap-menu-h, 60px) - var(--pap-second-h, 54px) - …)`
+  (mesures posées par `header.js`), sinon la grille déborde sous l'écran.
+- **Colonnes homogènes** : `align-items:stretch` sur la ligne + `flex:1 1 0;
+  min-width:190px` sur chaque colonne, pour que les jours sans contenu
+  gardent la même hauteur — ne pas injecter de texte de remplacement.
+- **Jour courant** : signalé nativement par la classe `.couleurClaireDuTheme`
+  (et un `background-color: white` inline) → le traiter en CSS pur avec
+  `.pap-vh-day:has(.couleurClaireDuTheme)`, sans JS, et annuler le fond blanc.
+- **Couleur d'un événement** : la garder en liseré vertical
+  (`.celluleMarqueur { position:absolute; left:0; top:0; bottom:0; width:4px }`
+  sur une carte `position:relative; overflow:hidden`), ce qui préserve le
+  `background-color` inline de PRONOTE.
+- **Ancrage par le fil d'Ariane** : le DOM de la timeline est identique sur
+  les autres pages, la détection doit passer par `h1#breadcrumbBandeau[aria-label]`
+  pour ne pas capturer Travail à faire / EDT.
+- **Modale hors de la timeline** : la fiche « Contenu du cours » est rendue
+  dans `#zone_fenetre`, donc hors de `#conteneur-page` — la marquer à part
+  (`markFenetre()` → `.pap-vh-fiche`) sinon la fiche reste native.
+- Le comportement natif (plier/déplier un contenu, flèches de semaine) n'est
+  pas touché : le CSS n'agit que sur l'habillage, et les polices inline
+  (`font-family:Arial; font-size:13px` dans le contenu) sont rebasculées sur
+  Inter via une règle `!important`.
 
 ## Conventions de code
 

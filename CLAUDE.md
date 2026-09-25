@@ -31,6 +31,10 @@ content/educonnect/        Content script + thème de la page EduConnect
 content/pronote/accueil/   Espace PRONOTE — script CSS sous pronote.css + pronote.js (bootstrap)
   éléments/<nom>/          Un dossier .css + .js par widget (header, edt, tav, grades,
                            viescolaire, informations, ressources)
+content/pronote/Cahier de textes/<page>/   Pages CDT (Contenus, TravailAFaire, Forums)
+  Vue hebdomadaire/        Vue hebdo de Contenus **et** TravailAFaire
+                           (1 .js par page, CSS commun voir ci-dessous)
+content/pronote/Mes données/<page>/        Pages Compte, Documents
 options/                   Page d'options (thème Clair / Sombre)
 assets/brand/              Assets officiels Papillon (logotype, favicon, splash)
 assets/icons/papicons/     Icônes Papicons (SVG, MIT) injectées dans PRONOTE
@@ -66,6 +70,25 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
 - `adjust(hex, pct)` et `svgWrap(...)` sont redéfinis dans chaque module `elements/`
   (tav, edt, grades, informations, viescolaire) — suivre la même signature.
   `normalizeSubject`/`EMOJI_MAP` (matières → émoji) n'existent que dans `tav.js`.
+- `Contenus.js` et `TravailAFaire.js` **sortent tôt** (`.DonneesListe_RessourceMatiere`
+  absente) en **vue hebdomadaire** : leurs classes ne sont pas posées du tout. Ce sont
+  `Cahier de textes/<page>/Vue hebdomadaire/VueHebdomadaire.js` qui la marquent, via le
+  fil d'Ariane `h1#breadcrumbBandeau[aria-label="…"]` (« Contenus et ressources
+  pédagogiques » / « Travail à faire à la maison ») + `#conteneur-page.Timeline` — d'où
+  l'importance de cette ancre (le DOM de la timeline est identique sur les autres pages
+  PRONOTE).
+- Les **deux** vues hebdomadaires partagent le même DOM : une seule feuille de style,
+  `Contenus/Vue hebdomadaire/VueHebdomadaire.css`, déclarée **une seule fois** dans le
+  Manifest, stylise les classes communes `pap-vh*` posées par les deux `.js`. Ne pas
+  dupliquer ce CSS dans le dossier TravailAFaire (ni y déclarer un second CSS).
+- La modale « Contenu du cours » (`.ObjetFenetre_Espace.ObjetFenetre_racine` contenant
+  `.conteneur-fiche-CDT`) est rendue **hors de `#conteneur-page`**, dans `#zone_fenetre` :
+  elle est marquée par `markFenetre()` (classe `.pap-vh-fiche`), pas par la timeline.
+- PRONOTE pose des **dimensions inline fixes** (largeur/hauteur) sur les conteneurs de
+  listes et de colonnes : les remplacer par `height:auto` + `max-height:calc(100vh - …)`
+  bâti sur `--pap-menu-h` / `--pap-second-h` (barres sticky mesurées par `header.js`),
+  sinon le contenu déborde sous le bas de l'écran. Voir `VueHebdomadaire.css` (colonnes
+  de jours, 780px) et `Documents.css` (listes, 865px).
 - L'élément témoin de la classe `pap-edt-*` masque le texte source ; ne pas le supprimer
   du DOM, sinon le badge « En cours » se duplique au re-rendu.
 - Le thème est relu en direct via `chrome.storage.onChanged` ; re-tester la bascule
@@ -76,4 +99,7 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
 1. Charger le dossier dans `chrome://extensions` (Mode développeur).
 2. Ouvrir PRONOTE : vérifier bandeau, widgets, cartes (`pap-*`), lisibilité sombre/clair.
 3. Naviguer dans le menu (le DOM est reconstruit) : pas de doublons, pas de perte d'icônes.
-4. Changer le thème depuis les Options : l'UI se recolorise sans recharge.
+4. Sur les pages à plusieurs affichages (Cahier de textes → Contenus et ressources) :
+   basculer Chronologique ↔ Hebdomadaire et changer de semaine (flèches) — pas de
+   doublon, pas de résidu de l'autre affichage.
+5. Changer le thème depuis les Options : l'UI se recolorise sans recharge.
