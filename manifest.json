@@ -50,6 +50,7 @@
         "content/pronote/Mes données/Compte/compte.css",
         "content/pronote/Mes données/Documents/Documents.css",
         "content/pronote/Cahier de textes/Contenus/Contenus.css",
+        "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.css",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.css",
         "content/pronote/Cahier de textes/Forums/Forums.css"
       ],
@@ -67,7 +68,9 @@
         "content/pronote/Mes données/Compte/compte.js",
         "content/pronote/Mes données/Documents/Documents.js",
         "content/pronote/Cahier de textes/Contenus/Contenus.js",
+        "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.js",
+        "content/pronote/Cahier de textes/TravailAFaire/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/Forums/Forums.js"
       ],
       "run_at": "document_idle"
@@ -123,8 +126,11 @@
         "content/pronote/Mes données/Documents/Documents.js",
         "content/pronote/Cahier de textes/Contenus/Contenus.css",
         "content/pronote/Cahier de textes/Contenus/Contenus.js",
+        "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.css",
+        "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.css",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.js",
+        "content/pronote/Cahier de textes/TravailAFaire/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/Forums/Forums.css",
         "content/pronote/Cahier de textes/Forums/Forums.js",
         "styles/fonts/*",

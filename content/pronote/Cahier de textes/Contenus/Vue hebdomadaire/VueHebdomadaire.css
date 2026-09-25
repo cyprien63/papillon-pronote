@@ -1,0 +1,1017 @@
+/* ============================================================
+   VUE HEBDOMADAIRE (« Vue hebdomadaire ») façon Papillon
+   Cible : pages « Cahier de textes → Contenus et ressources » ET
+   « Cahier de textes → Travail à faire » affichées en « Vue
+   hebdomadaire » (une colonne par jour).
+
+   Ces deux pages partagent exactement le même DOM de timeline
+   (mêmes .PetitEspaceHaut, .ObjetTimeline_classScrollPanel,
+   .DivBloc.ArrondisBloc, .celluleMarqueur, .couleurClaireDuTheme) :
+   cette feuille est donc **commune** aux deux modules JS
+   (`Contenus/Vue hebdomadaire/VueHebdomadaire.js` et
+   `TravailAFaire/Vue hebdomadaire/VueHebdomadaire.js`), qui ne
+   diffèrent que par l'ancre de page. Elle n'est déclarée qu'une seule
+   fois dans manifest.json.
+
+   Restyle purement visuel : colonnes en cartes arrondies, en-têtes
+   de jour (n° en pastille verte), cartes de contenu en sous-cartes,
+   couleur de l'événement conservée en liseré vertical, textes
+   lisibles en clair et en sombre. Aucun comportement natif n'est
+   modifié (pliage d'un contenu, navigation de semaine, ouverture
+   d'un contenu, date du jour, filtres « À faire / Fait »).
+
+   Classes de marquage posées par VueHebdomadaire.js :
+   - .pap-vh-grid  sur le .conteneur-CDT de la page
+   - .pap-vh       sur #conteneur-page (racine de la timeline)
+   - .pap-vh-day   sur chaque colonne de jour
+   - .pap-vh-head  sur l'en-tête du jour
+   - .pap-vh-panel sur le panneau défilant du jour
+   - .pap-vh-event sur chaque carte de contenu
+   ============================================================ */
+
+/* ---------- Fond de page ----------
+   Le wrapper extérieur (.interface_affV) porte un
+   background-color:var(--color-background) inline qui pourrait
+   rester clair en sombre → forcer le fond Papillon, scoped. */
+body.papillon-pronote .interface_affV:has(.pap-vh) {
+  background-color: #ffffff !important;
+}
+
+body.papillon-pronote main.interface_affV_client:has(.pap-vh) {
+  background-color: transparent !important;
+}
+
+html.papillon-dark body.papillon-pronote .interface_affV:has(.pap-vh) {
+  background-color: #101513 !important;
+}
+
+html.papillon-dark body.papillon-pronote main.interface_affV_client:has(.pap-vh) {
+  background-color: transparent !important;
+}
+
+/* ---------- Wrappers de la page ----------
+   PRONOTE peint en blanc les couches entre le <main> et la timeline
+   (plusieurs .fluid-bloc imbriqués + .conteneur-droite) → halo clair
+   en sombre : on les passe en transparent. */
+body.papillon-pronote .pap-vh-grid,
+body.papillon-pronote .pap-vh-grid > .fluid-bloc,
+body.papillon-pronote .pap-vh-grid .conteneur-droite,
+body.papillon-pronote .pap-vh-grid .conteneur-droite > .fluid-bloc,
+body.papillon-pronote .pap-vh-grid .conteneur-droite > .fluid-bloc > div {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-grid {
+  display: block !important;
+  padding: 10px 12px 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================================
+   La timeline : une carte par jour, les 5 jours sur une ligne
+   ============================================================ */
+body.papillon-pronote .pap-vh {
+  display: block !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: auto !important;
+}
+
+/* Ligne des jours : PRONOTE pose .flex-contain → on impose le gap
+   et l'étirement (colonnes de même hauteur, même avec des jours vides). */
+body.papillon-pronote .pap-vh > .flex-contain {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  min-width: min-content !important;
+}
+
+/* ---------- Colonne de jour ---------- */
+body.papillon-pronote .pap-vh-day {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0 !important;
+  min-width: 190px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+  color: var(--papillon-text, #10130f) !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+
+/* ---------- En-tête du jour ----------
+   Le natif pose des bordures sur 3 côtés (gauche/haut sur l'en-tête,
+   gauche/bas sur le panneau) pour dessiner la grille : on les
+   remplace par la bordure de la carte + un simple filet bas. */
+body.papillon-pronote .pap-vh-head {
+  flex: 0 0 auto !important;
+  border: none !important;
+  border-bottom: 1px solid var(--papillon-border, #e7efee) !important;
+  background: transparent !important;
+  padding: 10px 12px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .pap-vh-head .conteneurBandeauGrille {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-vh-head .fluid-bloc {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  /* Le natif colorise l'en-tête (inline color:var(--theme-neutre-foncee)
+     et, pour le jour courant, .couleurClaireDuTheme) : on repasse par
+     le texte Papillon. */
+  color: var(--papillon-text, #10130f) !important;
+}
+
+/* N° du jour → pastille ronde verte */
+body.papillon-pronote .pap-vh-head .fluid-bloc > .font-size-5xl:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 38px !important;
+  height: 38px !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: var(--papillon-grad) !important;
+  box-shadow: 0 2px 6px rgba(34, 126, 107, .28) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  color: #ffffff !important;
+}
+
+/* Séparateur vertical natif entre le n° et le libellé */
+body.papillon-pronote .pap-vh-head .fluid-bloc > *:nth-child(2):not(.font-size-5xl) {
+  display: none !important;
+}
+
+/* Bloc libellé (jour de la semaine + mois) */
+body.papillon-pronote .pap-vh-head .fluid-bloc > .font-size-5xl:last-child {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+/* « Lun. » */
+body.papillon-pronote .pap-vh-head .font-size-m.Gras {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  color: var(--papillon-text, #10130f) !important;
+  white-space: nowrap !important;
+}
+
+/* « Sept. » */
+body.papillon-pronote .pap-vh-head .Texte10.affichageMois {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+  line-height: 1.25 !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  white-space: nowrap !important;
+}
+
+/* Colonne vide à droite de l'en-tête (réservé natif) */
+body.papillon-pronote .pap-vh-head .fix-bloc {
+  flex: 1 1 auto !important;
+  background: transparent !important;
+}
+
+/* ---------- Jour courant ----------
+   PRONOTE signale le jour courant par la classe .couleurClaireDuTheme
+   sur l'en-tête (et un fond blanc inline sur la colonne) : on en
+   profite en CSS pur, pour suivre le changement de jour sans
+   re-marquage. Le fond blanc inline est annulé par .pap-vh-day. */
+body.papillon-pronote .pap-vh-day:has(.couleurClaireDuTheme) {
+  border-color: rgba(53, 187, 160, .5) !important;
+  box-shadow: 0 4px 16px rgba(53, 187, 160, .18) !important;
+}
+
+body.papillon-pronote .pap-vh-day:has(.couleurClaireDuTheme) .pap-vh-head {
+  background: rgba(53, 187, 160, .08) !important;
+}
+
+/* ---------- Panneau du jour (liste défilante) ----------
+   Le natif pose width:379px / height:780px en inline : on repasse en
+   largeur libre et en hauteur bornée au viewport (barres sticky
+   déduites via --pap-menu-h / --pap-second-h, posées par header.js),
+   sinon la grille déborde sous le bas de l'écran. */
+body.papillon-pronote .pap-vh-panel {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  height: auto !important;
+  max-height: calc(100vh - var(--pap-menu-h, 60px) - var(--pap-second-h, 54px) - 104px) !important;
+  min-height: 240px !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 10px 8px 12px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cfd9d5 transparent !important;
+}
+
+body.papillon-pronote .pap-vh-panel::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+body.papillon-pronote .pap-vh-panel::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-vh-panel::-webkit-scrollbar-thumb {
+  background: #cfd9d5 !important;
+  border-radius: 3px !important;
+}
+
+/* Repère vertical « Aujourd'hui » / date (natif, masqué au repos) */
+body.papillon-pronote .pap-vh .AvecMain.blocTimeline {
+  display: none !important;
+}
+
+/* ============================================================
+   Cartes de contenu
+   ============================================================ */
+body.papillon-pronote .pap-vh-event {
+  position: relative !important;
+  margin: 0 0 10px !important;
+  padding: 12px 14px 12px 18px !important;
+  background: #f7faf9 !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  color: var(--papillon-text, #10130f) !important;
+  cursor: pointer !important;
+  transition: background .15s ease, border-color .15s ease !important;
+}
+
+body.papillon-pronote .pap-vh-event:hover {
+  background: var(--papillon-hover, #f2f6f5) !important;
+  border-color: #d5e5e1 !important;
+}
+
+/* Le natif pose z-index / ombre sur la carte → neutralisés au profit
+   d'une lecture « liste » cohérente avec la vue chronologique. */
+body.papillon-pronote .pap-vh-event.z-depth-1 {
+  z-index: auto !important;
+}
+
+/* Wrapper de la carte et couches internes blanches natives */
+body.papillon-pronote .pap-vh-event .Timeline.UtilitaireBloc_containerGauche,
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_itemGauche,
+body.papillon-pronote .pap-vh-event .AvecMain,
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_containerInverse,
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_itemInverse,
+body.papillon-pronote .pap-vh-event .Bloc_Titre_container,
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_containerNormal,
+body.papillon-pronote .pap-vh-event .Bloc_Contenu,
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_itemNormal,
+body.papillon-pronote .pap-vh-event .container-bloc,
+body.papillon-pronote .pap-vh-event .PourFenetreBloc_Contenu,
+body.papillon-pronote .pap-vh-event .AvecSelectionTexte {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---------- Couleur de l'événement → liseré vertical ----------
+   Le natif pose .celluleMarqueur (3px, couleur du type d'événement
+   en inline) dans le flux. On l'absorbe dans le bord gauche de la
+   carte : sa background-color inline est conservée telle quelle. */
+body.papillon-pronote .pap-vh-event .celluleMarqueur {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 4px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+/* Colonne de texte de la carte (largeur calculée pour le marqueur
+   devenu absolu) */
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_itemInverse > div[style*="--color-text"] {
+  width: auto !important;
+  max-width: 100% !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+/* Pastille de date (natif, masqué au repos : laissée masquée) */
+body.papillon-pronote .pap-vh-event .UtilitaireBloc_Date {
+  display: none !important;
+}
+
+/* Matière (ex. « FRANCAIS ») */
+body.papillon-pronote .pap-vh-event .Bloc_Titre_container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 1px !important;
+}
+
+body.papillon-pronote .pap-vh-event .Bloc_Titre {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text, #10130f) !important;
+  text-transform: uppercase !important;
+}
+
+body.papillon-pronote .pap-vh-event .Bloc_Titre > div {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text, #10130f) !important;
+  text-transform: uppercase !important;
+}
+
+/* Prof (ex. « Mme COGNON N. ») */
+body.papillon-pronote .pap-vh-event .Bloc_SSTitre {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: var(--papillon-text-soft, #8a9b95) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Infos complémentaires natives (masquées au repos) */
+body.papillon-pronote .pap-vh-event .Bloc_InfoCompl {
+  display: none !important;
+}
+
+/* ---------- Corps déplié (comportement natif conservé) ---------- */
+body.papillon-pronote .pap-vh-event .elementPliable {
+  border-top: 1px dashed var(--papillon-border, #e7efee) !important;
+  padding-top: 9px !important;
+  margin-top: 9px !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+/* Le texte du contenu arrive en inline « color:var(--color-text) »
+   et « font-family:Arial; font-size:13px » : on le rebascule sur les
+   tokens Papillon (le pli/dépli natif reste inchangé). */
+body.papillon-pronote .pap-vh-event .elementPliable div,
+body.papillon-pronote .pap-vh-event .elementPliable span,
+body.papillon-pronote .pap-vh-event .elementPliable p {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-vh-event .PourFenetreBloc_Contenu {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--papillon-text, #10130f) !important;
+}
+
+body.papillon-pronote .pap-vh-event .PourFenetreBloc_Contenu div[style*="font-family"] {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: inherit !important;
+}
+
+/* ============================================================
+   Panneau détail « ressource pédagogique » (#id_432)
+   Bloc natif posé sous la grille (masqué au repos) : comportement
+   laissé intact, seul le habillage change.
+   ============================================================ */
+body.papillon-pronote .pap-vh .conteneur-ressourcePeda {
+  background: #ffffff !important;
+  color: #10130f !important;
+  border: 1px solid var(--papillon-border, #e7efee) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  padding: 16px 18px !important;
+  margin-top: 10px !important;
+  box-sizing: border-box !important;
+}
+
+body.papillon-pronote .pap-vh .conteneur-ressourcePeda > div {
+  max-width: none !important;
+  background: #ffffff !important;
+  color: #10130f !important;
+}
+
+/* ============================================================
+   FICHE « Contenu du cours » (modale ouverte au clic sur une carte)
+   Cible : .pap-vh-fiche = .ObjetFenetre_Espace.ObjetFenetre_racine
+   rendue par PRONOTE dans #zone_fenetre, donc hors de #conteneur-page :
+   le marqueur est posé par VueHebdomadaire.js (markFenetre) et la fiche
+   est stylée comme la carte de la semaine (liseré de matière, radius
+   18px, typo Inter). Même jeu de variables que les popups existants
+   (edt.css, pronote.css) : clair par défaut, redefini en sombre.
+   ============================================================ */
+body.papillon-pronote .pap-vh-fiche {
+  --pap-fiche-bg: #ffffff;
+  --pap-fiche-surface: #f7faf9;
+  --pap-fiche-hover: #f2f6f5;
+  --pap-fiche-title: #10130f;
+  --pap-fiche-text: #10130f;
+  --pap-fiche-soft: #8a9b95;
+  --pap-fiche-border: #e7efee;
+  --pap-fiche-accent: #35bba0;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche {
+  --pap-fiche-bg: #1a211e;
+  --pap-fiche-surface: #202926;
+  --pap-fiche-hover: #26322d;
+  --pap-fiche-title: #e7efec;
+  --pap-fiche-text: #e7efec;
+  --pap-fiche-soft: #93a79f;
+  --pap-fiche-border: #2a3531;
+  --pap-fiche-accent: #35bba0;
+}
+
+/* Cadre (le natif pose width:600px et background-color inline) */
+body.papillon-pronote .pap-vh-fiche .Fenetre_Cadre {
+  position: relative !important;
+  background: var(--pap-fiche-bg) !important;
+  color: var(--pap-fiche-text) !important;
+  border: 1px solid var(--pap-fiche-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .18) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  width: 600px !important;
+  max-width: calc(100vw - 40px) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .Fenetre_Cadre {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .4) !important;
+}
+
+/* Titre */
+body.papillon-pronote .pap-vh-fiche .Fenetre_Titre {
+  padding: 16px 18px 12px 18px !important;
+  border-bottom: 1px solid var(--pap-fiche-border) !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .Fenetre_Titre h1 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--pap-fiche-title) !important;
+  margin: 0 !important;
+}
+
+/* Boutons fermer / déplacer */
+body.papillon-pronote .pap-vh-fiche .Fenetre_Cadre .cta-conteneur {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  display: flex !important;
+  gap: 4px !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .cta-conteneur .btnImageIcon,
+body.papillon-pronote .pap-vh-fiche .cta-conteneur .btnImage {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background: var(--pap-fiche-hover) !important;
+  color: var(--pap-fiche-soft) !important;
+  box-shadow: none !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .cta-conteneur .btnImageIcon:hover,
+body.papillon-pronote .pap-vh-fiche .cta-conteneur .btnImage:hover {
+  background: rgba(53, 187, 160, .12) !important;
+  color: var(--pap-fiche-accent) !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .cta-conteneur .icone-svg {
+  width: 15px !important;
+  height: 15px !important;
+  fill: currentColor !important;
+}
+
+/* Corps défilant (le natif pose max-height:600px en inline) */
+body.papillon-pronote .pap-vh-fiche .Fenetre_Contenu {
+  max-height: min(60vh, 600px) !important;
+  background: var(--pap-fiche-bg) !important;
+  color: var(--pap-fiche-text) !important;
+  padding: 16px 18px !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .Fenetre_Scroll,
+body.papillon-pronote .pap-vh-fiche .Fenetre_Contenu > div {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .Fenetre_Scroll * {
+  scrollbar-color: #cfdcd7 transparent;
+}
+
+body.papillon-pronote .pap-vh-fiche .Fenetre_Scroll::-webkit-scrollbar-thumb {
+  background: #cfdcd7;
+  border: none;
+  border-radius: 999px;
+}
+
+/* Carte de la fiche : même gabarit que .pap-vh-event */
+body.papillon-pronote .pap-vh-fiche .conteneur-fiche-CDT,
+body.papillon-pronote .pap-vh-fiche .conteneur-liste-CDT {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item {
+  position: relative !important;
+  background: var(--pap-fiche-surface) !important;
+  color: var(--pap-fiche-text) !important;
+  border: 1px solid var(--pap-fiche-border) !important;
+  border-radius: 18px !important;
+  padding: 14px 16px 14px 18px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Liseré de matière : le div vide ne porte que son background-color
+   inline, on le colle au bord gauche de la carte. */
+body.papillon-pronote .pap-vh-fiche .conteneur-item .flex-contain > div:first-child[style*="background-color"] {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 4px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .flex-contain {
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .titre-matiere {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--pap-fiche-text) !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .ie-sous-titre,
+body.papillon-pronote .pap-vh-fiche .conteneur-item .ie-sous-titre p {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--pap-fiche-soft) !important;
+  margin: 2px 0 0 0 !important;
+}
+
+/* Créneau (ex. « mar. 22 sept. de 13h54 à 15h03 ») */
+body.papillon-pronote .pap-vh-fiche .conteneur-item .ie-titre-petit {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: var(--pap-fiche-soft) !important;
+  background: var(--pap-fiche-hover) !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+  margin: 10px 0 0 0 !important;
+  display: inline-block !important;
+}
+
+/* Corps du texte : le native le bride à 3 lignes, on affiche tout */
+body.papillon-pronote .pap-vh-fiche .conteneur-item .conteneur-descriptif {
+  margin-top: 10px !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .entete-element,
+body.papillon-pronote .pap-vh-fiche .conteneur-item .m-bottom-l {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .descriptif.tiny-view {
+  display: block !important;
+  overflow: visible !important;
+  -webkit-line-clamp: none !important;
+  max-height: none !important;
+  -webkit-box-orient: vertical !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  color: var(--pap-fiche-text) !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .conteneur-item .descriptif div[style*="font-family"] {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--pap-fiche-text) !important;
+}
+
+/* Bouton « Voir le cours » (button.themeBoutonNeutre.small-bt) : pill verte
+   Papillon, comme le « Voir le travail à faire » de Contenus.css. Le natif
+   l'affiche en texte noir sur fond transparent, donc illisible (aussi bien
+   dans la fiche que dans une carte de la semaine déployée). */
+body.papillon-pronote .pap-vh-fiche .btnCours,
+body.papillon-pronote .pap-vh-event .btnCours {
+  margin-top: 10px !important;
+  display: flex !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .themeBoutonNeutre.small-bt,
+body.papillon-pronote .pap-vh-event .themeBoutonNeutre.small-bt,
+body.papillon-pronote .pap-vh-fiche .btnCours button,
+body.papillon-pronote .pap-vh-event .btnCours button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 16px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  background: var(--papillon-grad) !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: filter .15s ease !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .themeBoutonNeutre.small-bt:hover,
+body.papillon-pronote .pap-vh-event .themeBoutonNeutre.small-bt:hover,
+body.papillon-pronote .pap-vh-fiche .btnCours button:hover,
+body.papillon-pronote .pap-vh-event .btnCours button:hover {
+  filter: brightness(.95) !important;
+  color: #ffffff !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .themeBoutonNeutre.small-bt svg,
+body.papillon-pronote .pap-vh-event .themeBoutonNeutre.small-bt svg,
+body.papillon-pronote .pap-vh-fiche .themeBoutonNeutre.small-bt svg path,
+body.papillon-pronote .pap-vh-event .themeBoutonNeutre.small-bt svg path {
+  fill: currentColor !important;
+}
+
+/* Pied de la fiche : le bouton « Fermer » est masqué — la croix est
+   déjà en haut à droite (et Échap / clic dehors fonctionnent). On retire
+   aussi la réserve du .zone-bas pour ne pas laisser de bande vide ; le
+   comportement natif du bouton n'est pas touché, il est juste caché. */
+body.papillon-pronote .pap-vh-fiche .zone-bas {
+  padding: 0 !important;
+  background: transparent !important;
+  border-top: none !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .zone-bas .themeBoutonSecondaire {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .zone-bas .btn-conteneur {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .zone-bas .themeBoutonSecondaire,
+body.papillon-pronote .pap-vh-fiche .zone-bas .themeBoutonPrimaire {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: var(--pap-fiche-text) !important;
+  background: var(--pap-fiche-hover) !important;
+  border: 1px solid var(--pap-fiche-border) !important;
+  border-radius: 999px !important;
+  padding: 9px 18px !important;
+  margin: 0 0 0 4px !important;
+  min-height: 0 !important;
+  box-shadow: none !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+
+body.papillon-pronote .pap-vh-fiche .zone-bas .themeBoutonSecondaire:hover,
+body.papillon-pronote .pap-vh-fiche .zone-bas .themeBoutonPrimaire:hover {
+  background: rgba(53, 187, 160, .12) !important;
+  color: var(--pap-fiche-accent) !important;
+}
+
+/* ============================================================
+   Toggle « J'ai terminé » (label.iecb.cb-termine) façon Papillon
+   Même rendu que le widget TAF de l'accueil et que la vue
+   chronologique (TravailAFaire.css) : pastille ronde sous la couleur
+   de l'événement (liseré .celluleMarqueur → --pap-vh-cb-tint posé par
+   le JS), check dessiné en CSS, texte « Terminé » seulement quand
+   coché. Ne s'applique qu'à la page « Travail à faire » (le DOM de la
+   page « Contenus » n'a pas de toggle). Le label reste le même
+   élément interactive : la soumission native n'est pas touchée.
+   ============================================================ */
+@keyframes pap-vh-check-pop {
+  0% { transform: scale(.5); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pap-vh-text-in {
+  0% { opacity: 0; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  /* Comme sur l'accueil : le check est poussé à droite de la ligne
+     (le widget TAF le fait via .conteneur-cb { justify-content: flex-end }). */
+  margin: 0 0 0 auto !important;
+  background: color-mix(in srgb, var(--pap-vh-cb-tint, #29947a) 14%, transparent) !important;
+  border: 1.5px solid color-mix(in srgb, var(--pap-vh-cb-tint, #29947a) 45%, transparent) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--pap-vh-cb-tint, #29947a) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  transition: background .2s ease, color .2s ease, padding .2s ease,
+    transform .15s ease, box-shadow .2s ease, border-color .2s ease !important;
+}
+
+/* Checkbox PRONOTE hors du layout flex (source du décalage natif) */
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine input,
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine .sr-only {
+  display: none !important;
+}
+
+/* Décoché : pastille ronde avec le check centré par le flex */
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine:not(.is-checked) {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb .pap-vh-check {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 auto !important;
+}
+
+/* On masque le svg : le check est dessiné en CSS (centrage parfait) */
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb .pap-vh-check svg {
+  display: none !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb .pap-vh-check::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 18px !important;
+  height: 10px !important;
+  border-left: 3.5px solid currentColor !important;
+  border-bottom: 3.5px solid currentColor !important;
+  border-radius: 2px !important;
+  transform: translate(-50%, -65%) rotate(-45deg) !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08) !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine.is-checked {
+  background: var(--pap-vh-cb-tint, #29947a) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  border-radius: 32px !important;
+  padding: 5px 12px 5px 7px !important;
+  width: auto !important;
+  height: auto !important;
+  justify-content: flex-start !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .15) !important;
+}
+
+/* Pas de cases natives : on ne montre que le check Papicon */
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine svg:not(.pap-vh-check-icon) {
+  display: none !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine.is-checked .pap-vh-check {
+  animation: pap-vh-check-pop .25s ease !important;
+  color: #ffffff !important;
+}
+
+/* En mode sombre, le check est blanc dans les deux états */
+html.papillon-dark body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb .pap-vh-check {
+  color: #ffffff !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb .pap-vh-done-text {
+  display: none !important;
+  white-space: nowrap !important;
+  font-family: 'Inter', sans-serif !important;
+  color: inherit !important;
+}
+
+body.papillon-pronote :is(.pap-vh-event, .pap-vh-fiche) label.iecb.cb-termine.is-checked .pap-vh-done-text {
+  display: inline !important;
+  animation: pap-vh-text-in .2s ease !important;
+}
+
+/* ============================================================
+   Mode sombre — html.papillon-dark posé par pronote.js
+   Textes clairs (#e7efec) sur fond #101513 / #1a211e.
+   ============================================================ */
+html.papillon-dark body.papillon-pronote .pap-vh-day {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-head {
+  border-bottom-color: #2a3531 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-head .fluid-bloc {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-head .font-size-m.Gras {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-head .Texte10.affichageMois {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-day:has(.couleurClaireDuTheme) {
+  border-color: rgba(53, 187, 160, .55) !important;
+  box-shadow: 0 4px 16px rgba(53, 187, 160, .18) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-day:has(.couleurClaireDuTheme) .pap-vh-head {
+  background: rgba(53, 187, 160, .12) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-panel {
+  scrollbar-color: #3a4742 transparent !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-panel::-webkit-scrollbar-thumb {
+  background: #3a4742 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event:hover {
+  background: #26322d !important;
+  border-color: #33423c !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event .UtilitaireBloc_itemInverse > div[style*="--color-text"] {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event .Bloc_Titre,
+html.papillon-dark body.papillon-pronote .pap-vh-event .Bloc_Titre > div {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event .Bloc_SSTitre {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event .elementPliable {
+  border-top-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-event .PourFenetreBloc_Contenu {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh .conteneur-ressourcePeda,
+html.papillon-dark body.papillon-pronote .pap-vh .conteneur-ressourcePeda > div {
+  background: #101513 !important;
+  color: #e7efec !important;
+  border-color: #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh .conteneur-ressourcePeda div,
+html.papillon-dark body.papillon-pronote .pap-vh .conteneur-ressourcePeda span,
+html.papillon-dark body.papillon-pronote .pap-vh .conteneur-ressourcePeda p {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+/* La fiche « Contenu du cours » passe en variables sombres (voir
+   section dédiée) : le fond inline var(--color-background) du cadre et
+   le texte inline var(--color-text) des libellés sont surchargés. */
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .Fenetre_Cadre .Fenetre_Titre h1,
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .Fenetre_Contenu {
+  color: var(--pap-fiche-title) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .ie-sous-titre,
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .ie-sous-titre p,
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .ie-titre-petit,
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .descriptif.tiny-view {
+  color: var(--pap-fiche-soft) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .ie-titre-petit {
+  background: var(--pap-fiche-hover) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .Fenetre_Scroll * {
+  scrollbar-color: #3a4742 transparent;
+}
+
+html.papillon-dark body.papillon-pronote .pap-vh-fiche .Fenetre_Scroll::-webkit-scrollbar-thumb {
+  background: #3a4742;
+}
