@@ -35,6 +35,8 @@ content/pronote/Cahier de textes/<page>/   Pages CDT (Contenus, TravailAFaire, F
   Vue hebdomadaire/        Vue hebdo de Contenus **et** TravailAFaire
                            (1 .js par page, CSS commun voir ci-dessous)
 content/pronote/Mes données/<page>/        Pages Compte, Documents
+content/pronote/Notes/Mes Notes/           Page « Détail de mes notes » : carte Moyennes
+                           (graphique SVG de l'historique des moyennes) + cartes de notes
 options/                   Page d'options (thème Clair / Sombre)
 assets/brand/              Assets officiels Papillon (logotype, favicon, splash)
 assets/icons/papicons/     Icônes Papicons (SVG, MIT) injectées dans PRONOTE
@@ -91,6 +93,15 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
   de jours, 780px) et `Documents.css` (listes, 865px).
 - L'élément témoin de la classe `pap-edt-*` masque le texte source ; ne pas le supprimer
   du DOM, sinon le badge « En cours » se duplique au re-rendu.
+- `Notes/Mes Notes` : le DOM ne contient **aucune moyenne générale ni aucun coefficient** —
+  `MesNotes.js` la calcule (moyenne des notes ramenées sur 20, ou moyenne des moyennes par
+  matière, ou médiane) et la **reconstruit à chaque changement de période/tri**. Ne pas
+  reconstruire la carte sur un simple changement de ligne sélectionnée : la signature
+  (`state.sig`) sert justement à éviter de casser le graphique pendant la navigation.
+- `Notes/Mes Notes` : le `datetime` des dates est en `MM-DD` **sans année** et PRONOTE
+  peut lister du plus récent au plus ancien — `chrono()` détecte le sens puis « déroule »
+  les mois. En mode « Par matière » l'ordre n'est pas chronologique : on suit alors
+  l'ordre d'affichage.
 - Le thème est relu en direct via `chrome.storage.onChanged` ; re-tester la bascule
   Clair ↔ Sombre après chaque modification.
 
@@ -102,4 +113,7 @@ manifest.json              Déclare les content_scripts + web_accessible_resourc
 4. Sur les pages à plusieurs affichages (Cahier de textes → Contenus et ressources) :
    basculer Chronologique ↔ Hebdomadaire et changer de semaine (flèches) — pas de
    doublon, pas de résidu de l'autre affichage.
-5. Changer le thème depuis les Options : l'UI se recolorise sans recharge.
+5. Sur `Notes → Mes notes` : changer de période, basculer « Par ordre chronologique » ↔
+   « Par matière », sélectionner un devoir (panneau de détail) et survoler le graphique —
+   pas de doublon, la courbe suit bien la période.
+6. Changer le thème depuis les Options : l'UI se recolorise sans recharge.

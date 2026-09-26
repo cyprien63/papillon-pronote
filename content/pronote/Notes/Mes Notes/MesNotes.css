@@ -1,0 +1,1484 @@
+/* ============================================================
+   PAGE NOTES — MES NOTES façon Papillon
+   Cible : .InterfaceDernieresNotes de la page « Détail de mes
+   notes » PRONOTE (fil d'Ariane h1#breadcrumbBandeau[aria-label=
+   "Détail de mes notes"]).
+   Restyle purement visuel : les deux colonnes deviennent deux
+   cartes rondes, la liste des notes devient une pile de cartes
+   façon Grade.tsx, et la carte « Moyennes » (créée par MesNotes.js)
+   porte le graphique SVG des moyennes.
+   Aucun comportement natif n'est modifié : sélection au clavier,
+   sélecteur de période et radios d'affichage restent intacts.
+   ============================================================ */
+
+/* ---------- Hauteur disponible ----------
+   Le budget vertical se déduit des deux barres sticky mesurées par
+   header.js (--pap-menu-h / --pap-second-h) plus la bande de filtres
+   (troisième menu) et les marges de la page. */
+body.papillon-pronote .pap-mn {
+  --pap-mn-h: calc(100vh - var(--pap-menu-h, 60px) - var(--pap-second-h, 54px) - 96px);
+  --pap-mn-line: #35bba0;
+  --pap-mn-line-soft: #6b807a;
+  --pap-mn-cls: #f0902e;
+}
+
+/* ============================================================
+   1. Fond de page et colonnes
+   ============================================================ */
+body.papillon-pronote .interface_affV:has(.pap-mn) {
+  background-color: #ffffff !important;
+}
+
+body.papillon-pronote main.interface_affV_client:has(.pap-mn) {
+  background-color: transparent !important;
+}
+
+body.papillon-pronote .pap-mn {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 12px !important;
+  padding: 10px 12px 14px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  background: transparent !important;
+}
+
+/* ============================================================
+   2. Les deux cartes
+   ============================================================ */
+body.papillon-pronote .pap-mn-list,
+body.papillon-pronote .pap-mn-detail {
+  display: flex !important;
+  flex-direction: column !important;
+  width: auto !important;
+  height: auto !important;
+  max-height: var(--pap-mn-h) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06) !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .pap-mn-list .ObjetListe {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* La zone de liste devient le conteneur qui défile : PRONOTE y pose une
+   hauteur inline figée (height:784px) héritée du <main> qui, le header
+   ayant été supprimé, déborde sous le bas de l'écran. */
+body.papillon-pronote .pap-mn-list .liste_zone {
+  flex: 1 1 auto !important;
+  min-height: 120px !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cfd9d5 transparent !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-thumb {
+  background: #cfd9d5 !important;
+  border-radius: 3px !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_content > div[style] {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+/* Grille interne : PRONOTE la fige à 608px → on la laisse respirer. */
+body.papillon-pronote .pap-mn-list .liste_content_lignes {
+  width: auto !important;
+  max-width: 100% !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 2px !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_contenu_cellule,
+body.papillon-pronote .pap-mn-list .liste_contenu_cellule_contenu,
+body.papillon-pronote .pap-mn-list .liste_contenu_ligne {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   3. Barre d'outils (bouton recherche) — pastille ronde
+   ============================================================ */
+body.papillon-pronote .pap-mn-list .liste_btnentete {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding: 0 2px 10px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage,
+body.papillon-pronote .pap-mn-list .liste_btnentete button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: #f2f6f5 !important;
+  border: 1px solid #e7efee !important;
+  color: #10130f !important;
+  box-shadow: none !important;
+  transition: background .15s ease, border-color .15s ease !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage:hover,
+body.papillon-pronote .pap-mn-list .liste_btnentete button:hover {
+  background: #ddf2ec !important;
+  border-color: #81c9b6 !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage span,
+body.papillon-pronote .pap-mn-list .liste_btnentete button span {
+  width: 16px !important;
+  height: 16px !important;
+  color: inherit !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage svg,
+body.papillon-pronote .pap-mn-list .liste_btnentete button svg {
+  width: 100% !important;
+  height: 100% !important;
+  fill: currentColor !important;
+}
+
+/* ============================================================
+   4. Carte « Moyennes »
+   ============================================================ */
+body.papillon-pronote .pap-mn-overview {
+  flex: 0 0 auto !important;
+  display: block !important;
+  padding: 14px 14px 10px !important;
+  margin: 0 0 10px !important;
+  background: linear-gradient(140deg, #f4fbf9 0%, #fbfdfc 55%, #ffffff 100%) !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  color: #10130f !important;
+}
+
+body.papillon-pronote .pap-mn-ov-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+body.papillon-pronote .pap-mn-ov-titles {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-ov-label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #10130f !important;
+  line-height: 1.2 !important;
+}
+
+body.papillon-pronote .pap-mn-ov-sub {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #8a9b95 !important;
+  line-height: 1.3 !important;
+}
+
+body.papillon-pronote .pap-mn-ov-score {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 2px !important;
+  flex: 0 0 auto !important;
+}
+
+body.papillon-pronote .pap-mn-ov-score b {
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -.5px !important;
+  color: #35bba0 !important;
+}
+
+body.papillon-pronote .pap-mn-ov-score i {
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  color: #8a9b95 !important;
+}
+
+/* ----- Sélecteur d'algorithme ----- */
+body.papillon-pronote .pap-mn-algos {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 10px 0 2px !important;
+}
+
+body.papillon-pronote .pap-mn-algo {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 4px 12px !important;
+  margin: 0 !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: #10130f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+  transition: background .15s ease, color .15s ease, border-color .15s ease !important;
+}
+
+body.papillon-pronote .pap-mn-algo:hover {
+  background: #f2f6f5 !important;
+  border-color: #d5e5e1 !important;
+}
+
+body.papillon-pronote .pap-mn-algo.is-on {
+  background: #ddf2ec !important;
+  border-color: #81c9b6 !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-mn-algo:focus-visible {
+  outline: 2px solid #35bba0 !important;
+  outline-offset: 2px !important;
+}
+
+/* ----- Graphique ----- */
+body.papillon-pronote .pap-mn-graph {
+  position: relative !important;
+  width: 100% !important;
+  margin: 4px 0 0 !important;
+}
+
+body.papillon-pronote .pap-mn-graph svg {
+  display: block !important;
+  width: 100% !important;
+  overflow: visible !important;
+  touch-action: pan-y !important;
+  cursor: crosshair !important;
+}
+
+body.papillon-pronote .pap-mn-area {
+  fill: url(#papMnArea) !important;
+  opacity: 0 !important;
+  animation: pap-mn-fade .7s ease-out .15s forwards !important;
+}
+
+@keyframes pap-mn-fade {
+  to { opacity: 1 !important; }
+}
+
+body.papillon-pronote .pap-mn-grid {
+  stroke: #cfe0db !important;
+  stroke-width: 1 !important;
+  stroke-dasharray: 2 4 !important;
+  shape-rendering: crispEdges !important;
+}
+
+body.papillon-pronote .pap-mn-axis {
+  fill: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-anchor: end !important;
+}
+
+body.papillon-pronote .pap-mn-axis-x {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+}
+
+body.papillon-pronote .pap-mn-path {
+  fill: none !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+body.papillon-pronote .pap-mn-glow {
+  stroke: var(--pap-mn-line) !important;
+  stroke-width: 7 !important;
+  opacity: .28 !important;
+  filter: url(#papMnGlow) !important;
+}
+
+body.papillon-pronote .pap-mn-path-me {
+  stroke: var(--pap-mn-line) !important;
+  stroke-width: 3.4 !important;
+  animation: pap-mn-draw .85s cubic-bezier(.4, 0, .2, 1) forwards !important;
+}
+
+@keyframes pap-mn-draw {
+  to { stroke-dashoffset: 0 !important; }
+}
+
+body.papillon-pronote .pap-mn-path-cls {
+  stroke: var(--pap-mn-cls) !important;
+  stroke-width: 2.2 !important;
+  stroke-dasharray: 6 5 !important;
+  opacity: .85 !important;
+  animation: pap-mn-draw .85s cubic-bezier(.4, 0, .2, 1) .1s forwards !important;
+}
+
+body.papillon-pronote .pap-mn-halo {
+  fill: var(--pap-mn-line) !important;
+  stroke: none !important;
+  opacity: .18 !important;
+  transform-box: fill-box !important;
+  transform-origin: center !important;
+  animation: pap-mn-pulse 2.4s ease-in-out infinite !important;
+}
+
+@keyframes pap-mn-pulse {
+  0%, 100% { transform: scale(1) !important; opacity: .18 !important; }
+  50% { transform: scale(1.45) !important; opacity: .05 !important; }
+}
+
+body.papillon-pronote .pap-mn-dot,
+body.papillon-pronote .pap-mn-dot-sm {
+  fill: #ffffff !important;
+  stroke: var(--pap-mn-line) !important;
+  stroke-width: 2.2 !important;
+}
+
+body.papillon-pronote .pap-mn-dot {
+  stroke-width: 2.6 !important;
+}
+
+body.papillon-pronote .pap-mn-scrub-line {
+  stroke: #35bba0 !important;
+  stroke-width: 1.4 !important;
+  stroke-dasharray: 3 3 !important;
+  opacity: .55 !important;
+}
+
+body.papillon-pronote .pap-mn-scrub-dot {
+  fill: var(--pap-mn-line) !important;
+  stroke: #ffffff !important;
+  stroke-width: 2.4 !important;
+}
+
+/* Infobulle au survol */
+body.papillon-pronote .pap-mn-tip {
+  position: absolute !important;
+  top: -4px !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+  background: #10130f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18) !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+  z-index: 5 !important;
+}
+
+body.papillon-pronote .pap-mn-tip[hidden] {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-tip b {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #5fd8bd !important;
+  line-height: 1.1 !important;
+}
+
+body.papillon-pronote .pap-mn-tip b i {
+  font-size: 10px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  color: #9fb3ac !important;
+}
+
+body.papillon-pronote .pap-mn-tip span {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #e7efec !important;
+  max-width: 220px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .pap-mn-tip .pap-mn-tip-date {
+  color: #9fb3ac !important;
+  font-size: 10px !important;
+}
+
+/* ----- Légende ----- */
+body.papillon-pronote .pap-mn-legend {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-top: 2px !important;
+}
+
+body.papillon-pronote .pap-mn-legend-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #8a9b95 !important;
+}
+
+body.papillon-pronote .pap-mn-legend-item i {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 0 !important;
+  border-top: 3px solid var(--pap-mn-line) !important;
+  border-radius: 2px !important;
+}
+
+body.papillon-pronote .pap-mn-legend-item i.is-cls {
+  border-top: 2.2px dashed var(--pap-mn-cls) !important;
+}
+
+/* ============================================================
+   5. Bandeau horizontal des moyennes par matière
+   ============================================================ */
+body.papillon-pronote .pap-mn-subjects {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  padding: 0 0 10px !important;
+  margin: 0 0 4px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+}
+
+body.papillon-pronote .pap-mn-subjects::-webkit-scrollbar {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-subj {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  column-gap: 8px !important;
+  row-gap: 0 !important;
+  min-width: 132px !important;
+  padding: 8px 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+  color: #10130f !important;
+}
+
+body.papillon-pronote .pap-mn-subj-emoji {
+  grid-row: 1 / span 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 14%, #ffffff) !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+}
+
+body.papillon-pronote .pap-mn-subj-name {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #10130f !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 130px !important;
+}
+
+body.papillon-pronote .pap-mn-subj-score {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 1px !important;
+  margin-top: 6px !important;
+}
+
+body.papillon-pronote .pap-mn-subj-score b {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 82%, #10130f) !important;
+  line-height: 1 !important;
+}
+
+body.papillon-pronote .pap-mn-subj-score i {
+  font-size: 10px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  color: #8a9b95 !important;
+}
+
+body.papillon-pronote .pap-mn-subj-count {
+  position: absolute !important;
+  display: none !important;
+}
+
+/* ============================================================
+   6. Lignes de notes façon Grade.tsx
+   ============================================================ */
+body.papillon-pronote .pap-mn-list .liste_celluleGrid {
+  display: block !important;
+  position: relative !important;
+  margin: 2px 0 !important;
+  padding: 0 !important;
+  border-radius: 18px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: background .15s ease !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_celluleGrid:hover {
+  background: #f7faf9 !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_celluleGrid[aria-selected="true"] {
+  background: #ddf2ec !important;
+  box-shadow: inset 0 0 0 1px #81c9b6 !important;
+}
+
+/* Le cadre de sélection natif est remplacé par notre fond teinté. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .liste_conteneurCadreSelection {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .liste_contenu_ligne {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 9px 12px !important;
+}
+
+/* ----- Colonne gauche : pastille matière + date ----- */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-gauche {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  flex: 0 0 auto !important;
+  width: 46px !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-emoji {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 15%, #ffffff) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row time.date-contain {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 16%, #ffffff) !important;
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 78%, #10130f) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  width: auto !important;
+  min-width: 0 !important;
+  box-shadow: none !important;
+  text-align: center !important;
+}
+
+/* ----- Colonne centrale : matière, devoir, moyenne de classe ----- */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-centrale {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-contenu-format {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-principale {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale {
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis {
+  color: #10130f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  max-width: 100% !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis:first-child {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 72%, #10130f) !important;
+}
+
+/* 2e ligne = intitulé du devoir : plus discret, sans majuscules. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis + .ie_ellipsis {
+  color: #5c6b66 !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .infos-supp {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin: 2px 0 0 !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .infos-supp .ie-sous-titre {
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+/* Écart à la moyenne de la classe */
+body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-delta {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 1px 7px !important;
+  border-radius: 999px !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-delta.is-up {
+  background: #ddf2ec !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-delta.is-down {
+  background: #fbe6e6 !important;
+  color: #b3261e !important;
+}
+
+/* ----- Colonne droite : la note ----- */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-complementaire {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 58px !important;
+  padding: 0 !important;
+  text-align: right !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .note-valeur {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 1px !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 13%, #ffffff) !important;
+  line-height: 1.1 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .note-devoir {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 80%, #10130f) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.2px !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .note-devoir .bareme,
+body.papillon-pronote .pap-mn-list .pap-mn-row .bareme {
+  color: #8a9b95 !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-on20 {
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+}
+
+/* ----- Pièces jointes ----- */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  background: #f2f6f5 !important;
+  border: 1px solid #e7efee !important;
+  color: #5c6b66 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  max-width: 130px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  transition: background .15s ease, color .15s ease !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn:hover {
+  background: #ddf2ec !important;
+  border-color: #81c9b6 !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn span {
+  color: inherit !important;
+}
+
+/* ============================================================
+   7. Panneau de détail
+   ============================================================ */
+body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cfd9d5 transparent !important;
+}
+
+body.papillon-pronote .pap-mn-detail .liste_content > div[style] {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body.papillon-pronote .pap-mn-detail .liste_contenu_cellule,
+body.papillon-pronote .pap-mn-detail .liste_contenu_cellule_contenu,
+body.papillon-pronote .pap-mn-detail .liste_contenu_ligne,
+body.papillon-pronote .pap-mn-detail .liste_zoneFils,
+body.papillon-pronote .pap-mn-detail .liste_content_lignes,
+body.papillon-pronote .pap-mn-detail .liste_conteneurCadreSelection {
+  width: auto !important;
+  max-width: 100% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* État vide : EmptyItem façon Papillon */
+body.papillon-pronote .pap-mn-detail .pap-mn-empty {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  flex: 1 1 auto !important;
+  min-height: 220px !important;
+  margin: 0 !important;
+  padding: 24px 16px !important;
+  border: 1px dashed #e7efee !important;
+  border-radius: 20px !important;
+  background: #fbfdfc !important;
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  text-transform: none !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-empty-icon {
+  width: 44px !important;
+  height: 44px !important;
+  color: #c8d6d1 !important;
+  opacity: 1 !important;
+}
+
+/* Contenu du devoir sélectionné : en-tête + bloc note + grille de stats.
+   Le DOM natif est conservé tel quel, on le habille seulement. */
+body.papillon-pronote .pap-mn-detail .infos-note {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  flex: 0 0 auto !important;
+  margin: 0 0 12px !important;
+  padding: 0 0 12px !important;
+  border-bottom: 1px solid #eef4f2 !important;
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-mn-detail .infos-note .m-top-l {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-avatar {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 15%, #ffffff) !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-title {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 62%, #10130f) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .2px !important;
+  text-transform: uppercase !important;
+}
+
+/* La date et les thèmes deviennent des puces douces */
+body.papillon-pronote .pap-mn-detail .infos-note p.ie-texte {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: flex-start !important;
+  width: fit-content !important;
+  margin: 0 !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  background: #f2f6f5 !important;
+  color: #5c6b66 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  text-transform: none !important;
+}
+
+/* ---------- Bloc « Note élève » + barre de position ---------- */
+body.papillon-pronote .pap-mn-detail .pap-mn-det-hero {
+  display: block !important;
+  flex: 0 0 auto !important;
+  margin: 0 0 14px !important;
+  padding: 14px 16px 12px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(140deg,
+    color-mix(in srgb, var(--pap-mn-c, #35bba0) 10%, #ffffff) 0%,
+    #ffffff 70%) !important;
+  border: 1px solid color-mix(in srgb, var(--pap-mn-c, #35bba0) 20%, #e7efee) !important;
+  box-shadow: none !important;
+  color: #10130f !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-hero-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 0 2px !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-label {
+  flex: 1 1 auto !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: .4px !important;
+  text-transform: uppercase !important;
+  color: #8a9b95 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-delta {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-delta.is-up {
+  background: #ddf2ec !important;
+  color: #157a63 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-delta.is-down {
+  background: #fbe6e6 !important;
+  color: #b3261e !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-coef {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  background: #f2f6f5 !important;
+  color: #5c6b66 !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-score {
+  display: flex !important;
+  align-items: baseline !important;
+  margin: 0 0 12px !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-score b {
+  font-size: 46px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -1.5px !important;
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 88%, #10130f) !important;
+}
+
+/* Texte en dégradé : uniquement si color-mix est supporté, sinon on garde
+   la couleur pleine ci-dessus (sinon le remplissage transparent rendrait le
+   score invisible). */
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+  body.papillon-pronote .pap-mn-detail .pap-mn-det-score b,
+  html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-score b {
+    background-image: linear-gradient(120deg,
+      color-mix(in srgb, var(--pap-mn-c, #35bba0) 88%, #10130f) 0%,
+      color-mix(in srgb, var(--pap-mn-c, #35bba0) 45%, #ffffff) 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-score b {
+    background-image: linear-gradient(120deg,
+      color-mix(in srgb, var(--pap-mn-c, #35bba0) 40%, #ffffff) 0%,
+      color-mix(in srgb, var(--pap-mn-c, #35bba0) 85%, #ffffff) 100%) !important;
+  }
+}
+
+/* Barre : étendue min..max de la classe, remplissage élève, marqueur moyenne */
+body.papillon-pronote .pap-mn-detail .pap-mn-det-bar {
+  position: relative !important;
+  height: 12px !important;
+  margin: 0 0 8px !important;
+  border-radius: 999px !important;
+  background: #eef4f2 !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .05) !important;
+  overflow: visible !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-range {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  border-radius: 999px !important;
+  background: #d8e6e2 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-fill {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--pap-mn-c, #35bba0) 55%, #ffffff) 0%,
+    var(--pap-mn-c, #35bba0) 100%) !important;
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--pap-mn-c, #35bba0) 45%, transparent) !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-avg {
+  position: absolute !important;
+  top: -3px !important;
+  bottom: -3px !important;
+  width: 3px !important;
+  margin-left: -1.5px !important;
+  border-radius: 2px !important;
+  background: var(--pap-mn-cls) !important;
+  box-shadow: 0 0 0 2px #ffffff !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-scale {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #8a9b95 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .pap-mn-det-scale span:nth-child(2) {
+  color: var(--pap-mn-cls) !important;
+  font-weight: 700 !important;
+}
+
+/* ---------- Grille de statistiques ---------- */
+body.papillon-pronote .pap-mn-detail .details,
+body.papillon-pronote .pap-mn-detail .details-notes {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 14px !important;
+  background: #f7faf9 !important;
+  border: 1px solid #eef4f2 !important;
+  grid-column: span 1 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes > div:has(dt:only-child),
+body.papillon-pronote .pap-mn-detail .details-notes > div:has(dd:only-child) {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes .pap-mn-dl-hidden {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes dt {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: .3px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details-notes dd {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #10130f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.2px !important;
+}
+
+/* Contenu libre du devoir (commentaire, pièces jointes) */
+body.papillon-pronote .pap-mn-detail .details p,
+body.papillon-pronote .pap-mn-detail .details .ie-texte:not(.pap-mn-dl-hidden) {
+  color: #5c6b66 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.55 !important;
+}
+
+body.papillon-pronote .pap-mn-detail .details a {
+  color: #157a63 !important;
+  font-weight: 600 !important;
+  text-decoration-color: #81c9b6 !important;
+}
+
+/* ============================================================
+   8. Mode sombre
+   ============================================================ */
+html.papillon-dark body.papillon-pronote .interface_affV:has(.pap-mn) {
+  background-color: #101513 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn {
+  --pap-mn-line: #35bba0;
+  --pap-mn-line-soft: #6b807a;
+  --pap-mn-cls: #f5a95c;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list,
+html.papillon-dark body.papillon-pronote .pap-mn-detail {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage,
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete button {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage:hover,
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete button:hover {
+  background: #14352c !important;
+  border-color: #35bba0 !important;
+  color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-thumb,
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar-thumb {
+  background: #2f3d38 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-overview {
+  background: linear-gradient(140deg, #16201d 0%, #1a211e 60%, #1c2521 100%) !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-ov-label {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-ov-sub,
+html.papillon-dark body.papillon-pronote .pap-mn-legend-item {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-algo {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-algo:hover {
+  background: #26332f !important;
+  border-color: #3a4742 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-algo.is-on {
+  background: #14352c !important;
+  border-color: #2f7f6c !important;
+  color: #5fd8bd !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-grid {
+  stroke: #2c3934 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-axis {
+  fill: #7d918b !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-path-cls {
+  opacity: .95 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-glow {
+  opacity: .34 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-dot,
+html.papillon-dark body.papillon-pronote .pap-mn-dot-sm {
+  fill: #1a211e !important;
+  stroke: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-scrub-line {
+  stroke: #35bba0 !important;
+  opacity: .7 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-scrub-dot {
+  fill: #5fd8bd !important;
+  stroke: #1a211e !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-tip {
+  background: #202926 !important;
+  border: 1px solid #2a3531 !important;
+  color: #e7efec !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .5) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-tip .pap-mn-tip-date {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-subj {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-subj-emoji {
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 22%, #202926) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-subj-name {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-subj-score b {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 62%, #ffffff) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-subj-score i {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_celluleGrid:hover {
+  background: #202926 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_celluleGrid[aria-selected="true"] {
+  background: #14352c !important;
+  box-shadow: inset 0 0 0 1px #2f7f6c !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-emoji {
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 24%, #202926) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row time.date-contain {
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 24%, #202926) !important;
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 45%, #ffffff) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis,
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis:first-child {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .titre-principale .ie_ellipsis + .ie_ellipsis {
+  color: #a8bab4 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .infos-supp .ie-sous-titre,
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-on20,
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .bareme {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-delta.is-up {
+  background: #14352c !important;
+  color: #5fd8bd !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-delta.is-down {
+  background: #3a1f1f !important;
+  color: #f2a5a0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .note-valeur {
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 22%, #202926) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .note-devoir {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 45%, #ffffff) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #a8bab4 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn:hover {
+  background: #14352c !important;
+  border-color: #2f7f6c !important;
+  color: #5fd8bd !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-empty {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-empty-icon {
+  color: #3a4742 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .infos-note {
+  border-bottom-color: #26312d !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-avatar {
+  background: color-mix(in srgb, var(--pap-mn-c, #35bba0) 24%, #202926) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-title {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 48%, #ffffff) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .infos-note p.ie-texte {
+  background: #202926 !important;
+  color: #a8bab4 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-hero {
+  background: linear-gradient(140deg,
+    color-mix(in srgb, var(--pap-mn-c, #35bba0) 16%, #1a211e) 0%,
+    #1a211e 72%) !important;
+  border-color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 26%, #2a3531) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-score b {
+  color: color-mix(in srgb, var(--pap-mn-c, #35bba0) 45%, #ffffff) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-delta.is-up {
+  background: #14352c !important;
+  color: #5fd8bd !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-delta.is-down {
+  background: #3a1f1f !important;
+  color: #f2a5a0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-coef {
+  background: #202926 !important;
+  color: #a8bab4 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-bar {
+  background: #232c29 !important;
+  box-shadow: none !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-range {
+  background: #2f3d38 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-det-avg {
+  box-shadow: 0 0 0 2px #1a211e !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details-notes > div {
+  background: #202926 !important;
+  border-color: #26312d !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details-notes dt {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details-notes dd {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details p,
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details .ie-texte:not(.pap-mn-dl-hidden) {
+  color: #a8bab4 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-detail .details a {
+  color: #5fd8bd !important;
+  text-decoration-color: #2f7f6c !important;
+}
+
+/* ============================================================
+   9. Écrans étroits — les colonnes s'empilent
+   ============================================================ */
+@media (max-width: 1080px) {
+  body.papillon-pronote .pap-mn {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body.papillon-pronote .pap-mn-list,
+  body.papillon-pronote .pap-mn-detail {
+    max-height: none !important;
+  }
+}
