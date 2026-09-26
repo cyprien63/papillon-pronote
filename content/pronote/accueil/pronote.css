@@ -78,6 +78,16 @@ html.papillon-dark body.papillon-pronote .widget {
   background: #1a211e !important; border-color: #2a3531 !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
 }
+
+/* Filigrane décoratif de PRONOTE (.icone-widget-fond, glyphe Educ-Font de
+   160px) : sa couleur #F5FDFB est prévue pour une carte blanche. Sur la carte
+   sombre il vire au blanc éclatant et barre le widget. On reprend l'écart
+   clair/carte du thème clair (5 valeurs sRGB) au lieu de le masquer, pour
+   garder le même voile discret dans les deux thèmes. */
+html.papillon-dark body.papillon-pronote .icone-widget-fond,
+html.papillon-dark body.papillon-pronote .icone-widget-fond::after {
+  color: rgba(255, 255, 255, .025) !important;
+}
 html.papillon-dark body.papillon-pronote .widget header h2,
 html.papillon-dark body.papillon-pronote .widget header h2 span,
 html.papillon-dark body.papillon-pronote .widget header h3,
