@@ -211,6 +211,15 @@ body.papillon-pronote .fil-ariane { color: #10130f !important; }
 body.papillon-pronote .item-menu_niveau1:hover .label-submenu,
 body.papillon-pronote .item-menu_niveau2:hover .label-submenu { color: #29947a !important; }
 
+/* Exception : le sélecteur d'élève garde le fond sombre de PRONOTE (#353535
+   sur son <li>). Assombrir son libellé comme les autres onglets le rendrait
+   illisible — il reste donc clair. Le sous-menu, lui, est posé sur blanc et
+   doit conserver le texte sombre : on ne vise que le libellé de niveau 0. */
+body.papillon-pronote .objetBandeauEntete_membres .label-menu_niveau0,
+body.papillon-pronote .objetBandeauEntete_membres .label-menu_niveau0 .label-membre {
+  color: #fff !important;
+}
+
 /* Sous-menu déroulant — fond blanc cohérent pills (cache la liste blanc sur blanc) */
 body.papillon-pronote .submenu-wrapper,
 body.papillon-pronote .menu-principal_niveau1,
