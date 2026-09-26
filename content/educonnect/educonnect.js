@@ -6,6 +6,10 @@
    Injecte le thème Papillon + branding (assets officiels du
    repo Papillon), sans toucher au fonctionnement du formulaire
    (posts SAML, champs j_username / j_password, typeUser, ...).
+   Couvre aussi l'étape « Confirmation de l'identité » : le site
+   redemande la date de naissance (formulaire #theForm avec les
+   champs #jour / #mois / #annee) — page marquée via la classe
+   body.pap-ec-identite puis stylée par educonnect.css.
    ============================================================ */
 
 (() => {
@@ -44,6 +48,111 @@
         <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
       </svg>`,
   };
+
+  /* ---------- Icônes Papicons (assets/icons/papicons) ---------- */
+  const ICON_CACHE = new Map();
+  const ICON_FILES = {
+    user: 'user.svg',
+    calendar: 'calendar.svg',
+    check: 'check.svg',
+  };
+
+  function icon(name) {
+    return ICON_CACHE.get(name) || null;
+  }
+
+  async function loadIcon(name) {
+    const file = ICON_FILES[name];
+    if (!file || ICON_CACHE.has(name)) return;
+    try {
+      const url = chrome.runtime.getURL(`assets/icons/papicons/${file}`);
+      const res = await fetch(url);
+      const text = await res.text();
+      ICON_CACHE.set(name, text.replace(/fill="black"/g, 'fill="currentColor"'));
+    } catch (e) {
+      /* ignore — l'icône est optionnelle */
+    }
+  }
+
+  function svgWrap(inner, component) {
+    const span = document.createElement('span');
+    span.className = 'papillon-icon';
+    span.dataset.papicon = component;
+    span.innerHTML = inner;
+    return span;
+  }
+
+  /* ============================================================
+     Étape « Confirmation de l'identité » — date de naissance
+     Le DOM est celui du formulaire #theForm : .titreCompte (profil
+     « Élève »), #titreSaisieDate, #dateNaissance (#jour, #mois,
+     #annee), #dateHelpEleve et les boutons #submit-button /
+     #bouton_precedent. On se contente de poser la classe de
+     marquage et d'injecter les Papicons : la concaténation de la
+     date dans #password-input et l'activation de #submit-button
+     restent gérées par les scripts de la page.
+     ============================================================ */
+  function markIdentitePage() {
+    const form = document.getElementById('theForm');
+    if (!form || !form.querySelector('#dateNaissance')) return;
+    document.body.classList.add('pap-ec-identite');
+  }
+
+  /* Pastille du profil : l'icône native est remplacée par le
+     Papicon `user` (l'<img> n'est masqué qu'une fois l'SVG prêt) */
+  function injectProfileIcon() {
+    const zone = document.querySelector('.pap-ec-identite .titreCompte__icone');
+    const svg = icon('user');
+    if (!zone || !svg || zone.dataset.papEcProfile) return;
+    zone.dataset.papEcProfile = '1';
+    const img = zone.querySelector('img');
+    if (img) img.hidden = true;
+    zone.appendChild(svgWrap(svg, 'ec-profile'));
+  }
+
+  /* Icône calendrier dans l'aide sous les champs de date */
+  function injectDateIcon() {
+    const hint = document.querySelector('.pap-ec-identite #dateHelpEleve');
+    const svg = icon('calendar');
+    if (!hint || !svg || hint.dataset.papEcDate) return;
+    hint.dataset.papEcDate = '1';
+    hint.insertBefore(svgWrap(svg, 'ec-calendar'), hint.firstChild);
+  }
+
+  /* Icône de validation dans le bouton « Confirmer » */
+  function injectConfirmIcon() {
+    const btn = document.querySelector('.pap-ec-identite #submit-button');
+    const svg = icon('check');
+    if (!btn || !svg || btn.dataset.papEcConfirm) return;
+    btn.dataset.papEcConfirm = '1';
+    btn.insertBefore(svgWrap(svg, 'ec-check'), btn.firstChild);
+  }
+
+  function focusFirstField() {
+    const jour = document.getElementById('jour');
+    if (!jour) return;
+    const root = document.documentElement;
+    if (root.dataset.papEcFocus) return;
+    root.dataset.papEcFocus = '1';
+    if (document.activeElement === document.body) jour.focus();
+  }
+
+  function processAll() {
+    markIdentitePage();
+    injectProfileIcon();
+    injectDateIcon();
+    injectConfirmIcon();
+    focusFirstField();
+  }
+
+  function watch() {
+    if (!window.MutationObserver || !document.body) return;
+    new MutationObserver(processAll).observe(document.body, { childList: true, subtree: true });
+    new MutationObserver(processAll).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
 
   function injectProfileIcons() {
     const rep = document.getElementById('bouton_responsable');
@@ -135,6 +244,12 @@
     injectProfileIcons();
     activateConnexionTab();
     watchConnexion();
+
+    processAll();
+    watch();
+    loadIcon('user').then(processAll);
+    loadIcon('calendar').then(processAll);
+    loadIcon('check').then(processAll);
 
     if (chrome && chrome.storage && chrome.storage.sync) {
       const get = chrome.storage.sync.get;

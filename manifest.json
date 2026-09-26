@@ -94,7 +94,8 @@
       "resources": [
         "content/educonnect/educonnect.css",
         "styles/fonts/*",
-        "assets/brand/*"
+        "assets/brand/*",
+        "assets/icons/*"
       ],
       "matches": [
         "https://educonnect.education.gouv.fr/*"

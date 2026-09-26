@@ -21,7 +21,29 @@ body.papillon-educonnect {
   color: #1f2937 !important;
   background: #ffffff !important;
   line-height: 1.5 !important;
-  padding-top: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---------- Centrage de la page ----------
+   DSFR raisonne en 100vw sur le header fixed et laisse passer des
+   débordements horizontaux (#chatmd, conteneurs .fr-container,
+   <div> mal imbriqués sur la page « Confirmation de l'identité ») :
+   le body devient alors plus large que la fenêtre et toute la
+   colonne (bandeau de marque + contenu) paraît décalée. On borne
+   donc body/html à la largeur de la fenêtre et on coupe le
+   débordement horizontal. */
+html:has(body.papillon-educonnect) {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+}
+body.papillon-educonnect {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
 body.papillon-educonnect a {
   color: #29947a !important;
@@ -32,6 +54,20 @@ body.papillon-educonnect a:hover {
   text-decoration: underline !important;
 }
 
+/* ---------- Icônes Papicons injectées inline (voir educonnect.js) ---------- */
+body.papillon-educonnect .papillon-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+body.papillon-educonnect .papillon-icon svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+body.papillon-educonnect .papillon-icon svg path { fill: currentColor !important; }
+
 /* ---------- En-têtes DSFR : le profil switch reste, la marque part ---------- */
 body.papillon-educonnect #header_profil {
   display: none !important;
@@ -39,6 +75,8 @@ body.papillon-educonnect #header_profil {
 body.papillon-educonnect #header_connexion {
   position: relative !important;
   top: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
   background: #ffffff !important;
   box-shadow: none !important;
   border-bottom: none !important;
@@ -83,6 +121,7 @@ body.papillon-educonnect .papillon-brand {
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
+  max-width: 100% !important;
   box-sizing: border-box !important;
   padding: 44px 40px 38px !important;
   margin: 0 0 40px !important;
@@ -92,6 +131,7 @@ body.papillon-educonnect .papillon-brand {
 body.papillon-educonnect .papillon-brand__logotype {
   display: block !important;
   width: 264px !important;
+  max-width: 100% !important;
   height: auto !important;
 }
 
@@ -99,10 +139,10 @@ body.papillon-educonnect .papillon-brand__logotype {
    Contenu — colonne unique centrée 560px, sidebars masquées
    ============================================================ */
 body.papillon-educonnect #contenu {
-  max-width: none !important;
+  max-width: 100% !important;
   width: 100% !important;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   box-shadow: none !important;
 }
 body.papillon-educonnect #contenu > .fr-grid-row {
@@ -111,7 +151,8 @@ body.papillon-educonnect #contenu > .fr-grid-row {
   align-items: center !important;
   width: 100% !important;
   max-width: 560px !important;
-  margin: 0 auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   padding: 0 24px !important;
   box-sizing: border-box !important;
 }
@@ -629,6 +670,337 @@ body.papillon-educonnect h2 {
 }
 
 /* ============================================================
+   Étape « Confirmation de l'identité » — date de naissance
+   EduConnect redemande la date de naissance de l'élève : on
+   retrouve .titreCompte (profil), #titrePage, puis la carte
+   #theForm (h2 #titreSaisieDate, #dateNaissance avec #jour /
+   #mois / #annee, #dateHelpEleve, boutons #submit-button et
+   #bouton_precedent).
+   Ancre : body.pap-ec-identite posée par educonnect.js quand
+   #theForm contient #dateNaissance.
+   ⚠️ Aucun comportement touché : la concaténation de la date
+   dans #password-input (j_password) et l'activation de
+   #submit-button restent gérées par les scripts de la page.
+   ============================================================ */
+
+/* ---------- Header DSFR vide sur cette étape (ni profil, ni outils) :
+   on l'aplatit plutôt que de le masquer, un éventuel bouton de
+   changement de profil resterait ainsi cliquable ---------- */
+body.papillon-educonnect.pap-ec-identite #header_connexion {
+  padding: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect.pap-ec-identite #header_connexion .fr-header__body,
+body.papillon-educonnect.pap-ec-identite #header_connexion .fr-container,
+body.papillon-educonnect.pap-ec-identite #header_connexion .fr-header__body-row,
+body.papillon-educonnect.pap-ec-identite #header_connexion .fr-header__brand {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+/* ---------- Empilement centré : pill, titre, carte ----------
+   La colonne externe (#contenu > .fr-grid-row) garde son
+   `margin: 0 auto` (560px) : on ne touche donc qu'à la rangée
+   interne, dont on neutralise les gouttières DSFR (marges
+   négatives) avant de la passer en colonne centrée. */
+body.papillon-educonnect.pap-ec-identite #contenu .fr-grid-row--gutters {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.papillon-educonnect.pap-ec-identite #contenu #titrePage,
+body.papillon-educonnect.pap-ec-identite #contenu .fr-card {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+}
+body.papillon-educonnect.pap-ec-identite #titrePage {
+  text-align: center !important;
+}
+body.papillon-educonnect.pap-ec-identite #titrePage h1 {
+  margin: 0 0 22px !important;
+}
+
+/* ---------- Pastille de profil (« Élève ») ---------- */
+body.papillon-educonnect.pap-ec-identite #contenu .titreCompte {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 4px 0 20px !important;
+  padding: 6px 18px 6px 6px !important;
+  background: #f2f6f5 !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  color: #227e6b !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+body.papillon-educonnect.pap-ec-identite .titreCompte__icone {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+body.papillon-educonnect.pap-ec-identite .titreCompte__icone img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain !important;
+}
+body.papillon-educonnect.pap-ec-identite .titreCompte__icone .papillon-icon {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* ---------- Carte de confirmation ---------- */
+body.papillon-educonnect.pap-ec-identite #contenu .fr-card {
+  max-width: 460px !important;
+  margin: 0 auto !important;
+  padding: 26px 26px 22px !important;
+  background: #ffffff !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 25px !important;
+  box-shadow: 0 2px 10px rgba(16, 19, 15, 0.05) !important;
+}
+body.papillon-educonnect.pap-ec-identite #contenu .fr-card__body {
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect.pap-ec-identite #theForm {
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+}
+
+/* ---------- Textes de la carte ---------- */
+body.papillon-educonnect.pap-ec-identite #titreSaisieDate {
+  font-size: 19px !important;
+  text-align: center !important;
+  margin: 0 0 6px !important;
+}
+body.papillon-educonnect.pap-ec-identite .champ-obligatoire-label {
+  font-size: 13px !important;
+  text-align: center !important;
+  margin: 0 0 14px !important;
+}
+body.papillon-educonnect.pap-ec-identite #texteSaisieDate {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  text-align: center !important;
+  color: #5b6b66 !important;
+  margin: 0 0 20px !important;
+}
+body.papillon-educonnect.pap-ec-identite .etoile {
+  color: #d34843 !important;
+  font-weight: 700 !important;
+}
+
+/* ---------- Groupe de champs (#dateNaissance) ---------- */
+body.papillon-educonnect.pap-ec-identite .fr-input-group {
+  margin: 0 !important;
+}
+body.papillon-educonnect.pap-ec-identite input[type="hidden"] {
+  display: none !important;
+}
+body.papillon-educonnect.pap-ec-identite .fr-messages-group:empty {
+  display: none !important;
+}
+body.papillon-educonnect.pap-ec-identite .fr-fieldset,
+body.papillon-educonnect.pap-ec-identite .fr-fieldset--border-bottom {
+  border: none !important;
+  border-bottom: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+
+/* Champs segmentés JJ / MM / AAAA */
+body.papillon-educonnect.pap-ec-identite #dateNaissance input {
+  flex: 0 0 84px !important;
+  width: 84px !important;
+  height: 58px !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  padding: 0 6px !important;
+  text-align: center !important;
+  color: #1f2937 !important;
+  background: #f7faf9 !important;
+  border: 1px solid #dde8e5 !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.06em !important;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance input::-webkit-outer-spin-button,
+body.papillon-educonnect.pap-ec-identite #dateNaissance input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance #annee {
+  flex: 0 0 112px !important;
+  width: 112px !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance input::placeholder {
+  color: #a9b8b3 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance input:hover {
+  border-color: #cfe0db !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateNaissance input:focus {
+  background: #ffffff !important;
+  border-color: #29947a !important;
+  box-shadow: 0 0 0 3px rgba(41, 148, 122, 0.15) !important;
+  outline: none !important;
+}
+
+/* ---------- Aide sous les champs (icône calendrier) ---------- */
+body.papillon-educonnect.pap-ec-identite #dateHelpEleve {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin: 12px 0 0 !important;
+  padding: 0 !important;
+  color: #8a9b95 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+}
+body.papillon-educonnect.pap-ec-identite #dateHelpEleve .papillon-icon {
+  width: 15px !important;
+  height: 15px !important;
+  color: #29947a !important;
+}
+
+/* ---------- Boutons (Confirmer / Précédent) ---------- */
+body.papillon-educonnect.pap-ec-identite .fr-btns-group {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin: 26px 0 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.papillon-educonnect.pap-ec-identite .fr-btns-group .fr-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 14px 26px !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.01em !important;
+  text-decoration: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, filter 0.15s ease !important;
+}
+body.papillon-educonnect.pap-ec-identite .fr-btns-group .fr-btn::before,
+body.papillon-educonnect.pap-ec-identite .fr-btns-group .fr-btn::after {
+  content: none !important;
+}
+body.papillon-educonnect.pap-ec-identite #submit-button {
+  border: none !important;
+  background: linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%) !important;
+  color: #ffffff !important;
+}
+body.papillon-educonnect.pap-ec-identite #submit-button .papillon-icon {
+  width: 16px !important;
+  height: 16px !important;
+  color: #ffffff !important;
+}
+body.papillon-educonnect.pap-ec-identite #submit-button:hover:not([disabled]) {
+  filter: brightness(1.06) !important;
+}
+/* L'état actif est porté par l'attribut disabled posé par la page */
+body.papillon-educonnect.pap-ec-identite #submit-button[disabled] {
+  background: #e4ece9 !important;
+  color: #9bb0a9 !important;
+  opacity: 1 !important;
+  cursor: default !important;
+}
+body.papillon-educonnect.pap-ec-identite #submit-button[disabled] .papillon-icon {
+  color: #9bb0a9 !important;
+}
+body.papillon-educonnect.pap-ec-identite #bouton_precedent {
+  background: #ffffff !important;
+  border: 1px solid #dde8e5 !important;
+  color: #5b6b66 !important;
+  font-weight: 600 !important;
+}
+body.papillon-educonnect.pap-ec-identite #bouton_precedent:hover {
+  background: #f2f6f5 !important;
+  border-color: #29947a !important;
+  color: #227e6b !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  body.papillon-educonnect.pap-ec-identite #contenu .fr-card {
+    padding: 22px 18px 18px !important;
+    border-radius: 20px !important;
+  }
+  body.papillon-educonnect.pap-ec-identite #dateNaissance {
+    gap: 8px !important;
+  }
+  body.papillon-educonnect.pap-ec-identite #dateNaissance input,
+  body.papillon-educonnect.pap-ec-identite #dateNaissance #annee {
+    flex: 1 1 0 !important;
+    width: auto !important;
+  }
+  body.papillon-educonnect.pap-ec-identite .fr-btns-group .fr-btn {
+    flex: 1 1 100% !important;
+  }
+}
+
+/* ============================================================
    Mode sombre — html.papillon-dark posé par educonnect.js
    ============================================================ */
 html.papillon-dark body.papillon-educonnect {
@@ -722,4 +1094,60 @@ html.papillon-dark body.papillon-educonnect #div_franceconnect #lienQuoiFC {
 }
 html.papillon-dark body.papillon-educonnect #descriptionFC {
   color: #93a79f !important;
+}
+
+/* ---------- Étape « Confirmation de l'identité » ---------- */
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #header_connexion {
+  background: transparent !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #contenu .titreCompte {
+  background: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #contenu .fr-card {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #dateNaissance input {
+  background: #141b18 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #dateNaissance input:hover {
+  border-color: #3a4542 !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #dateNaissance input:focus {
+  background: #1a211e !important;
+  border-color: #35bba0 !important;
+  box-shadow: 0 0 0 3px rgba(41, 148, 122, 0.25) !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #dateNaissance input::placeholder {
+  color: #6f817b !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #dateHelpEleve,
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #texteSaisieDate,
+html.papillon-dark body.papillon-educonnect.pap-ec-identite .champ-obligatoire-label {
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite .etoile {
+  color: #e0796f !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #submit-button[disabled] {
+  background: #232c29 !important;
+  color: #6f817b !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #submit-button[disabled] .papillon-icon {
+  color: #6f817b !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #bouton_precedent {
+  background: #1a211e !important;
+  border-color: #2a3531 !important;
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-educonnect.pap-ec-identite #bouton_precedent:hover {
+  background: #202926 !important;
+  border-color: #35bba0 !important;
+  color: #35bba0 !important;
 }
