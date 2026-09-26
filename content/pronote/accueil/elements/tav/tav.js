@@ -170,7 +170,7 @@
   }
 
   /* Construit la carte d'une tâche */
-  function buildTask(wrap, dayLabel, dark) {
+  function buildTask(wrap, dark) {
     if (wrap.dataset.papTav) return;
     wrap.dataset.papTav = '1';
 
@@ -206,13 +206,6 @@
           (withColor || header).appendChild(a);
         }
       }
-      /* Date à droite */
-      if (dayLabel && !header.querySelector('.pap-tav-day')) {
-        const day = document.createElement('span');
-        day.className = 'pap-tav-day';
-        day.textContent = dayLabel;
-        header.appendChild(day);
-      }
     }
 
     /* Toggle « J'ai terminé » : injecter le check Papicon dans le label */
@@ -247,18 +240,8 @@
     const isDark = document.documentElement.classList.contains('papillon-dark');
     processHeader(widget);
 
-    const dayGroups = widget.querySelectorAll('.liste-imbriquee > li');
-    dayGroups.forEach((group) => {
-      const h3 = group.querySelector('h3[id*="_date_"], h3');
-      let dayLabel = '';
-      if (h3) {
-        const raw = (h3.textContent || '').replace(/^Pour\s*/i, '').trim();
-        dayLabel = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
-      }
-      group.querySelectorAll('.sub-liste > li .wrap.conteneur-item').forEach((wrap) => {
-        buildTask(wrap, dayLabel, isDark);
-      });
-    });
+    widget.querySelectorAll('.liste-imbriquee > li .sub-liste > li .wrap.conteneur-item')
+      .forEach((wrap) => buildTask(wrap, isDark));
   }
 
   function processAll() {

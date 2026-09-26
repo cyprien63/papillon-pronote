@@ -256,8 +256,8 @@ body.papillon-pronote .widget.travailafaire .titre-matiere {
   line-height: 1.25 !important;
 }
 
-/* La date ne se comprime pas et ne se coupe jamais : c'est le nom qui cède. */
-body.papillon-pronote .widget.travailafaire .pap-tav-day {
+/* La pastille d'état ne se comprime pas et ne se coupe jamais : c'est le nom qui cède. */
+body.papillon-pronote .widget.travailafaire .as-header .tag-style {
   flex: 0 0 auto !important;
   white-space: nowrap !important;
 }
@@ -269,9 +269,41 @@ body.papillon-pronote .widget.travailafaire .pap-tav-emoji {
   flex: 0 0 auto !important;
 }
 
-/* Pastille « Fait / Non Fait » retirée */
+/* Pastille « Fait / Non Fait », poussée à droite de la rangée sujet.
+   PRONOTE ajoute la classe color-theme quand le travail est fait. */
 body.papillon-pronote .widget.travailafaire .as-header .tag-style {
-  display: none !important;
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  background: var(--pap-tav-hover) !important;
+  /* Le gris doux vaut 4.17 sur le fond de la pastille, un cran sous le seuil :
+     assombri de 5% pour repasser au-dessus de 4.5. */
+  color: #67736e !important;
+  border: 1px solid var(--pap-tav-border) !important;
+}
+html.papillon-dark body.papillon-pronote .widget.travailafaire .as-header .tag-style {
+  color: var(--pap-tav-soft) !important;
+}
+body.papillon-pronote .widget.travailafaire .as-header .tag-style.color-theme {
+  background: #ddf2ec !important;
+  color: #157a63 !important;
+  border-color: #81c9b6 !important;
+}
+html.papillon-dark body.papillon-pronote .widget.travailafaire .as-header .tag-style.color-theme {
+  background: #14352c !important;
+  color: #35bba0 !important;
+  border-color: #29947a !important;
+}
+body.papillon-pronote .widget.travailafaire .as-header .tag-style .text {
+  overflow: visible !important;
+  text-overflow: clip !important;
 }
 
 /* Icône pièce jointe à côté du sujet */
@@ -287,17 +319,6 @@ body.papillon-pronote .widget.travailafaire .pap-tav-attach svg {
   width: 100% !important;
   height: 100% !important;
   display: block !important;
-}
-
-/* Date à droite de la rangée sujet */
-body.papillon-pronote .widget.travailafaire .pap-tav-day {
-  margin-left: auto !important;
-  font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  color: var(--pap-tav-soft) !important;
-  white-space: nowrap !important;
-  text-transform: capitalize !important;
 }
 
 /* ---------- Contenu (description) ---------- */
