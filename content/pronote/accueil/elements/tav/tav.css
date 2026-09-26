@@ -217,8 +217,13 @@ body.papillon-pronote .widget.travailafaire .as-header {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  /* Si le nom réclame toute la largeur, la date passe dessous plutôt que de
-     le comprimer : mieux vaut une ligne de plus qu'un mot coupé. */
+  /* PRONOTE ajoute 16px de padding à droite, qui s'ajoutent à celui de la
+     carte : la pastille d'état finissait à 30px du bord et manquait de place.
+     À zéro, la rangée s'aligne sur les bords de la carte. */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* Si le nom réclame toute la largeur, la pastille d'état passe dessous
+     plutôt que de le comprimer : mieux vaut une ligne de plus qu'un mot coupé. */
   flex-wrap: wrap !important;
   row-gap: 2px !important;
 }
