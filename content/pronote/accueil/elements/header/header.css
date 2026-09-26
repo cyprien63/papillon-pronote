@@ -404,6 +404,17 @@ body.papillon-pronote .objetBandeauEntete_boutons .objetBandeauEntete_sep_bouton
   border-color: #e7efee !important; margin: 0 4px !important;
 }
 
+/* Bascule clair / sombre (injectée par header.js) — reprend les classes
+   btnImage de PRONOTE, donc le rond et le survol viennent des règles
+   ci-dessus ; il ne reste que le curseur et la taille du glyphe. */
+body.papillon-pronote .pap-theme-toggle {
+  cursor: pointer !important;
+}
+body.papillon-pronote .pap-theme-toggle .icone-svg {
+  width: 16px !important; height: 16px !important;
+  fill: currentColor !important;
+}
+
 /* Compteurs de notifications — teal, comme le badge */
 body.papillon-pronote .objetBandeauEntete_boutons .bcne_compteur_notif,
 body.papillon-pronote .objetBandeauEntete_boutons .bcne_compteur_aide {
