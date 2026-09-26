@@ -83,6 +83,11 @@ body.papillon-pronote .pap-mn-list .liste_zone {
   min-height: 120px !important;
   height: auto !important;
   max-height: none !important;
+  /* PRONOTE fige la zone en inline (width:934px) alors que la carte
+     ne fait que --liste-width (625px) : d'où le débordement
+     horizontal et la bande claire qui dépasse sur les côtés. */
+  width: auto !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
   background: transparent !important;
@@ -139,6 +144,9 @@ body.papillon-pronote .pap-mn-list .liste_btnentete {
   align-items: center !important;
   justify-content: flex-end !important;
   gap: 8px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
   padding: 0 2px 10px !important;
   margin: 0 !important;
   background: transparent !important;
@@ -146,11 +154,31 @@ body.papillon-pronote .pap-mn-list .liste_btnentete {
   border: none !important;
 }
 
+/* Le conteneur natif de la recherche garde un fond et une bordure
+   blancs en mode sombre : on les neutralise. */
+body.papillon-pronote .pap-mn-list .liste_btnentete_droite,
+body.papillon-pronote .pap-mn-list .liste_contbtnRechercheEntete {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #10130f !important;
+}
+
 body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage,
 body.papillon-pronote .pap-mn-list .liste_btnentete button {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex: 0 0 auto !important;
   width: 34px !important;
   height: 34px !important;
   padding: 0 !important;
@@ -159,6 +187,7 @@ body.papillon-pronote .pap-mn-list .liste_btnentete button {
   border: 1px solid #e7efee !important;
   color: #10130f !important;
   box-shadow: none !important;
+  overflow: visible !important;
   transition: background .15s ease, border-color .15s ease !important;
 }
 
@@ -176,10 +205,27 @@ body.papillon-pronote .pap-mn-list .liste_btnentete button span {
   color: inherit !important;
 }
 
+/* Le <svg class="icone-svg-search"> est livré sans width/height :
+   il retombe sur la taille par défaut d'un élément remplacé et son
+   viewBox (0 0 15 16) est plus étroit que le <path> (x ≈ 15.15),
+   d'où l'icône rognée. On cadre explicitement et on neutralise
+   l'overflow:hidden par défaut des <svg> inline. */
 body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage svg,
 body.papillon-pronote .pap-mn-list .liste_btnentete button svg {
-  width: 100% !important;
-  height: 100% !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: 16px !important;
+  height: 16px !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  fill: currentColor !important;
+}
+
+/* `fill` n'est pas hérité si le <path> en porte un attribut : il faut
+   le viser directement pour que l'icône suive currentColor. */
+body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage svg path:not([fill="none"]),
+body.papillon-pronote .pap-mn-list .liste_btnentete button svg path:not([fill="none"]) {
   fill: currentColor !important;
 }
 
@@ -783,17 +829,50 @@ body.papillon-pronote .pap-mn-list .pap-mn-row .pap-mn-on20 {
 }
 
 /* ----- Pièces jointes ----- */
+/* .zone-message est un bloc frère de .zone-contenu-format : sans marge
+   il vient se coller au contenu du dessus. */
 body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message {
   display: flex !important;
   align-items: center !important;
   gap: 4px !important;
   flex: 0 0 auto !important;
+  margin: 7px 0 0 !important;
   padding: 0 !important;
+}
+
+/* PRONOTE applique ses marges utilitaires (m-top/m-bottom) sur le
+   conteneur flex interne : on les reprend à notre main. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message > .flex-contain {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* La pastille native est posée sur .chips-design-liste.ie-chips, pas
+   sur le <a> : on la neutralise pour ne garder que la nôtre. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-design-liste {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
 }
 
 body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn {
   display: inline-flex !important;
   align-items: center !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  max-width: 130px !important;
   padding: 3px 8px !important;
   border-radius: 999px !important;
   background: #f2f6f5 !important;
@@ -802,8 +881,8 @@ body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn {
   font-family: 'Inter', sans-serif !important;
   font-size: 10.5px !important;
   font-weight: 600 !important;
+  line-height: 1.4 !important;
   text-decoration: none !important;
-  max-width: 130px !important;
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
@@ -816,8 +895,42 @@ body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn:hover {
   color: #157a63 !important;
 }
 
-body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn span {
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn > span {
   color: inherit !important;
+}
+
+/* .chips-svg n'est pas dimensionné et le <svg> qu'il enveloppe n'a ni
+   width ni height : il tombe à 300x150 puis se fait rogner par
+   l'overflow du chip, ce qui écrase le libellé. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn .chips-svg {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: inherit !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn .chips-svg svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  fill: currentColor !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn .chips-svg svg path:not([fill="none"]) {
+  fill: currentColor !important;
+}
+
+/* L'ellipsis porte sur le libellé, pas sur le chip entier. */
+body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn .text {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }
 
 /* ============================================================
@@ -1213,6 +1326,14 @@ html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete button:ho
   background: #14352c !important;
   border-color: #35bba0 !important;
   color: #35bba0 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_btnentete_droite,
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_contbtnRechercheEntete,
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-design-liste {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #e7efec !important;
 }
 
 html.papillon-dark body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-thumb,
