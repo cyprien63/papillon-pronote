@@ -191,6 +191,26 @@ body.papillon-pronote .menu-principal_niveau0 li.actif > a {
   background: #ddf2ec !important; color: #157a63 !important;
 }
 
+/* PRONOTE porte le libellé sur .label-menu_niveau0 / .label-submenu, pas sur
+   le <a> : ces éléments sont peints en clair pour le bandeau coloré d'origine.
+   Le menu étant reposé sur fond blanc, ils devenaient blanc sur blanc. Le thème
+   sombre reprenait déjà ces sélecteurs, le thème clair les avait oubliés. */
+body.papillon-pronote .label-menu_niveau0 {
+  color: #10130f !important;
+}
+body.papillon-pronote .item-menu_niveau0:hover .label-menu_niveau0 {
+  background: #f1f1f1 !important; color: #29947a !important;
+}
+body.papillon-pronote .item-menu_niveau0.item-selected .label-menu_niveau0 {
+  background: #ddf2ec !important; color: #157a63 !important;
+}
+body.papillon-pronote .label-submenu,
+body.papillon-pronote .item-menu_niveau1 .label-submenu,
+body.papillon-pronote .item-menu_niveau2 .label-submenu,
+body.papillon-pronote .fil-ariane { color: #10130f !important; }
+body.papillon-pronote .item-menu_niveau1:hover .label-submenu,
+body.papillon-pronote .item-menu_niveau2:hover .label-submenu { color: #29947a !important; }
+
 /* Sous-menu déroulant — fond blanc cohérent pills (cache la liste blanc sur blanc) */
 body.papillon-pronote .submenu-wrapper,
 body.papillon-pronote .menu-principal_niveau1,

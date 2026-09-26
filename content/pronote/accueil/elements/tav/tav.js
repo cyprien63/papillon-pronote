@@ -109,6 +109,31 @@
     return '📚';
   }
 
+  /* Les drapeaux emoji sont des paires d'indicateurs régionaux (🇬🇧 = U+1F1EC
+     U+1F1E7). Windows n'embarque aucun glyphe pour ces paires : Edge et Chrome
+     retombent alors sur les deux lettres, et « 🇬🇧 » s'affiche « GB ». On les
+     dessine donc en SVG, ce qui donne le même rendu sur toutes les plateformes.
+     Bandes seules : l'arrondi est posé par .pap-tav-flag (overflow: hidden). */
+  const FLAG_SVG = {
+    '🇩🇪': '<svg viewBox="0 0 5 3" preserveAspectRatio="none" focusable="false"><rect width="5" height="1" y="0" fill="#262626"/><rect width="5" height="1" y="1" fill="#d00"/><rect width="5" height="1" y="2" fill="#ffce00"/></svg>',
+    '🇪🇸': '<svg viewBox="0 0 4 3" preserveAspectRatio="none" focusable="false"><rect width="4" height="3" fill="#aa151b"/><rect width="4" height="1.5" y="0.75" fill="#f1bf00"/></svg>',
+    '🇮🇹': '<svg viewBox="0 0 3 2" preserveAspectRatio="none" focusable="false"><rect width="1" height="2" x="0" fill="#009246"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#ce2b37"/></svg>',
+    '🇬🇧': '<svg viewBox="0 0 60 30" preserveAspectRatio="none" focusable="false"><rect width="60" height="30" fill="#012169"/><path d="M0 0l60 30M60 0L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30M60 0L0 30" stroke="#c8102e" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#c8102e" stroke-width="6"/></svg>',
+  };
+
+  /* Pose l'émoji de matière dans <el>, en SVG si c'est un drapeau */
+  function paintSubjectEmoji(el, value) {
+    const flag = FLAG_SVG[value];
+    if (flag) {
+      el.classList.add('pap-tav-flag');
+      el.innerHTML = flag;
+      el.setAttribute('role', 'img');
+      el.setAttribute('aria-label', value);
+    } else {
+      el.textContent = value;
+    }
+  }
+
   /* Extrait la couleur de matière depuis le style inline (--couleur-matiere) */
   function findColor(el) {
     if (!el) return null;
@@ -162,7 +187,7 @@
       if (!header.querySelector('.pap-tav-emoji')) {
         const emoji = document.createElement('span');
         emoji.className = 'pap-tav-emoji';
-        emoji.textContent = subjectEmoji(subject);
+        paintSubjectEmoji(emoji, subjectEmoji(subject));
         if (withColor) withColor.prepend(emoji);
         else header.prepend(emoji);
       }
