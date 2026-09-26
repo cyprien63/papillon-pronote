@@ -53,6 +53,37 @@
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
+  /* Luminance relative sRGB (WCAG 2.1) */
+  function luminance(hex) {
+    hex = String(hex).replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
+    const n = parseInt(hex, 16);
+    const canaux = [n >> 16, (n >> 8) & 0xff, n & 0xff].map((c) => {
+      c /= 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * canaux[0] + 0.7152 * canaux[1] + 0.0722 * canaux[2];
+  }
+
+  function contrast(a, b) {
+    const la = luminance(a);
+    const lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  /* Les couleurs de matière viennent de PRONOTE et vont du très pâle au très
+     sombre : un écart fixe laisse un jaune illisible sur la carte blanche.
+     On pousse la couleur vers le noir ou le blanc juste ce qu'il faut pour
+     atteindre le contraste visé, en gardant la teinte d'origine. */
+  function readableOn(couleur, fond, cible) {
+    const vers = luminance(fond) > 0.5 ? -1 : 1;
+    for (let p = 0; p <= 0.95; p += 0.05) {
+      const candidat = adjust(couleur, vers * p);
+      if (contrast(candidat, fond) >= cible) return candidat;
+    }
+    return vers < 0 ? '#10130f' : '#e7efec';
+  }
+
   function svgWrap(inner, component) {
     const span = document.createElement('span');
     span.className = 'papillon-icon';
@@ -139,7 +170,7 @@
   }
 
   /* Construit la carte d'une tâche */
-  function buildTask(wrap, dayLabel, dark) {
+  function buildTask(wrap, dark) {
     if (wrap.dataset.papTav) return;
     wrap.dataset.papTav = '1';
 
@@ -152,7 +183,7 @@
     const hasAttach = !!attach;
 
     const color = findColor(withColor) || '#35bba0';
-    const tint = adjust(color, dark ? 0.3 : -0.3);
+    const tint = readableOn(color, dark ? '#1a211e' : '#ffffff', 4.5);
 
     wrap.style.setProperty('--pap-tav-color', color);
     wrap.style.setProperty('--pap-tav-tint', tint);
@@ -174,13 +205,6 @@
           a.className = 'pap-tav-attach papillon-icon';
           (withColor || header).appendChild(a);
         }
-      }
-      /* Date à droite */
-      if (dayLabel && !header.querySelector('.pap-tav-day')) {
-        const day = document.createElement('span');
-        day.className = 'pap-tav-day';
-        day.textContent = dayLabel;
-        header.appendChild(day);
       }
     }
 
@@ -216,18 +240,8 @@
     const isDark = document.documentElement.classList.contains('papillon-dark');
     processHeader(widget);
 
-    const dayGroups = widget.querySelectorAll('.liste-imbriquee > li');
-    dayGroups.forEach((group) => {
-      const h3 = group.querySelector('h3[id*="_date_"], h3');
-      let dayLabel = '';
-      if (h3) {
-        const raw = (h3.textContent || '').replace(/^Pour\s*/i, '').trim();
-        dayLabel = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
-      }
-      group.querySelectorAll('.sub-liste > li .wrap.conteneur-item').forEach((wrap) => {
-        buildTask(wrap, dayLabel, isDark);
-      });
-    });
+    widget.querySelectorAll('.liste-imbriquee > li .sub-liste > li .wrap.conteneur-item')
+      .forEach((wrap) => buildTask(wrap, isDark));
   }
 
   function processAll() {

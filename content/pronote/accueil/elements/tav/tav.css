@@ -7,7 +7,7 @@
 /* ---------- Carte du widget ---------- */
 body.papillon-pronote .widget.travailafaire {
   --pap-tav-title: #10130f;
-  --pap-tav-soft: #8a9b95;
+  --pap-tav-soft: #6c7974;
   --pap-tav-card: #ffffff;
   --pap-tav-hover: #f2f6f5;
   --pap-tav-accent: #35bba0;
@@ -217,6 +217,15 @@ body.papillon-pronote .widget.travailafaire .as-header {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
+  /* PRONOTE ajoute 16px de padding à droite, qui s'ajoutent à celui de la
+     carte : la pastille d'état finissait à 30px du bord et manquait de place.
+     À zéro, la rangée s'aligne sur les bords de la carte. */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* Si le nom réclame toute la largeur, la pastille d'état passe dessous
+     plutôt que de le comprimer : mieux vaut une ligne de plus qu'un mot coupé. */
+  flex-wrap: wrap !important;
+  row-gap: 2px !important;
 }
 
 body.papillon-pronote .widget.travailafaire .with-color {
@@ -227,14 +236,35 @@ body.papillon-pronote .widget.travailafaire .with-color {
   min-width: 0 !important;
 }
 
+/* La barre de couleur est le ::before de PRONOTE. Devenue élément flex, elle
+   cumule sa marge d'origine (8px) avec le gap du conteneur : l'icône se
+   retrouvait à 14px de la barre. On laisse le gap seul gérer l'écart. */
+body.papillon-pronote .widget.travailafaire .with-color::before {
+  margin-right: 0 !important;
+}
+
 body.papillon-pronote .widget.travailafaire .titre-matiere {
   font-family: 'Inter', sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   color: var(--pap-tav-tint, var(--couleur-matiere, var(--pap-tav-accent))) !important;
+  /* PRONOTE écrit les matières en capitales : « HISTOIRE-GEOGRAPHIE » ne tient
+     pas sur une ligne dans une colonne étroite. Plutôt que de tronquer le nom,
+     on le laisse passer à la ligne — la carte s'agrandit d'autant.
+     break-word et non anywhere : anywhere coupe à n'importe quelle lettre et
+     hachait les noms d'un seul mot (« MATHEMATI/QUES »), alors que break-word
+     ne coupe un mot que s'il ne tient pas seul sur sa ligne. */
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.25 !important;
+}
+
+/* La pastille d'état ne se comprime pas et ne se coupe jamais : c'est le nom qui cède. */
+body.papillon-pronote .widget.travailafaire .as-header .tag-style {
+  flex: 0 0 auto !important;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
 }
 
 /* Émoji sujet */
@@ -244,26 +274,56 @@ body.papillon-pronote .widget.travailafaire .pap-tav-emoji {
   flex: 0 0 auto !important;
 }
 
-/* Pastille « Fait / Non Fait » retirée */
+/* Pastille « Fait / Non Fait », poussée à droite de la rangée sujet.
+   PRONOTE ajoute la classe color-theme quand le travail est fait. */
 body.papillon-pronote .widget.travailafaire .as-header .tag-style {
-  display: none !important;
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  background: var(--pap-tav-hover) !important;
+  /* Le gris doux vaut 4.17 sur le fond de la pastille, un cran sous le seuil :
+     assombri de 5% pour repasser au-dessus de 4.5. */
+  color: #67736e !important;
+  border: 1px solid var(--pap-tav-border) !important;
+}
+html.papillon-dark body.papillon-pronote .widget.travailafaire .as-header .tag-style {
+  color: var(--pap-tav-soft) !important;
+}
+body.papillon-pronote .widget.travailafaire .as-header .tag-style.color-theme {
+  background: #ddf2ec !important;
+  color: #157a63 !important;
+  border-color: #81c9b6 !important;
+}
+html.papillon-dark body.papillon-pronote .widget.travailafaire .as-header .tag-style.color-theme {
+  background: #14352c !important;
+  color: #35bba0 !important;
+  border-color: #29947a !important;
+}
+body.papillon-pronote .widget.travailafaire .as-header .tag-style .text {
+  overflow: visible !important;
+  text-overflow: clip !important;
 }
 
 /* Icône pièce jointe à côté du sujet */
 body.papillon-pronote .widget.travailafaire .pap-tav-attach {
   flex: 0 0 auto !important;
   opacity: .55 !important;
+  /* 24px par défaut, soit plus haut que l'émoji de matière : on l'aligne sur
+     le drapeau (16px). L'icône reste lisible et rend de la place au nom. */
+  width: 16px !important;
+  height: 16px !important;
 }
-
-/* Date à droite de la rangée sujet */
-body.papillon-pronote .widget.travailafaire .pap-tav-day {
-  margin-left: auto !important;
-  font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  color: var(--pap-tav-soft) !important;
-  white-space: nowrap !important;
-  text-transform: capitalize !important;
+body.papillon-pronote .widget.travailafaire .pap-tav-attach svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
 }
 
 /* ---------- Contenu (description) ---------- */

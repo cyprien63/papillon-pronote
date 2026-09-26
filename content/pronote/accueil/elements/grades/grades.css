@@ -7,7 +7,7 @@
 /* ---------- Carte du widget ---------- */
 body.papillon-pronote .widget.notes {
   --pap-grade-title: #10130f;
-  --pap-grade-soft: #8a9b95;
+  --pap-grade-soft: #6c7974;
   --pap-grade-card: #ffffff;
   --pap-grade-border: rgba(16, 19, 15, .12);
   --pap-grade-hover: #f2f6f5;

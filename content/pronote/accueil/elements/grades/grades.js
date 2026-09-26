@@ -51,6 +51,36 @@
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
+  /* Luminance relative sRGB (WCAG 2.1) */
+  function luminance(hex) {
+    hex = String(hex).replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
+    const n = parseInt(hex, 16);
+    const canaux = [n >> 16, (n >> 8) & 0xff, n & 0xff].map((c) => {
+      c /= 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * canaux[0] + 0.7152 * canaux[1] + 0.0722 * canaux[2];
+  }
+
+  function contrast(a, b) {
+    const la = luminance(a);
+    const lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  /* La pilule de note est posée sur un fond neutre : certaines teintes de la
+     palette (cyan, ambre) y passent sous le seuil de lisibilité. On les pousse
+     vers le noir ou le blanc juste ce qu'il faut, en gardant la teinte. */
+  function readableOn(couleur, fond, cible) {
+    const vers = luminance(fond) > 0.5 ? -1 : 1;
+    for (let p = 0; p <= 0.95; p += 0.05) {
+      const candidat = adjust(couleur, vers * p);
+      if (contrast(candidat, fond) >= cible) return candidat;
+    }
+    return vers < 0 ? '#10130f' : '#e7efec';
+  }
+
   function svgWrap(inner, component) {
     const span = document.createElement('span');
     span.className = 'papillon-icon';
@@ -175,7 +205,7 @@
 
     /* Couleurs : texte de la note = couleur matière (éclaircie en sombre) */
     li.dataset.papGradeEmoji = subjectEmoji(subject);
-    li.style.setProperty('--pap-grade-color', dark ? adjust(color, 0.35) : color);
+    li.style.setProperty('--pap-grade-color', readableOn(color, dark ? '#202926' : '#e8e9e9', 4.5));
     li.style.setProperty('--pap-grade-bg', `${color}33`);
 
     if (subjectEl) subjectEl.classList.add('pap-grade-subject');
