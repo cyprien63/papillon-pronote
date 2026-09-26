@@ -52,7 +52,10 @@ body.papillon-pronote .pap-mn-detail {
   display: flex !important;
   flex-direction: column !important;
   width: auto !important;
-  height: auto !important;
+  /* Hauteur DÉFINIE (et non seulement max-height) : c'est elle qui donne
+     aux viewports enfants (#…_Zone_1, .pap-mn-detail-zone) une taille à
+     laquelle se répartir, donc un vrai scroll à la molette. */
+  height: var(--pap-mn-h) !important;
   max-height: var(--pap-mn-h) !important;
   min-height: 0 !important;
   margin: 0 !important;
@@ -92,30 +95,82 @@ body.papillon-pronote .pap-mn-list .liste_zone {
   padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  overflow: auto !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
   scrollbar-width: thin !important;
   scrollbar-color: #cfd9d5 transparent !important;
 }
 
-body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar {
-  width: 6px !important;
-  height: 6px !important;
+/* ---------- Défilement à la molette ----------
+   PRONOTE fait défiler la liste dans #…_Zone_1 (overflow:hidden + une
+   hauteur inline, plus un handler de molette qui écrit son scrollTop) : nos
+   `height:auto` / `overflow:visible` le transformaient en conteneur
+   incapable de défiler, et la molette n'était plus reprise par personne.
+   On rebâtit la chaîne de flex jusqu'à lui pour qu'il redevienne un vrai
+   viewport défilant — un seul conteneur de scroll, pas de double barre. */
+body.papillon-pronote .pap-mn-list .liste_zoneFils,
+body.papillon-pronote .pap-mn-list .liste-heriar,
+body.papillon-pronote .pap-mn-list .liste-heriar > div,
+body.papillon-pronote .pap-mn-list .liste_content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
 }
 
-body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-thumb {
-  background: #cfd9d5 !important;
-  border-radius: 3px !important;
-}
-
-body.papillon-pronote .pap-mn-list .liste_content > div[style] {
+body.papillon-pronote .pap-mn-list .liste_content > div[style]:not(.liste-totale-fd),
+body.papillon-pronote .pap-mn-list .liste_content > div[id*="_Zone_1"] {
+  flex: 1 1 auto !important;
   height: auto !important;
   max-height: none !important;
   min-height: 0 !important;
-  overflow: visible !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cfd9d5 transparent !important;
+}
+
+/* Barre de scroll du viewport qui remplace celle de PRONOTE.
+   La colonne de droite a déjà le sien (.pap-mn-detail-zone, voir §7) :
+   on ne la double pas, sinon deux barres pour un seul contenu. */
+body.papillon-pronote .pap-mn-list .liste_content > div[style]:not(.liste-totale-fd)::-webkit-scrollbar,
+body.papillon-pronote .pap-mn-list .liste_content > div[id*="_Zone_1"]::-webkit-scrollbar,
+body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_content > div[style]:not(.liste-totale-fd)::-webkit-scrollbar-track,
+body.papillon-pronote .pap-mn-list .liste_content > div[id*="_Zone_1"]::-webkit-scrollbar-track,
+body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_content > div[style]:not(.liste-totale-fd)::-webkit-scrollbar-thumb,
+body.papillon-pronote .pap-mn-list .liste_content > div[id*="_Zone_1"]::-webkit-scrollbar-thumb,
+body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar-thumb {
+  background: #cfd9d5 !important;
+  border-radius: 4px !important;
+  border: 2px solid transparent !important;
+  background-clip: padding-box !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_content > div[style]:not(.liste-totale-fd)::-webkit-scrollbar-thumb,
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_content > div[id*="_Zone_1"]::-webkit-scrollbar-thumb,
+html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar-thumb {
+  background: #2f3d38 !important;
+  background-clip: padding-box !important;
+}
+
+/* La barre personnalisée de PRONOTE est neutralisée (on laisse le widget en
+   place : son JS s'en sert pour mesurer les tailles) — un seul scroll. */
+body.papillon-pronote .pap-mn-list .liste_cont_btnscroll {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Grille interne : PRONOTE la fige à 608px → on la laisse respirer. */
@@ -227,6 +282,108 @@ body.papillon-pronote .pap-mn-list .liste_btnentete button svg {
 body.papillon-pronote .pap-mn-list .liste_btnentete .btnImage svg path:not([fill="none"]),
 body.papillon-pronote .pap-mn-list .liste_btnentete button svg path:not([fill="none"]) {
   fill: currentColor !important;
+}
+
+/* ---------- Champ de recherche natif (.liste_rechercheTexte) ----------
+   Il apparaît quand on clique la loupe : PRONOTE le dessine comme un
+   widget « input-like » blanc avec bordure et bouton d'effacement, ce
+   qui fait apparaître des rebords blancs dans notre barre d'outils.
+   On le rend façon Papillon (pastille douce alignée sur la loupe).
+   ⚠️ On n'écrase que `background-color` / `border` : les icônes de
+   PRONOTE sont posées en `background-image`, il ne faut pas les virer. */
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex: 0 1 220px !important;
+  gap: 6px !important;
+  width: 220px !important;
+  min-width: 120px !important;
+  max-width: 100% !important;
+  height: 34px !important;
+  box-sizing: border-box !important;
+  padding: 0 8px 0 12px !important;
+  margin: 0 !important;
+  background-color: #f2f6f5 !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid #e7efee !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  color: #10130f !important;
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte:hover {
+  border-color: #cfe0db !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte:focus-within {
+  background-color: #ffffff !important;
+  border-color: #35bba0 !important;
+  box-shadow: 0 0 0 3px rgba(53, 187, 160, .15) !important;
+}
+
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte input {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #10130f !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte input:focus,
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte input::placeholder {
+  color: #8a9b95 !important;
+  opacity: 1 !important;
+}
+
+/* Croix d'effacement : pastille douce dans le champ, sans cadre blanc.
+   On garde `background-image` (icône PRONOTE) et on n'agit que sur la
+   couleur de fond, la bordure et l'ombre. */
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #dfe9e6 !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget:hover {
+  background-color: #c6d8d3 !important;
+}
+/* PRONOTE affiche la croix par un offset : on recentre l'icône. */
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget span,
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget svg {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+body.papillon-pronote .pap-mn-list .liste_rechercheTexte_alerte {
+  display: none !important;
 }
 
 /* ============================================================
@@ -933,6 +1090,205 @@ body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message .chips-btn .text {
   text-overflow: ellipsis !important;
 }
 
+/* ---------- Intertitres de matière (mode « Par matière ») ----------
+   Ces lignes portent le nom de la matière et sa moyenne : on les transforme
+   en petits en-têtes de section, sans pastille ni chip de note. */
+body.papillon-pronote .pap-mn-list .pap-mn-matiere {
+  margin: 12px 2px 2px !important;
+  padding: 5px 10px 5px 9px !important;
+  min-height: 0 !important;
+  border: none !important;
+  border-left: 3px solid var(--pap-mn-c, #35bba0) !important;
+  border-radius: 11px !important;
+  background: #f2f7f5 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-matiere:hover {
+  background: #f2f7f5 !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-matiere .zone-gauche {
+  display: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-matiere .ie-titre-gros {
+  color: #1d2b27 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+}
+
+body.papillon-pronote .pap-mn-list .pap-mn-matiere .ie-sous-titre {
+  color: #6b807a !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 11.5px !important;
+}
+
+/* La moyenne de la matière prend la couleur de la matière (PRONOTE la
+   colore en rouge) — plus de valeur rouge dans la liste. */
+body.papillon-pronote .pap-mn-list .pap-mn-matiere .zone-complementaire,
+body.papillon-pronote .pap-mn-list .pap-mn-matiere .zone-complementaire * {
+  color: var(--pap-mn-c, #35bba0) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* ============================================================
+   6 bis. Pied de liste : moyenne générale élève / classe
+   ⚠ Scope : `.InterfaceDernieresNotes` et NON `.pap-mn-list`. Le pied
+   est un objet frère de la liste dans la collection PRONOTE (son
+   aria-labelledby pointe sur `…Instances[2]…`, la liste étant
+   `Instances[1]`) : un sélecteur `.pap-mn-list .liste-totale-fd`
+   ne le touchait donc jamais.
+   Rendu : un bandeau sombre (noir/gris) au texte clair, quelle que
+   soit la position du pied dans le flux. Le rouge PRONOTE
+   (.ie-titre-couleur-large) est neutralisé.
+   ============================================================ */
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd {
+  flex: 0 0 auto !important;
+  /* si le déplacement JS n'a pas eu lieu (pied resté objet frère de la
+     liste), il ne doit pas créer une 3ᵉ colonne sous la grille */
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd > div {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #0d1110 !important;
+  border: 1px solid #2a3531 !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article {
+  display: flex !important;
+  flex: 1 1 0 !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 11px 14px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  /* le rouge de .ie-titre-couleur-large tombe ici */
+  color: #e7efec !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article + article {
+  border-left: 1px solid #2a3531 !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article > span:first-child {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  color: #93a79f !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+  text-transform: none !important;
+}
+
+body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article > span:last-child {
+  flex: 0 0 auto !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums !important;
+  text-shadow: none !important;
+  background: none !important;
+}
+
+/* ---------- Mode sombre : le bandeau reste noir, la bordure s'adapte ---------- */
+html.papillon-dark body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content {
+  background: #0b0e0d !important;
+  border-color: #2a3531 !important;
+}
+
+html.papillon-dark body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article + article {
+  border-left-color: #2a3531 !important;
+}
+
+html.papillon-dark body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article > span:first-child {
+  color: #93a79f !important;
+}
+
+html.papillon-dark body.papillon-pronote .InterfaceDernieresNotes .liste-totale-fd .total-content article > span:last-child {
+  color: #ffffff !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-matiere {
+  background: #1c2422 !important;
+  border-left-color: var(--pap-mn-c, #35bba0) !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-matiere:hover {
+  background: #1c2422 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-matiere .ie-titre-gros {
+  color: #e7efec !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-matiere .ie-sous-titre {
+  color: #8fa39c !important;
+}
+
 /* ============================================================
    7. Panneau de détail
    ============================================================ */
@@ -1201,6 +1557,16 @@ body.papillon-pronote .pap-mn-detail .pap-mn-det-avg {
   box-shadow: 0 0 0 2px #ffffff !important;
 }
 
+/* Repère estimé (moyenne de classe de la période quand le devoir n'en
+   fournit pas) : pointillé + opacité réduite pour ne pas passer pour une
+   donnée de PRONOTE. */
+body.papillon-pronote .pap-mn-detail .pap-mn-det-avg.is-estime {
+  background: repeating-linear-gradient(180deg,
+    var(--pap-mn-cls) 0 3px,
+    transparent 3px 6px) !important;
+  opacity: .8 !important;
+}
+
 body.papillon-pronote .pap-mn-detail .pap-mn-det-scale {
   display: flex !important;
   align-items: center !important;
@@ -1339,6 +1705,34 @@ html.papillon-dark body.papillon-pronote .pap-mn-list .pap-mn-row .zone-message 
 html.papillon-dark body.papillon-pronote .pap-mn-list .liste_zone::-webkit-scrollbar-thumb,
 html.papillon-dark body.papillon-pronote .pap-mn-detail .pap-mn-detail-zone::-webkit-scrollbar-thumb {
   background: #2f3d38 !important;
+}
+
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte {
+  background-color: #202926 !important;
+  border-color: #2a3531 !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte:hover {
+  border-color: #2f3d38 !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte:focus-within {
+  background-color: #1c2521 !important;
+  border-color: #35bba0 !important;
+  box-shadow: 0 0 0 3px rgba(53, 187, 160, .2) !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte input {
+  background: transparent !important;
+  color: #e7efec !important;
+  caret-color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte input::placeholder {
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget {
+  background-color: #2f3d38 !important;
+}
+html.papillon-dark body.papillon-pronote .pap-mn-list .liste_rechercheTexte .icon_fermeture_widget:hover {
+  background-color: #35bba0 !important;
 }
 
 html.papillon-dark body.papillon-pronote .pap-mn-overview {

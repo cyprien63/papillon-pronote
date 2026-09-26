@@ -170,18 +170,56 @@
     return { mm: +m[1], dd: +m[2] };
   }
 
-  /* Couleur de matière donnée par PRONOTE (inline sur le <time>) */
-  function readColor(time) {
+  /* Couleur de matière donnée par PRONOTE : inline sur le <time> en mode
+     chronologique, sur la pastille .ie-line-color de la ligne d'en-tête de
+     matière en mode « Par matière ». */
+  function readColor(row) {
+    const time = row.querySelector('.zone-gauche time, time');
     const style = (time && time.getAttribute('style')) || '';
     const m = /--color-line\s*:\s*(#[0-9a-f]{3,8})/i.exec(style);
-    return m ? m[1] : '';
+    if (m) return m[1];
+    const pastille = row.querySelector('.ie-line-color');
+    const s2 = (pastille && pastille.getAttribute('style')) || '';
+    const m2 = /--color-line\s*:\s*(#[0-9a-f]{3,8})/i.exec(s2);
+    return m2 ? m2[1] : '';
   }
 
-  function readRow(row) {
+  /* `matiere` / `couleurMatiere` : ce que porte la ligne d'en-tête de
+     matière précédente (mode « Par matière »), dont les notes héritent. */
+  function readRow(row, matiere, couleurMatiere) {
     const time = row.querySelector('.zone-gauche time, time');
     const lignes = row.querySelectorAll('.zone-principale .titre-principale .ie_ellipsis');
-    const subject = lignes[0] ? lignes[0].textContent.trim() : '';
-    const devoir = lignes[1] ? lignes[1].textContent.trim() : '';
+
+    /* En mode « Par matière », PRONOTE intercale une ligne d'en-tête par
+       matière : pas de date, pas de devoir, seulement le nom de la matière
+       et sa moyenne. Elle ne doit pas être comptée comme une note (sinon la
+       moyenne générale et le graphique intègrent les moyennes de matière),
+       et ses notes héritent de sa matière et de sa couleur. */
+    const gros = row.querySelector('.zone-principale .titre-principale .ie-titre-gros');
+    if (!lignes.length && gros) {
+      const mat = (gros.textContent || '').trim();
+      return {
+        el: row,
+        estMatiere: true,
+        subject: mat,
+        subjectKey: normalizeSubject(mat) || 'note',
+        color: readColor(row) || hashColor(mat),
+        sig: `M|${mat}`,
+      };
+    }
+
+    /* Chronologique : 2 lignes (matière puis devoir).
+       Par matière : 1 seule ligne, le devoir — la matière vient de l'en-tête
+       qui le précède (on ne le sait que si `matiere` est renseignée). */
+    const deuxLignes = lignes.length >= 2;
+    const uneLigne = lignes.length === 1;
+    const mat = deuxLignes
+      ? ((lignes[0].textContent || '').trim())
+      : (matiere || (uneLigne ? (lignes[0].textContent || '').trim() : ''));
+    const devoir = deuxLignes
+      ? ((lignes[1].textContent || '').trim())
+      : (uneLigne && matiere ? (lignes[0].textContent || '').trim() : '');
+    const matKey = mat || 'Note';
 
     /* Note élève : l'aria-label est la source la plus fiable
        (« Note élève : 10,00/10 »), le .note-devoir sert de repli. */
@@ -208,17 +246,18 @@
     const date = readDate(time);
     const raw = time ? (time.textContent || '').trim() : '';
 
-    if (!subject && score.value === null) return null;
+    if (!mat && score.value === null) return null;
 
     return {
       el: row,
-      subject: subject || 'Note',
-      subjectKey: normalizeSubject(subject) || 'note',
+      estMatiere: false,
+      subject: matKey,
+      subjectKey: normalizeSubject(mat) || 'note',
       devoir,
       date,
       dateRaw: time ? time.getAttribute('datetime') || '' : '',
       dateLabel: raw,
-      color: readColor(time) || hashColor(subject),
+      color: readColor(row) || couleurMatiere || hashColor(matKey),
       score: score.value,
       out: score.out,
       score20: on20(score.value, score.out),
@@ -228,7 +267,8 @@
       pieces: pieces.length,
       sig: [
         time ? time.getAttribute('datetime') || '' : '',
-        subject,
+        mat,
+        devoir,
         score.value,
         score.out,
         cls.value,
@@ -239,9 +279,19 @@
 
   function readRows(list) {
     const out = [];
+    let matiere = '';
+    let couleur = '';
     list.querySelectorAll('.liste_celluleGrid').forEach((row) => {
-      const g = readRow(row);
-      if (g) out.push(g);
+      const g = readRow(row, matiere, couleur);
+      if (!g) return;
+      /* ligne d'en-tête de matière : elle porte la matière et sa couleur
+         pour les notes suivantes, mais n'est pas une note */
+      if (g.estMatiere) {
+        matiere = g.subject;
+        couleur = g.color;
+        return;
+      }
+      out.push(g);
     });
     return out;
   }
@@ -823,7 +873,7 @@
      ajoute un bloc « note élève » façon Papillon + un graphe de position. */
   const DT = {
     eleve: /note\s+élève/i,
-    classe: /moyenne\s+(?:de\s+la\s+)?classe/i,
+    classe: /moyenne\b[^:;]{0,24}?\bclasse\b/i,
     plusHaut: /plus\s+haute/i,
     plusBas: /plus\s+basse/i,
     coef: /coefficient/i,
@@ -847,6 +897,98 @@
     return null;
   }
 
+  /* ---------- Moyenne de classe : recherche large ----------
+     PRONOTE n'inscrit la moyenne de classe dans le <dl> de détail que
+     pour certains devoirs (les autres n'ont que note / plus haute /
+     plus basse / coefficient) : le repère jaune de la barre disparaît
+     alors. On la cherche donc successivement :
+       1. dans la ligne de liste correspondant au devoir sélectionné ;
+       2. dans n'importe quel texte ou attribut de cette ligne ou du
+          panneau de détail (PRONOTE varie lesClasses) ;
+       3. à défaut, dans la moyenne des moyennes de classe de la période,
+          signalée comme une estimation (repère en pointillés, sans écart
+          chiffré pour ne pas faire croire à une donnée de PRONOTE).
+     Format renvoyé aligné sur readDl ({ value, out }) pour réutiliser
+     onEchelle, plus un `estime` pour le cas 3. */
+  const CLS_RE = /moyenne\b[^:;]{0,24}?\bclasse\b\s*[:\-]?\s*(-?[\d\s]*[\d](?:[.,][\d]+)?)\s*(?:\/\s*([\d\s]*[\d](?:[.,][\d]+)?))?/i;
+
+  function parseClasse(text) {
+    const s = String(text || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+    const m = CLS_RE.exec(s);
+    if (!m) return null;
+    const value = parseFr(m[1]);
+    if (value === null) return null;
+    return { label: 'Moyenne de la classe', raw: s, value, out: m[2] ? parseFr(m[2]) : null };
+  }
+
+  /* texte visible + attributs porteurs d'information (title, aria-label…) */
+  function textes(el) {
+    if (!el) return [];
+    const out = [el.textContent || ''];
+    const all = [el].concat(Array.prototype.slice.call(el.querySelectorAll('*')));
+    all.forEach((n) => {
+      ['title', 'aria-label', 'data-value', 'data-note', 'alt'].forEach((a) => {
+        const v = n.getAttribute && n.getAttribute(a);
+        if (v) out.push(v);
+      });
+    });
+    return out;
+  }
+
+  function premiereClasse(list) {
+    for (let i = 0; i < list.length; i++) {
+      const f = parseClasse(list[i]);
+      if (f) return f;
+    }
+    return null;
+  }
+
+  /* Ligne de liste du devoir affiché : PRONOTE la marque le plus souvent,
+     sinon on la retrouve par matière. */
+  function ligneSelectionnee(detail) {
+    const list = document.querySelector('.ListeDernieresNotes');
+    if (!list) return null;
+    const marquee = list.querySelector('.liste_celluleGrid[aria-selected="true"]')
+      || list.querySelector('.liste_celluleGrid.selected')
+      || list.querySelector('.liste_celluleGrid.est-selectionne');
+    if (marquee) return marquee;
+    const h2 = detail.querySelector('.ie-titre');
+    const mat = h2 ? (h2.textContent || '').trim() : '';
+    if (!mat) return null;
+    const rows = Array.prototype.slice.call(list.querySelectorAll('.liste_celluleGrid'));
+    for (let i = 0; i < rows.length; i++) {
+      const l = rows[i].querySelectorAll('.zone-principale .titre-principale .ie_ellipsis');
+      if (l[0] && (l[0].textContent || '').trim() === mat) return rows[i];
+    }
+    return null;
+  }
+
+  function classeDeLaListe(detail) {
+    return premiereClasse(textes(ligneSelectionnee(detail)))
+      || premiereClasse(textes(detail));
+  }
+
+  /* Dernier recours : la moyenne des moyennes de classe connues sur la
+     période — c'est la même référence que la ligne en pointillés du
+     graphique, lissée sur toutes les notes plutôt que portée par la
+     dernière valeur. */
+  function classeDeLaPeriode() {
+    const list = document.querySelector('.ListeDernieresNotes');
+    if (!list) return null;
+    const vs = readRows(list)
+      .filter((g) => g.clsKind === 'classe' && g.cls20 !== null)
+      .map((g) => g.cls20);
+    if (!vs.length) return null;
+    const moy = vs.reduce((s, v) => s + v, 0) / vs.length;
+    return {
+      label: 'Moyenne de la classe',
+      raw: `moyenne de classe de la période (${vs.length} notes)`,
+      value: moy,
+      out: 20,
+      estime: true,
+    };
+  }
+
   /* Couleur du devoir sélectionné : celle que PRONOTE a donnée à la
      ligne de la liste, sinon le hash du nom de matière. */
   function detailColor(detail, matiere) {
@@ -865,22 +1007,31 @@
     const titre0 = detail.querySelector('.ie-titre');
     const color0 = detailColor(detail, titre0 ? titre0.textContent.trim() : '');
 
+    const classe = pick(data, DT.classe);
+    const haut = pick(data, DT.plusHaut);
+    const bas = pick(data, DT.plusBas);
+    const coef = pick(data, DT.coef);
+    /* Repli hors <dl> : ligne de liste, puis moyenne de la période */
+    const moy = (classe && classe.value !== null) ? classe
+      : (classeDeLaListe(detail) || classeDeLaPeriode());
+
     /* PRONOTE réécrit le <dd> en place quand on change de devoir sans
        remplacer les nœuds. La clé doit donc englober TOUS les <dd> lus :
        deux devoirs peuvent afficher la même note (deux 12,30 dans la même
        matière) tout en ayant des moyennes de classe et des extrêmes
        différents — sinon le héros garderait ceux du devoir précédent. */
-    const key = [eleve.raw, ...[DT.classe, DT.plusHaut, DT.plusBas, DT.coef]
-      .map((re) => { const it = pick(data, re); return it ? it.raw : ''; }), color0].join('|');
+    const key = [
+      eleve.raw,
+      moy ? moy.raw : '',
+      haut ? haut.raw : '',
+      bas ? bas.raw : '',
+      coef ? coef.raw : '',
+      color0,
+    ].join('|');
 
     let hero = detail.querySelector('.pap-mn-det-hero');
     if (hero && hero.dataset.papMnHero === key) return;
     if (hero) hero.remove();
-
-    const classe = pick(data, DT.classe);
-    const haut = pick(data, DT.plusHaut);
-    const bas = pick(data, DT.plusBas);
-    const coef = pick(data, DT.coef);
 
     /* Une seule échelle pour toute la barre : celle de l'élève. PRONOTE
        omet le dénominateur quand c'est /20, et il arrive qu'une note soit
@@ -895,7 +1046,7 @@
     const pct = (v) => Math.max(0, Math.min(100, (v / barème) * 100));
 
     const vEleve = onEchelle(eleve);
-    const vClasse = onEchelle(classe);
+    const vClasse = onEchelle(moy);
     const vHaut = onEchelle(haut);
     const vBas = onEchelle(bas);
 
@@ -906,8 +1057,15 @@
     const pClasse = vClasse !== null ? pct(vClasse) : null;
     const pHaut = vHaut !== null ? pct(vHaut) : null;
     const pBas = vBas !== null ? pct(vBas) : null;
-    const delta = vClasse !== null ? vEleve - vClasse : null;
+    /* L'écart chiffré n'a de sens que sur une moyenne de classe réellement
+       fournie par PRONOTE : sur une estimation de période, on s'abstient. */
+    const estime = !!(moy && moy.estime);
+    const delta = (vClasse !== null && !estime) ? vEleve - vClasse : null;
     const up = delta !== null && delta >= 0;
+    const tipClasse = pClasse === null ? ''
+      : estime
+        ? `Moyenne de classe de la période : ${fmt(vClasse)}/20 (estimation, cette note n'a pas de moyenne de classe)`
+        : `Moyenne de la classe : ${fmt(vClasse)}/20`;
 
     hero = document.createElement('div');
     hero.className = 'pap-mn-det-hero';
@@ -922,7 +1080,9 @@
              ? `<span class="pap-mn-det-range" style="left:${pBas.toFixed(1)}%;width:${(pHaut - pBas).toFixed(1)}%"></span>`
              : ''}
            <span class="pap-mn-det-fill" style="width:${pEleve.toFixed(1)}%"></span>
-           ${pClasse !== null ? `<span class="pap-mn-det-avg" style="left:${pClasse.toFixed(1)}%"></span>` : ''}
+           ${pClasse !== null
+             ? `<span class="pap-mn-det-avg${estime ? ' is-estime' : ''}" style="left:${pClasse.toFixed(1)}%" title="${escapeHtml(tipClasse)}"></span>`
+             : ''}
          </div>`
       : '';
 
@@ -938,11 +1098,12 @@
        </div>
        <div class="pap-mn-det-score"><b>${escapeHtml(eleve.raw)}</b></div>
        ${bar}
-       <div class="pap-mn-det-scale">
-         <span>0</span>
-         <span>${pClasse !== null ? `Classe ${fmt(vClasse)}` : ''}</span>
-         <span>${fmt(barème, 0)}</span>
-       </div>`;
+        <div class="pap-mn-det-scale">
+          <span>0</span>
+          <span>${pClasse !== null ? (estime ? 'Moy. classe (période)' : `Classe ${fmt(vClasse)}`) : ''}</span>
+          <span>${fmt(barème, 0)}</span>
+        </div>`;
+
 
     /* La ligne « Note élève » du <dl> est reprise par le bloc ci-dessus. */
     const first = dl.querySelector('div');
@@ -995,6 +1156,40 @@
     }
   }
 
+  /* ---------- Intertitres de matière (mode « Par matière ») ----------
+     Ces lignes ne sont pas des notes : on les marque pour les styler en
+     en-tête de section (petit titre + moyenne de la matière). */
+  function enhanceMatiere(list) {
+    list.querySelectorAll('.liste_celluleGrid').forEach((row) => {
+      if (row.dataset.papMnMat) return;
+      const titre = row.querySelector('.zone-principale .titre-principale');
+      if (!titre || titre.querySelector('.ie_ellipsis')) return;
+      const gros = titre.querySelector('.ie-titre-gros');
+      if (!gros) return;
+      row.dataset.papMnMat = '1';
+      row.classList.add('pap-mn-matiere');
+      const mat = (gros.textContent || '').trim();
+      row.style.setProperty('--pap-mn-c', readColor(row) || hashColor(mat));
+    });
+  }
+
+  /* ---------- Pied de liste (« Moyenne générale élève / classe ») ----------
+     PRONOTE rend ce bandeau comme un objet FRÈRE de la liste (son
+     aria-labelledby pointe sur `…collection._1.Instances[2]…`, la liste
+     étant `Instances[1]`) : laissé en place, il tombe sous la grille des
+     deux colonnes et aucun sélecteur `.pap-mn-list .liste-totale-fd` ne le
+     stylait. On le rentre dans la carte pour qu'il forme son bandeau de
+     bas. Purement cosmétique : aucun listener ni état n'est touché. */
+  function placeFooter(root, list) {
+    const objet = list.querySelector('.ObjetListe');
+    if (!objet) return;
+    const pied = root.querySelector('.liste-totale-fd');
+    if (!pied) return;
+    if (pied.parentElement === objet && objet.lastElementChild === pied) return;
+    pied.classList.add('pap-mn-footer');
+    objet.appendChild(pied);
+  }
+
   /* ---------- Traitement de la page ---------- */
   function processAll() {
     const root = document.querySelector('.InterfaceDernieresNotes');
@@ -1016,7 +1211,9 @@
       const objet = list.querySelector('.ObjetListe');
 
       /* lignes */
+      enhanceMatiere(list);
       readRows(list).forEach(enhanceRow);
+      placeFooter(root, list);
 
       /* carte Moyennes : reconstruite seulement si les données ont changé
          (sinon un simple survol ou un clic sur les algorithmes la casserait) */
