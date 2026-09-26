@@ -189,13 +189,13 @@ body.papillon-pronote .pap-docs .fd_intertitre .h5 {
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: .06em !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   margin: 0 !important;
 }
 
 /* Icônes des rubriques (SVG inline natifs PRONOTE) */
 body.papillon-pronote .pap-docs .icon {
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   display: inline-flex !important;
 }
 
@@ -239,7 +239,7 @@ body.papillon-pronote .pap-docs-right .fd_ligne.with-select.selected .titre-prin
 }
 
 body.papillon-pronote .pap-docs-right .icon {
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   display: inline-flex !important;
 }
 
@@ -258,7 +258,7 @@ body.papillon-pronote .pap-docs-right .titre-principal + div {
   font-family: 'Inter', sans-serif !important;
   font-size: 12.5px !important;
   font-weight: 500 !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
 }
 
 /* Séparateurs natifs masqués (purement décoratifs) */

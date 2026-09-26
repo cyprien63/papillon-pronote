@@ -63,7 +63,7 @@ Source de vérité : `content/pronote/accueil/pronote.css`, section
 | Surface carte | `#ffffff`                    | `#1a211e`                     |
 | Bordure       | `#e7efee`                    | `#2a3531`                     |
 | Texte         | `#10130f`                    | `#e7efec`                     |
-| Texte doux    | `#8a9b95`                    | `#93a79f`                     |
+| Texte doux    | `#6c7974`                    | `#93a79f`                     |
 | Hover         | `#f2f6f5`                    | `#202926`                     |
 | Accent primaire | `#35bba0`                  | `#35bba0`                     |
 

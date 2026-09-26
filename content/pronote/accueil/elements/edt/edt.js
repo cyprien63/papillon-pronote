@@ -67,6 +67,37 @@
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
+  /* Luminance relative sRGB (WCAG 2.1) */
+  function luminance(hex) {
+    hex = String(hex).replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
+    const n = parseInt(hex, 16);
+    const canaux = [n >> 16, (n >> 8) & 0xff, n & 0xff].map((c) => {
+      c /= 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * canaux[0] + 0.7152 * canaux[1] + 0.0722 * canaux[2];
+  }
+
+  function contrast(a, b) {
+    const la = luminance(a);
+    const lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  /* Les couleurs de matière viennent de PRONOTE et vont du très pâle au très
+     sombre : un écart fixe laisse un jaune illisible sur sa propre teinte
+     claire. On pousse donc la couleur vers le noir ou le blanc juste ce qu'il
+     faut pour atteindre le contraste visé, en gardant la teinte d'origine. */
+  function readableOn(couleur, fond, cible) {
+    const vers = luminance(fond) > 0.5 ? -1 : 1;
+    for (let p = 0; p <= 0.95; p += 0.05) {
+      const candidat = adjust(couleur, vers * p);
+      if (contrast(candidat, fond) >= cible) return candidat;
+    }
+    return vers < 0 ? '#10130f' : '#e7efec';
+  }
+
   function parseTime(txt) {
     const m = String(txt).trim().match(/^(\d{1,2})[h:](\d{2})$/);
     return m ? m[1] * 60 + Number(m[2]) : null;
@@ -197,7 +228,7 @@
     /* Variables de colorimétrie (comme Course.tsx de Papillon) */
     const bg = adjust(color, dark ? -0.7 : 0.85);
     const bar = adjust(color, dark ? 0.15 : -0.15);
-    const txt = adjust(color, dark ? 0.45 : -0.15);
+    const txt = readableOn(color, bg, 4.5);
     const border = `${adjust(color, dark ? 0.7 : -0.7)}36`;
     coursUl.style.setProperty('--pap-edt-bg', bg);
     coursUl.style.setProperty('--pap-edt-bar', bar);

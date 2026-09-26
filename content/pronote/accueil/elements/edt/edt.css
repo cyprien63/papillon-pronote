@@ -7,7 +7,7 @@
 /* ---------- Carte du widget ---------- */
 body.papillon-pronote .widget.edt {
   --pap-edt-title: #10130f;
-  --pap-edt-soft: #8a9b95;
+  --pap-edt-soft: #6c7974;
   --pap-edt-hover: #f2f6f5;
   --pap-edt-accent: #35bba0;
   border-radius: 25px !important;
@@ -455,7 +455,7 @@ body.papillon-pronote .ObjetFenetre_Date_racine {
   --pap-picker-surface: #f2f6f5;
   --pap-picker-title: #10130f;
   --pap-picker-text: #10130f;
-  --pap-picker-soft: #8a9b95;
+  --pap-picker-soft: #6c7974;
   --pap-picker-border: #e7efee;
   --pap-picker-accent: #35bba0;
 }

@@ -25,7 +25,7 @@
   --papillon-surface: #ffffff;
   --papillon-border: #e7efee;
   --papillon-text: #10130f;
-  --papillon-text-soft: #8a9b95;
+  --papillon-text-soft: #6c7974;
   --papillon-hover: #f2f6f5;
 }
 
@@ -74,9 +74,18 @@ html.papillon-dark body.papillon-pronote .widgets-global-container {
 html.papillon-dark body.papillon-pronote a { color: #35bba0 !important; }
 
 /* ---------- Widgets ---------- */
+/* PRONOTE pose color:#000 sur section.widget lui-même : sans reprise, tout le
+   contenu des widgets non restylés hérite du noir sur la carte sombre (16
+   textes illisibles relevés sur la page d'accueil). Les widgets repris
+   recolorent leurs éléments internes et priment donc toujours. */
 html.papillon-dark body.papillon-pronote .widget {
   background: #1a211e !important; border-color: #2a3531 !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote .widget h3,
+html.papillon-dark body.papillon-pronote .widget label {
+  color: #e7efec !important;
 }
 html.papillon-dark body.papillon-pronote .widget header h2,
 html.papillon-dark body.papillon-pronote .widget header h2 span,
@@ -234,7 +243,7 @@ body.papillon-pronote .ObjetFicheEtablissement_racine {
   --pap-popup-surface: #f2f6f5;
   --pap-popup-title: #10130f;
   --pap-popup-text: #10130f;
-  --pap-popup-soft: #8a9b95;
+  --pap-popup-soft: #6c7974;
   --pap-popup-border: #e7efee;
   --pap-popup-accent: #35bba0;
 }
@@ -384,7 +393,7 @@ body.papillon-pronote .ObjetFenetre_Espace.is-info {
   --pap-popup-surface: #f2f6f5;
   --pap-popup-title: #10130f;
   --pap-popup-text: #10130f;
-  --pap-popup-soft: #8a9b95;
+  --pap-popup-soft: #6c7974;
   --pap-popup-border: #e7efee;
   --pap-popup-accent: #35bba0;
 }
@@ -520,7 +529,7 @@ body.papillon-pronote .ObjetFicheAppliMobile_racine {
   --pap-popup-surface: #f2f6f5;
   --pap-popup-title: #10130f;
   --pap-popup-text: #10130f;
-  --pap-popup-soft: #8a9b95;
+  --pap-popup-soft: #6c7974;
   --pap-popup-border: #e7efee;
   --pap-popup-accent: #35bba0;
 }
@@ -676,7 +685,7 @@ body.papillon-pronote .ObjetMenuContexutel {
   --pap-menu-bg: #ffffff;
   --pap-menu-surface: #f2f6f5;
   --pap-menu-text: #10130f;
-  --pap-menu-soft: #8a9b95;
+  --pap-menu-soft: #6c7974;
   --pap-menu-border: #e7efee;
   --pap-menu-accent: #35bba0;
   --pap-menu-shadow: 0 8px 32px rgba(0,0,0,.14);
@@ -767,7 +776,7 @@ body.papillon-pronote .ObjetCentraleNotifications {
   --pap-popup-surface: #f2f6f5;
   --pap-popup-title: #10130f;
   --pap-popup-text: #10130f;
-  --pap-popup-soft: #8a9b95;
+  --pap-popup-soft: #6c7974;
   --pap-popup-border: #e7efee;
   --pap-popup-accent: #35bba0;
 }
@@ -989,7 +998,7 @@ body.papillon-pronote .ObjetAideContextuelle {
   --pap-popup-surface: #f2f6f5;
   --pap-popup-title: #10130f;
   --pap-popup-text: #10130f;
-  --pap-popup-soft: #8a9b95;
+  --pap-popup-soft: #6c7974;
   --pap-popup-border: #e7efee;
   --pap-popup-accent: #35bba0;
 }

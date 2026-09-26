@@ -114,7 +114,7 @@ body.papillon-pronote .ObjetCompte [role="treeitem"][aria-level="1"] .titre-prin
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: .06em !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
 }
 
 /* Ligne sélectionnée (« Mon profil ») */
@@ -130,7 +130,7 @@ body.papillon-pronote .ObjetCompte .fd_ligne.with-select.selected .titre-princip
 
 /* Icônes des entrées du menu */
 body.papillon-pronote .ObjetCompte .icon {
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
 }
 
 body.papillon-pronote .ObjetCompte .icon svg {
@@ -217,7 +217,7 @@ body.papillon-pronote .ObjetCompte .compte-contain .champ-libelle {
   font-size: 13px !important;
   font-weight: 600 !important;
   line-height: 1.3 !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   margin: 0 0 4px !important;
 }
 

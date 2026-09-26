@@ -189,7 +189,7 @@ body.papillon-pronote .pap-contenus-left .compteur {
   padding: 0 7px !important;
   border-radius: 999px !important;
   background: var(--papillon-hover, #f2f6f5) !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -198,7 +198,7 @@ body.papillon-pronote .pap-contenus-left .compteur {
 
 /* Icône « Toutes les matières » */
 body.papillon-pronote .pap-contenus-left .icon_th_large {
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   display: inline-flex !important;
 }
 
@@ -271,7 +271,7 @@ body.papillon-pronote .pap-contenus-right .ie-titre-gros.souligne {
   letter-spacing: .04em !important;
   text-transform: uppercase !important;
   line-height: 1.3 !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
 }
 
 /* Liste des contenus du jour */
@@ -353,7 +353,7 @@ body.papillon-pronote .pap-contenus-right .ie-sous-titre {
   font-size: 12.5px !important;
   font-weight: 500 !important;
   line-height: 1.3 !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -370,7 +370,7 @@ body.papillon-pronote .pap-contenus-right .ie-titre-petit {
   font-size: 12px !important;
   font-weight: 600 !important;
   line-height: 1.3 !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   white-space: nowrap !important;
 }
 
@@ -406,7 +406,7 @@ body.papillon-pronote .pap-contenus-right .tag-style.ie-chips {
   border-radius: 999px !important;
   background: var(--papillon-hover, #f2f6f5) !important;
   border: none !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 11.5px !important;
   font-weight: 600 !important;

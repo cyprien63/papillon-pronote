@@ -194,7 +194,7 @@ body.papillon-pronote .pap-forums-middle .zone-filtres {
 }
 
 body.papillon-pronote .pap-forums-middle .zone-filtres .ie-titre-petit {
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
 }
 
 body.papillon-pronote .pap-forums-middle .ocb_cont {
@@ -285,7 +285,7 @@ body.papillon-pronote .pap-forums-middle .compteur {
   padding: 0 7px !important;
   border-radius: 999px !important;
   background: var(--papillon-hover, #f2f6f5) !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -296,7 +296,7 @@ body.papillon-pronote .pap-forums-middle .compteur {
 /* ----- État vide « Aucun forum » ----- */
 body.papillon-pronote .pap-forums-middle .liste_messageVide {
   background: transparent !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 13.5px !important;
   font-weight: 500 !important;
@@ -339,7 +339,7 @@ body.papillon-pronote .pap-forums-right .message-vide {
 
 body.papillon-pronote .pap-forums-right .message-vide .message {
   background: transparent !important;
-  color: var(--papillon-text-soft, #8a9b95) !important;
+  color: var(--papillon-text-soft, #6c7974) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;

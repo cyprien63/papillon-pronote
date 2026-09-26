@@ -140,7 +140,7 @@ body.papillon-educonnect #contenu .fs-20 {
 }
 body.papillon-educonnect .champ-obligatoire-label {
   font-size: 14px !important;
-  color: #8a9b95 !important;
+  color: #6c7974 !important;
   margin: 0 0 18px !important;
 }
 body.papillon-educonnect #div_profil h1.fs-20,
@@ -422,7 +422,7 @@ body.papillon-educonnect #div_franceconnect .divider {
   display: flex !important;
   align-items: center !important;
   gap: 16px !important;
-  color: #8a9b95 !important;
+  color: #6c7974 !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;

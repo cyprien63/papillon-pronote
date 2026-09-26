@@ -330,7 +330,7 @@ body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton {
   align-items: center !important;
   justify-content: center !important;
   background: transparent !important;
-  color: #8a9b95 !important;
+  color: #6c7974 !important;
 }
 body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton svg,
 body.papillon-pronote .objetBandeauEntete_thirdmenu:not(.sr-only) .ocb_bouton svg path,
@@ -366,7 +366,7 @@ body.papillon-pronote .titre-onglet {
 }
 body.papillon-pronote .precedenteConnexion {
   font-family: 'Inter', sans-serif !important; font-size: 12.5px !important; font-weight: 500 !important;
-  color: #8a9b95 !important;
+  color: #6c7974 !important;
 }
 
 /* Boutons de commande — pill */
