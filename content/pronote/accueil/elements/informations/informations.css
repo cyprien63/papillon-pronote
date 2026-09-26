@@ -11,7 +11,7 @@
 /* ---------- Carte du widget ---------- */
 body.papillon-pronote section.widget:has(svg.icone-svg-diffuser_information) {
   --pap-info-title: #10130f;
-  --pap-info-soft: #8a9b95;
+  --pap-info-soft: #6c7974;
   --pap-info-card: #ffffff;
   --pap-info-border: rgba(16, 19, 15, .12);
   --pap-info-hover: #f2f6f5;
