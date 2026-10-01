@@ -63,28 +63,30 @@ donne les chiffres sans qu'il faille lire le HTML.
 node tools/commits.mjs
 ```
 
-### Les deux comptes, et l'écart entre eux
+### Pourquoi la page annonce moins de commits que GitHub
 
-La page annonce **67** commits pour `main` et **12** pour `SITE`. GitHub affiche
-**72** et **20**. Les deux chiffres sont justes, et c'est exactement ce qui rend
-la page trompeuse : le lecteur compare, tombe sur 5 et 8 d'écart, et conclut que
-le générateur compte mal.
+La page annonce **67** commits pour `main` et **13** pour `SITE`. GitHub affiche
+**72** et **21**. Les deux chiffres sont justes, et c'est ce qui peut rendre la
+page trompeuse : le lecteur compare, tombe sur l'écart, et conclut que le
+générateur compte mal.
 
-L'écart est la contrepartie d'une décision nécessaire. Les fusions et les
-commits du robot sont exclus du graphe — sans quoi le workflow régénère le
-fichier, la PR est mergée, le fichier diffère encore, et la boucle ne se ferme
-jamais. Mais **un compte filtré ne doit pas se présenter comme le compte de la
-branche.** Chaque carte porte donc les deux nombres :
+L'écart vient de deux familles de commits que le graphe laisse dehors, et le
+raisonnement tient en une phrase : **le graphe mesure le travail, pas la
+mécanique qui l'affiche.** Les fusions rapprochent des commits déjà comptés un
+par un ; les commits du workflow régénèrent la page. Les compter ferait que le
+fichier change à chaque fois qu'il est régénéré.
+
+La page explique donc la règle en mots, sans chiffres. La réconciliation est
+dans la sortie du générateur :
 
 ```
-main   67  commits représentés
-          sur 72 dans la branche — écartés : 5 fusions
-SITE   12  commits représentés
-          sur 20 dans la branche — écartés : 5 fusions, 3 commits du robot
+$ node tools/commits.mjs
+  main : 67 représentés sur 72 dans la branche (écartés : 5 fusions)
+  SITE : 13 représentés sur 21 dans la branche (écartés : 5 fusions, 3 commits du robot)
 ```
 
-L'arithmétique est vérifiable à la main et le générateur l'affiche :
-`67 + 5 + 0 = 72`, `12 + 5 + 3 = 20`, `79 + 13 = 92`.
+**Le terminal, et lui seul, peut porter ce décompte.** C'est la leçon de la
+section suivante : ces chiffres ne peuvent pas revenir dans un fichier versionné.
 
 Les compteurs de fusions et de commits du robot vivaient dans une variable
 unique, calculée sur `git log --all` : ils étaient vrais globalement et
@@ -92,18 +94,48 @@ impossibles à répartir sur une branche. C'est pour ça que `sur` est désormai
 posé sur *tous* les commits lus, y compris les écartés — sinon il n'y a aucun
 moyen de distinguer, pour `main`, ses 5 fusions des 5 fusions de `SITE`.
 
+### La boucle que j'ai ouverte en voulant réconcilier les comptes
+
+Le coupable n'était pas la boucle qu'on cherchait à éviter, mais le moyen de la
+montrer.
+
+La page disait « 67 représentés sur 72 dans la branche — 5 fusions écartées ».
+À la regeneration suivante, le bot crée son commit, la PR est mergée, et la
+branche compte donc **73** commits : le fichier change, une PR se rouvre, on la
+merge, on arrive à 74. Le cycle ne s'arrêtait jamais. Vérifié sur un clone : le
+diff ne faisait que grossir, `97 commits, 17 non représentés`, puis `99, 19`.
+
+Le graphe lui-même n'avait rien à voir là-dedans. La grille ne bougeait pas, la
+liste des 14 derniers commits non plus : la grille et la liste sont construites
+sur les commits filtrés, donc un commit de fusion ou du robot n'y entre pas. Ce
+qui bougeait, c'était le texte que j'y avais ajouté pour justifier l'écart.
+
+Un fichier produit par un générateur **ne peut pas compter les commits que ce
+générateur crée**. Le compte est une fonction de lui-même, il croît à chaque
+tour, et aucune garde ne le fixe : il n'y a pas de point fixe. Les chiffres sont
+donc sortis de `data/commits.json` et du HTML, et restent dans la sortie
+terminale, que rien ne réinjecte dans le dépôt.
+
+Le repli, lui, est bien réel et vérifié : `paths-ignore` sur les deux fichiers
+générés fait que le push du bot ne relance pas le workflow. C'est une seconde
+barrière, pas la première — sans elle, la moindre mesure affichée qui dépende
+du nombre de commits écartés réintroduirait la boucle sans qu'on s'en aperçoive.
+
+La même règle vaut pour `genereLe`, la date d'instantané : elle change une fois
+par jour. Sans conséquence tant qu'aucun déclencheur quotidien ne tourne, et il
+n'y en a pas — voir plus loin pourquoi le cron a été retiré.
+
 Zéro dépendance, comme le `tools/build.mjs` prévu pour la variante Firefox. Le
-workflow `.github/workflows/commits.yml` le relance à chaque push sur `main` ou
-`SITE`, chaque matin, et à la main. Il n'ouvre une PR que si le fichier a
-réellement changé.
+workflow `.github/workflows/commits.yml` le relance à chaque push sur `SITE` et à
+la main. Il n'ouvre une PR que si le fichier a réellement changé.
 
 ### Le workflow passe par une PR, volontairement
 
-Les deux branches portent un ruleset qui impose une pull request, et le robot
-n'est pas dans la liste de contournement : un `git push` direct de sa part
-serait refusé. Le workflow pousse donc sur une branche jetable
-(`commits-graphe`) et ouvre une PR, que tu merges. C'est plus lent d'un push
-direct, mais ça respecte la protection au lieu de la contourner en douce.
+`SITE` porte un ruleset qui impose une pull request, et le robot n'est pas dans
+la liste de contournement : un `git push` direct de sa part serait refusé. Le
+workflow pousse donc sur une branche jetable (`commits-graphe`) et ouvre une PR,
+que tu merges. C'est plus lent d'un push direct, mais ça respecte la protection
+au lieu de la contourner en douce.
 
 ### Trois pièges que le script désamorce
 
@@ -120,11 +152,12 @@ changeait, donc le workflow ouvrait une PR — laquelle en créait une autre.
 Écarter les fusions ne perd rien : les commits qu'elles rapprochent sont déjà
 comptés un par un.
 
-**La date ne bouge que si le contenu bouge.** Le workflow tourne chaque matin.
-Si `genereLe` prenait l'heure du jour, le fichier serait différent tous les
-matins et le workflow ouvrirait une PR ne contenant qu'une date. La date est
-celle du dernier changement réel, donc une journée sans commit produit un
-fichier identique et le workflow s'arrête avant la PR.
+**La date de l'instantané ne bouge que si le travail bouge.** `genereLe` prend
+la date du dernier commit représenté, pas celle du jour où le script tourne.
+Avec `new Date()`, le fichier changeait une fois par jour même sans travail
+nouveau, et le workflow ouvrait une PR ne contenant qu'une date. La date du
+dernier commit est stable par construction, et elle dit plus : elle date le
+travail, pas le passage du script.
 
 ### Ce que montre le graphique
 

@@ -169,28 +169,35 @@ const premier = (b) => {
 };
 
 /* Le compte que GitHub affiche sur la branche, et la raison de l'écart avec le
- * compte ci-dessus. Sans ces deux nombres, la page annonce 67 et 12 là où le
- * dépôt en affiche 72 et 20, et le lecteur n'a aucun moyen de réconcilier les
- * deux — il conclut que le compte est faux. */
+ * compte ci-dessus. Ces nombres vont sur le terminal, jamais dans un fichier
+ * versionné : voir le commentaire à la fin de grapheHtml. */
 const dansLaBranche = (b, motif) =>
   lus.filter((c) => c.sur.includes(b) && (!motif || c.ecarte === motif)).length;
 
 const presentes = BRANCHES.filter((b) => !introuvables.includes(b));
 const resume = {};
 for (const b of presentes) {
-  const fusions = dansLaBranche(b, 'fusion');
-  const robots = dansLaBranche(b, 'robot');
-  resume[b] = {
-    commits: total(b),
-    total: dansLaBranche(b),
-    fusions,
-    robots,
-    premier: premier(b),
-  };
+  /* Deux nombres seulement, et ils sont stables : le nombre de commits
+   * représentés, et la date du premier.
+   *
+   * Le total de la branche et la répartition fusions / automatiques
+   * n'entrent pas dans le JSON, même s'ils sont affichés sur le terminal. Ils
+   * dépendent des commits que le bot crée lui-même : le fichier changerait à
+   * chaque régénération, le workflow committerait cette différence, et la mise
+   * à jour ne convergerait jamais. Le terminal n'est pas réinjecté dans le
+   * dépôt — c'est le seul endroit où le décompte complet est exact. */
+  resume[b] = { commits: total(b), premier: premier(b) };
 }
 
+/* La date de l'instantané, et elle est celle du dernier commit représenté, pas
+ * celle du jour où le script tourne.
+ *
+ * Avec `new Date()`, le fichier changeait une fois par jour même sans travail
+ * nouveau, et le workflow ouvrait une PR ne contenant qu'une date. La date du
+ * dernier commit est stable par construction, et elle dit plus : elle date le
+ * travail, pas le passage du script. */
 const donnees = {
-  genereLe: new Date().toISOString().slice(0, 10),
+  genereLe: jours.length ? jours[jours.length - 1].jour : new Date().toISOString().slice(0, 10),
   branches: presentes,
   resume,
   jours,
@@ -239,20 +246,12 @@ function pasRond(max, cible = 4) {
 function carteResume(b, r, indent) {
   const p = ' '.repeat(indent);
   const classe = b === 'main' ? 'swatch-main' : 'swatch-site';
-  const pluriel = (n) => (n > 1 ? 's' : '');
-  const ecarts = [];
-  if (r.fusions) ecarts.push(`${r.fusions} fusion${pluriel(r.fusions)}`);
-  if (r.robots) ecarts.push(`${r.robots} commit${pluriel(r.robots)} du robot`);
+  const pluriel = r.commits > 1 ? 's' : '';
   return [
     `${p}<article class="branch-card">`,
     `${p}  <h3><span class="swatch ${classe}"></span>${b}</h3>`,
     `${p}  <div class="count">${r.commits}</div>`,
-    `${p}  <div class="since">commit${pluriel(r.commits)} représenté${pluriel(r.commits)}, premier le ${r.premier}</div>`,
-    ...(ecarts.length
-      ? [
-          `${p}  <p class="ecart">sur ${r.total} dans la branche — écartés : ${ecarts.join(', ')}</p>`,
-        ]
-      : []),
+    `${p}  <div class="since">commit${pluriel} représenté${pluriel}, premier le ${r.premier}</div>`,
     `${p}</article>`,
   ].join('\n');
 }
@@ -353,7 +352,7 @@ function grapheHtml(indent) {
           `maximum ${maxPar[s.cle]} le ${moisCourts(meilleur[s.cle] ? meilleur.jour : dernierJour)}`
         );
       })
-      .join('. ')}. ${lus.length} commits dans les deux branches, dont ${nbRobot + nbFusion} non représentés : ${nbFusion} fusions et ${nbRobot} commits du workflow, qui régénèrent ce fichier.</desc>`
+      .join('. ')}. Les fusions et les commits automatiques ne sont pas représentés.</desc>`
   );
 
   /* Les dates, environ une sur trois, pour qu'elles ne se chevauchent pas.
@@ -404,7 +403,6 @@ function grapheHtml(indent) {
   L.push(`${p}</svg>`);
 
   const sansCommit = colonnes.length - jours.length;
-  const ecartGlobal = lus.length - total;
   L.push(
     `${p}<p class="graph-foot">Chaque case porte le nombre de commits du jour. ` +
       `<b>${total} commits</b> du ${moisCourts(debut)} au ${moisCourts(dernierJour)}, ` +
@@ -414,15 +412,24 @@ function grapheHtml(indent) {
         : `Aucun jour sans commit sur la période.`) +
       `</p>`
   );
-  if (ecartGlobal > 0) {
-    L.push(
-      `${p}<p class="graph-foot">GitHub affiche <b>${lus.length} commits</b> sur les deux ` +
-        `branches, pas ${total}. L'écart de ${ecartGlobal} n'est pas une perte : ` +
-        `${nbFusion} fusions rapprochent des commits déjà comptés un par un, et les ` +
-        `${nbRobot} commits du workflow régénèrent cette page. Les compter ferait ` +
-        `boucler la mise à jour toute seule.</p>`
-    );
-  }
+  /* Pas de « GitHub affiche N commits » ici, même si l'écart mérite une phrase.
+   *
+   * Le nombre de commits écartés dépend des commits que le bot lui-même crée :
+   * il incrémente à chaque régénération et à chaque fusion de la PR, donc le
+   * fichier changerait à chaque tour et rouvrirait une PR sans fin. Un fichier
+   * produit par le générateur ne peut pas compter les commits que ce
+   * générateur crée. La règle s'explique donc en mots, et le décompte exact
+   * est dans la sortie de `node tools/commits.mjs` — un terminal n'est pas
+   * réinjecté dans le dépôt. */
+  L.push(
+    `${p}<p class="graph-foot">Ce graphe ne représente que les commits écrits par ` +
+      `toi. Les <b>fusions</b> en sont écartées : elles rapprochent des commits déjà ` +
+      `comptés un par un. Les <b>commits automatiques</b> aussi : le workflow qui ` +
+      `régénère cette page en crée un à chaque mise à jour, donc les compter le ` +
+      `ferait changer sans cesse et rouvrirait une PR sans fin. C’est pour cette ` +
+      `raison que cette page annonce moins de commits que GitHub n’en affiche — ` +
+      `et que <code>node tools/commits.mjs</code> est là pour dire l’écart exact.</p>`
+  );
   return L.join('\n');
 }
 
@@ -502,13 +509,18 @@ if (nbRobot) {
 if (nbFusion) {
   console.log(`  ${nbFusion} commit(s) de fusion écartés du graphe`);
 }
+/* Le décompte complet, ici et nulle part ailleurs. C'est le seul endroit où il
+ * peut figurer : un fichier versionné serait réécrit par ce que ce décompte
+ * mesure. */
 for (const b of presentes) {
   const r = resume[b];
+  const fusions = dansLaBranche(b, 'fusion');
+  const robots = dansLaBranche(b, 'robot');
   const ecarts = [];
-  if (r.fusions) ecarts.push(`${r.fusions} fusion${r.fusions > 1 ? 's' : ''}`);
-  if (r.robots) ecarts.push(`${r.robots} commit${r.robots > 1 ? 's' : ''} du robot`);
+  if (fusions) ecarts.push(`${fusions} fusion${fusions > 1 ? 's' : ''}`);
+  if (robots) ecarts.push(`${robots} commit${robots > 1 ? 's' : ''} du robot`);
   console.log(
-    `  ${b} : ${r.commits} représentés sur ${r.total} dans la branche` +
+    `  ${b} : ${r.commits} représentés sur ${dansLaBranche(b)} dans la branche` +
       (ecarts.length ? ` (écartés : ${ecarts.join(', ')})` : '') +
       `, premier le ${r.premier}`
   );

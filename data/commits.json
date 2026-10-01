@@ -7,16 +7,10 @@
   "resume": {
     "main": {
       "commits": 67,
-      "total": 72,
-      "fusions": 5,
-      "robots": 0,
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 12,
-      "total": 20,
-      "fusions": 5,
-      "robots": 3,
+      "commits": 13,
       "premier": "2026-10-01"
     }
   },
@@ -816,8 +810,19 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 12,
+      "SITE": 13,
       "commits": [
+        {
+          "hash": "d8a15f1",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T21:11:41+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Annoncer le compte de la branche, pas seulement le compte filtre",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
         {
           "hash": "d960882",
           "auteur": "Cyprien63",

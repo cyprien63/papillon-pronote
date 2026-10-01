@@ -1059,18 +1059,6 @@ html.dark .branch-card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
   color: var(--papillon-muted);
 }
 
-/* L'écart avec le compte de GitHub. Il est écrit dans la carte plutôt que
-  dans une note en bas de page : c'est la première chose que le lecteur
-   compare au dépôt, donc c'est là qu'il doit trouver la réponse. */
-.branch-card .ecart {
-  margin: 10px 0 0;
-  padding-top: 10px;
-  border-top: 1px solid var(--papillon-border);
-  font-size: .78rem;
-  line-height: 1.45;
-  color: var(--papillon-muted);
-}
-
 /* Liste des derniers commits */
 .commit-list {
   list-style: none;
