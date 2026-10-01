@@ -1196,11 +1196,13 @@
     if (!root) return;
 
     /* Le fil d'Ariane confirme la page : sans lui, on ne touche à rien
-       (le même libellé existe dans d'autres contextes PRONOTE). */
+       (le même libellé existe dans d'autres contextes PRONOTE).
+       L'Espace Élève écrit « Détail de mes notes », l'Espace Parents
+       « Détail des notes » : les deux libellés doivent passer. */
     const bc = document.querySelector('h1#breadcrumbBandeau');
     if (bc) {
       const name = bc.getAttribute('aria-label') || '';
-      if (name && !/d[ée]tail de mes notes/i.test(name)) return;
+      if (name && !/d[ée]tail (?:de mes|des) notes/i.test(name)) return;
     }
 
     root.classList.add('pap-mn');
