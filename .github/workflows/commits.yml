@@ -43,16 +43,17 @@ jobs:
           # seulement la branche déclencheuse.
           fetch-depth: 0
 
-      # Le checkout d'un push ne crée qu'une seule branche locale. Sur un push
-      # vers SITE, `main` est donc un nom inconnu, même avec fetch-depth: 0 :
-      # seule origin/main existe. On crée les deux branches locales pour que
-      # le script trouve ce qu'il cherche.
-      - name: Rendre les deux branches visibles
+      # Le checkout d'un push ne crée qu'une seule branche locale : sur un push
+      # vers SITE, `main` est un nom inconnu, alors que le graphe compare les
+      # deux. On ne peut pas'aller la chercher dans refs/heads : le runner est
+      # positionné sur la branche du push et git refuse d'y écrire. La refspec
+      # cible donc refs/remotes/origin, que le script sait lire.
+      - name: Rapporter les deux branches en références distantes
         run: |
-          git fetch --no-tags origin \
-            '+refs/heads/main:refs/heads/main' \
-            '+refs/heads/SITE:refs/heads/SITE'
-          git branch --list
+          git fetch --no-tags --prune origin \
+            '+refs/heads/*:refs/remotes/origin/*'
+          echo "branche courante : $(git branch --show-current)"
+          git branch -a --list '*main*' '*SITE*'
 
       - uses: actions/setup-node@v4
         with:
