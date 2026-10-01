@@ -917,8 +917,8 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
   flex: 0 0 auto;
 }
 
-.swatch-main { background: #2ea08a; }
-.swatch-site { background: #b08cf0; }
+.swatch-main { background: #2c9581; }
+.swatch-site { background: #8f62e0; }
 
 /* Une ligne par jour : deux piste côte à côte */
 .graph-row {
@@ -953,11 +953,11 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
   width: 5px;
   min-width: 5px;
   border-radius: 2px;
-  background: #2ea08a;
+  background: #2c9581;
   transition: transform .16s ease;
 }
 
-.lane-site .tick { background: #b08cf0; }
+.lane-site .tick { background: #8f62e0; }
 
 .tick:hover { transform: scaleY(1.35); }
 

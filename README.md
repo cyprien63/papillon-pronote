@@ -13,6 +13,7 @@ pas au site.
 |---|---|
 | `index.html` | Accueil : ce que fait l'extension, chiffres clés, installation, données stockées |
 | `pages/fonctionnalites.html` | Détail page par page : connexion, accueil, notes, compétences, design |
+| `pages/branches.html` | Séparation `main` / `SITE`, règles GitHub, graphe des commits |
 | `pages/mentions-legales.html` | Éditeur, hébergeur, licences, RGPD, cookies, sécurité |
 
 ## Structure
@@ -20,8 +21,12 @@ pas au site.
 ```
 index.html              page d'accueil
 pages/                  pages secondaires
+data/commits.json       instantané des commits, pour la page Branches
+tools/commits.mjs       régénère data/commits.json
+.github/workflows/      régénération automatique de l'instantané
 assets/css/style.css    feuille de style unique
 assets/js/site.js       thème + navigation mobile
+assets/js/branches.js   rendu du graphe des commits
 assets/fonts/           Inter 400→800, embarquée (10 fichiers woff2)
 assets/img/             logotype, icônes, splash
 LICENSE                 MIT
@@ -36,6 +41,33 @@ Du HTML et du CSS servis tels quels. Pas de npm, pas de bundler, pas de
 framework, pas de police distante. Le site fonctionne en ouvrant `index.html`
 directement dans un navigateur.
 
+## Le graphe des commits
+
+`pages/branches.html` affiche l'activité par jour et par branche. Les données
+viennent de `data/commits.json`, **pas** de l'API GitHub.
+
+Ce choix est une contrainte : la page des mentions légales promet qu'aucune
+requête ne part du navigateur. Récupérer le graphe à l'affichage rendrait cette
+promesse fausse. Le fichier est donc produit en amont et versionné.
+
+```bash
+node tools/commits.mjs
+```
+
+Zéro dépendance, comme le `tools/build.mjs` prévu pour la variante Firefox. Le
+workflow `.github/workflows/commits.yml` le relance à chaque push sur `main` ou
+`SITE`, chaque matin, et à la main. Il ne pousse que si le fichier a changé, ce
+qui évite le commit vide quotidien.
+
+Un détail qui a coûté du temps : l'appartenance d'un commit à une branche ne se
+lit pas dans l'étiquette `%D` de `git log`, qui ne liste que les références qui
+pointent *sur* le commit. Presque tous les commits anciens de `main` en sont
+dépourvus et seraient apparus sans branche. Le script utilise donc
+`git rev-list <branche>` pour l'appartenance réelle.
+
+Le rendu se dégrade proprement : si le JSON est absent, la page affiche un
+encadré expliquant comment le produire, sans erreur visible.
+
 ## Identité visuelle
 
 Les valeurs viennent de l'extension, pour que le site ressemble à ce que
@@ -47,6 +79,8 @@ produit le code. Source de vérité :
 | Dégradé de marque | `linear-gradient(140deg, #35bba0 0%, #2ea08a 46%, #227e6b 100%)` |
 | Accent / sélection | `#29947a` |
 | Lien (accessible) | `#1f7360` en clair, `#4ecfb4` en sombre |
+| Barre `main` (graphe) | `#2c9581` |
+| Barre `SITE` (graphe) | `#8f62e0` |
 | Rayon des cartes | `25px` |
 | Pastilles | `300px` |
 | Police | Inter 400 / 500 / 600 / 700 / 800, embarquée |
