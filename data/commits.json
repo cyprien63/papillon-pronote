@@ -10,7 +10,7 @@
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 9,
+      "commits": 10,
       "premier": "2026-10-01"
     }
   },
@@ -745,8 +745,18 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 9,
+      "SITE": 10,
       "commits": [
+        {
+          "hash": "df46c35",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T20:50:45+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Remplacer la bande de traits par une vraie courbe, et fermer la boucle des PR",
+          "sur": [
+            "SITE"
+          ]
+        },
         {
           "hash": "5b71105",
           "auteur": "Cyprien63",
