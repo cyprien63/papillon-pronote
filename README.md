@@ -65,8 +65,8 @@ node tools/commits.mjs
 
 ### Pourquoi la page annonce moins de commits que GitHub
 
-La page annonce **67** commits pour `main` et **13** pour `SITE`. GitHub affiche
-**72** et **21**. Les deux chiffres sont justes, et c'est ce qui peut rendre la
+La page annonce **67** commits pour `main` et **15** pour `SITE`. GitHub affiche
+**72** et **23**. Les deux chiffres sont justes, et c'est ce qui peut rendre la
 page trompeuse : le lecteur compare, tombe sur l'écart, et conclut que le
 générateur compte mal.
 
@@ -82,7 +82,7 @@ dans la sortie du générateur :
 ```
 $ node tools/commits.mjs
   main : 67 représentés sur 72 dans la branche (écartés : 5 fusions)
-  SITE : 13 représentés sur 21 dans la branche (écartés : 5 fusions, 3 commits du robot)
+  SITE : 15 représentés sur 23 dans la branche (écartés : 5 fusions, 3 commits du robot)
 ```
 
 **Le terminal, et lui seul, peut porter ce décompte.** C'est la leçon de la
@@ -93,6 +93,41 @@ unique, calculée sur `git log --all` : ils étaient vrais globalement et
 impossibles à répartir sur une branche. C'est pour ça que `sur` est désormais
 posé sur *tous* les commits lus, y compris les écartés — sinon il n'y a aucun
 moyen de distinguer, pour `main`, ses 5 fusions des 5 fusions de `SITE`.
+
+### « 67 commits sur main » n'est pas ton nombre de commits
+
+Un deuxième écart, de même nature mais qu'aucun réglage ne referme : le gros
+chiffre compte l'activité du dépôt, et le dépôt n'est pas à toi seul.
+
+```
+main   67   dont 10 par SpartisPerso
+SITE   15   dont 3 par une adresse sans compte
+```
+
+Donc 57 commits de `main` et 12 de `SITE` t'appartiennent. Le reste est réel —
+le travail de SpartisPerso sur les menus, le thème sombre et le contraste est
+dans l'historique — mais il ne se retrouve pas sur ton profil GitHub. C'est ce
+qui rendait le chiffre « faux » à qui le comparait à son profil : il l'était
+pour cette raison, et pas pour une erreur de comptage.
+
+Pour le voir, il a fallu lire l'adresse mail des commits et non leur nom
+d'auteur. `%an` est du texte libre, et le dépôt contient « Cyprien63 »,
+« cyprien63 » et « Cyprien » pour la même personne : compter par nom additionne
+tout le monde sans dire pourquoi.
+
+L'adresse, elle, n'est pas devinable non plus. Cinq commits de `SITE` sont
+signés `cyprien@users.noreply.github.com`, qui a exactement la forme d'une
+adresse noreply valide — et à laquelle GitHub ne rattache aucun compte. Une règle
+de forme les aurait crédités à un compte `cyprien` sans rapport avec le tien, et
+ils auraient disparu du décompte au lieu d'être signalés. La table `COMPTES` est
+donc explicite, vérifiée par l'API, et le script **signale toute adresse qu'il ne
+connaît pas** au lieu de la classer en « non rattaché » : sans cet avertissement,
+un auteur entier pourrait passer dans la case muette et le décompte resterait
+juste en apparence.
+
+C'est une donnée sur ce dépôt, pas un appel réseau : la table est dans le
+script, et la page des mentions légales promet qu'aucune requête ne part du
+navigateur.
 
 ### La boucle que j'ai ouverte en voulant réconcilier les comptes
 
@@ -197,7 +232,7 @@ Avant cela, une bande de traits, un trait par commit. Plus illisible encore :
 au-delà de quatorze traits par jour la ligne débordait, et le graphique mentait
 sur les jours chargés.
 
-### Six pièges que ce générateur a désamorcés
+### Sept pièges que ce générateur a désamorcés
 
 **Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
 `git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
@@ -236,6 +271,18 @@ vrais commits de travail sont apparus comme automatisés, et j'ai conclu à tort
 que le générateur en perdait un. Le filtre lui-même testait l'auteur et était
 juste ; c'est le coup d'œil qui mentait. Un filtre se vérifie sur le même champ
 que celui qu'il lit.
+
+Un septième, toujours dans la même famille, et le plus coûteux : **un fichier
+généré ne peut pas compter ce que sa génération produit.** Je voulais
+réconcilier le 15 de la page avec le 23 de GitHub, alors j'ai écrit « sur 23
+dans la branche, 5 fusions, 3 commits du robot » dans la page et dans le JSON.
+Le bot commite, la PR est mergée, la branche passe à 25 : le fichier change, une
+PR se rouvre, on arrive à 27. Le décompte est une fonction de lui-même, il croît
+à chaque tour, et il n'existe aucun point fixe. Vérifié sur un clone : le diff ne
+faisait que grossir. Aucun garde ne l'arrête, pas même `paths-ignore` — celui-ci
+empêche la PR de s'ouvrir, pas le chiffre d'être faux au moment où elle
+s'ouvre. Le compte complet vit dans la sortie du terminal, que rien ne
+réinjecte dans le dépôt.
 
 ### Deux détails qui ont coûté du temps
 

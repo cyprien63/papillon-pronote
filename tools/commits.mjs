@@ -76,7 +76,7 @@ function resoudre(branche) {
 
 /* --- Lecture de l'historique ---------------------------------------------- */
 
-const LECTURE = ['%H', '%an', '%aI', '%s'].join(SEP);
+const LECTURE = ['%H', '%an', '%ae', '%aI', '%s'].join(SEP);
 
 let brut;
 try {
@@ -85,17 +85,63 @@ try {
   echec("impossible de lire l'historique Git");
 }
 
+/* Le compte GitHub auquel un commit est rattaché, déduit de son adresse mail.
+ *
+ * Le nom d'auteur ne suffit pas, et il ment deux fois. `%an` est du texte libre :
+ * le dépôt contient « Cyprien63 », « cyprien63 » et « Cyprien » pour la même
+ * personne, et « SpartisPerso » pour quelqu'un d'autre. Compter par nom Melange
+ * tout le monde.
+ *
+ * L'adresse n'est pas devinable pour autant. `cyprien@users.noreply.github.com`
+ * a exactement la forme d'une adresse noreply valide, et GitHub ne la rattache à
+ * aucun compte : une règle de forme l'aurait créditée à un compte `cyprien` qui
+ * n'est pas le tien, et cinq commits auraient disparu de ton profil. La table
+ * est donc explicite, vérifiée par l'API, et le script signale toute adresse
+ * qu'il ne connaît pas plutôt que de deviner. C'est une donnée sur ce dépôt,
+ * pas un appel réseau : la page des mentions légales promet qu'aucune requête ne
+ * part du navigateur.
+ */
+const COMPTES = new Map(
+  Object.entries({
+    'cyprien63@users.noreply.github.com': 'cyprien63',
+    '157894664+cyprien63@users.noreply.github.com': 'cyprien63',
+    'p.cyprien6312@gmail.com': 'cyprien63',
+    '328088496+SpartisPerso@users.noreply.github.com': 'SpartisPerso',
+    '41898282+github-actions[bot]@users.noreply.github.com': 'github-actions[bot]',
+    // Vérifiée le 2026-10-01 : aucun compte ne porte cette adresse. Cinq
+    // commits de SITE ne se rattachent donc à personne, et GitHub les affiche
+    // chez un `cyprien` sans rapport.
+    'cyprien@users.noreply.github.com': null,
+  })
+);
+
 const lus = brut.split('\n').filter(Boolean).map((ligne) => {
-  const [hash, auteur, date, sujet] = ligne.split(SEP);
+  const [hash, auteur, email, date, sujet] = ligne.split(SEP);
   return {
     hash: hash.slice(0, 7),
     auteur,
+    email,
+    compte: COMPTES.has(email) ? COMPTES.get(email) : undefined,
     date,
     jour: date.slice(0, 10),
     sujet,
     sur: [],
   };
 });
+
+/* Une adresse nouvelle passe inaperçue si on ne la signale pas : le décompte
+ * par compte resterait juste, mais faux, parce qu'un auteur entier serait
+ * rangé dans les « non rattachés ». */
+const inconnues = [...new Set(lus.map((c) => c.email))].filter(
+  (e) => !COMPTES.has(e)
+);
+if (inconnues.length) {
+  console.warn(
+    `commits.mjs : adresse${inconnues.length > 1 ? 's' : ''} d'auteur inconnue${inconnues.length > 1 ? 's' : ''} ` +
+      `de la table COMPTES, comptée${inconnues.length > 1 ? 's' : ''} comme non rattachée${inconnues.length > 1 ? 's' : ''} : ` +
+      inconnues.join(', ')
+  );
+}
 
 /* Deux familles de commits sortent du graphe, et ce n'est pas cosmétique :
  * sans ça, le fichier se met à jour lui-même et tu merges des PR sans fin.
@@ -112,7 +158,7 @@ const lus = brut.split('\n').filter(Boolean).map((ligne) => {
  *
  * Les deux filtres sont cumulés : il suffit que l'un des deux attrape le
  * commit pour que la boucle reste fermée. */
-const estRobot = (c) => c.auteur.includes('[bot]');
+const estRobot = (c) => c.auteur.includes('[bot]') || c.email.includes('[bot]');
 const estFusion = (c) => /^Merge (remote-tracking branch|pull request|branch)/.test(c.sujet);
 for (const c of lus) c.ecarte = estRobot(c) ? 'robot' : estFusion(c) ? 'fusion' : null;
 const commits = lus.filter((c) => !c.ecarte);
@@ -175,10 +221,34 @@ const dansLaBranche = (b, motif) =>
   lus.filter((c) => c.sur.includes(b) && (!motif || c.ecarte === motif)).length;
 
 const presentes = BRANCHES.filter((b) => !introuvables.includes(b));
+
+/* Qui a écrit les commits représentés, par branche.
+ *
+ * Le gros chiffre de la carte est l'activité du dépôt, pas la tienne : dix des
+ * 67 commits de `main` sont de SpartisPerso, et cinq des quinze de `SITE`
+ * portent une adresse que GitHub ne rattache à aucun compte. Additionner les
+ * deux revient à annoncer un nombre que personne ne reconnaît — ni ton profil,
+ * ni la page du dépôt.
+ *
+ * Ce décompte est stable, contrairement au total de la branche : les comptes du
+ * robot et des fusions sont écartés, donc ils n'apparaissent pas ici et ne
+ * changent pas ce que la page affiche. */
+const parCompte = (b) => {
+  const comptes = new Map();
+  for (const c of commits) {
+    if (!c.sur.includes(b)) continue;
+    const cle = c.compte ?? 'non rattaché';
+    comptes.set(cle, (comptes.get(cle) ?? 0) + 1);
+  }
+  return [...comptes.entries()]
+    .sort((a, z) => z[1] - a[1] || a[0].localeCompare(z[0]))
+    .map(([nom, n]) => ({ compte: nom, commits: n }));
+};
+
 const resume = {};
 for (const b of presentes) {
-  /* Deux nombres seulement, et ils sont stables : le nombre de commits
-   * représentés, et la date du premier.
+  /* Trois données, et elles sont stables : le nombre de commits représentés, la
+   * date du premier, et la répartition par compte.
    *
    * Le total de la branche et la répartition fusions / automatiques
    * n'entrent pas dans le JSON, même s'ils sont affichés sur le terminal. Ils
@@ -186,7 +256,7 @@ for (const b of presentes) {
    * chaque régénération, le workflow committerait cette différence, et la mise
    * à jour ne convergerait jamais. Le terminal n'est pas réinjecté dans le
    * dépôt — c'est le seul endroit où le décompte complet est exact. */
-  resume[b] = { commits: total(b), premier: premier(b) };
+  resume[b] = { commits: total(b), premier: premier(b), auteurs: parCompte(b) };
 }
 
 /* La date de l'instantané, et elle est celle du dernier commit représenté, pas
@@ -247,13 +317,22 @@ function carteResume(b, r, indent) {
   const p = ' '.repeat(indent);
   const classe = b === 'main' ? 'swatch-main' : 'swatch-site';
   const pluriel = r.commits > 1 ? 's' : '';
-  return [
+  const L = [
     `${p}<article class="branch-card">`,
     `${p}  <h3><span class="swatch ${classe}"></span>${b}</h3>`,
     `${p}  <div class="count">${r.commits}</div>`,
     `${p}  <div class="since">commit${pluriel} représenté${pluriel}, premier le ${r.premier}</div>`,
-    `${p}</article>`,
-  ].join('\n');
+  ];
+  /* Le gros chiffre est l'activité du dépôt, pas la tienne. Tant qu'il n'y a
+   * qu'un compte, la ligne serait du bruit ; dès qu'il y en a deux, l'écart
+   * mérite d'être écrit, sinon le chiffre se compare à un profil GitHub et ne
+   * tombe juste pour personne. */
+  for (const { compte, commits: n } of r.auteurs.slice(1)) {
+    const nom = compte === 'non rattaché' ? 'une adresse sans compte' : compte;
+    L.push(`${p}  <div class="auteurs">dont ${n} par ${nom}</div>`);
+  }
+  L.push(`${p}</article>`);
+  return L.join('\n');
 }
 
 /* Jour calendaire en nombre, pour poser les colonnes de la grille.
@@ -524,4 +603,9 @@ for (const b of presentes) {
       (ecarts.length ? ` (écartés : ${ecarts.join(', ')})` : '') +
       `, premier le ${r.premier}`
   );
+  for (const { compte, commits: n } of r.auteurs) {
+    console.log(
+      `      ${String(n).padStart(3)}  ${compte === 'non rattaché' ? 'adresse non rattachée à un compte' : compte}`
+    );
+  }
 }

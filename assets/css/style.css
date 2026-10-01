@@ -1059,6 +1059,17 @@ html.dark .branch-card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
   color: var(--papillon-muted);
 }
 
+/* Qui a écrit les commits, quand le dépôt a plus d'un auteur. La nuance est
+  importante — c'est la différence entre l'activité du dépôt et le travail de
+  quelqu'un — donc un peu plus petit que la date, mais pas au point de devenir
+  illisible. */
+.branch-card .auteurs {
+  margin-top: 4px;
+  font-size: .78rem;
+  line-height: 1.4;
+  color: var(--papillon-muted);
+}
+
 /* Liste des derniers commits */
 .commit-list {
   list-style: none;
