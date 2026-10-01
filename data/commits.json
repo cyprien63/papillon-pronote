@@ -10,7 +10,7 @@
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 10,
+      "commits": 11,
       "premier": "2026-10-01"
     }
   },
@@ -745,8 +745,18 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 10,
+      "SITE": 11,
       "commits": [
+        {
+          "hash": "7b3049d",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T20:54:34+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Nommer l'adresse de commit au lieu de la decrire",
+          "sur": [
+            "SITE"
+          ]
+        },
         {
           "hash": "df46c35",
           "auteur": "Cyprien63",
