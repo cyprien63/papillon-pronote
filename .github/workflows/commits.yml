@@ -4,114 +4,198 @@ name: Régénérer le graphe des commits
 # l'API GitHub : la page des mentions légales promet qu'aucune requête ne part
 # du navigateur. Il faut donc régénérer le fichier depuis GitHub Actions.
 #
-# Le workflow n'écrit jamais directement sur main ni sur SITE. Les deux
-# branches portent un ruleset qui impose une pull request, et le bot n'est pas
-# dans la liste de contournement : un `git push` direct serait refusé. Il passe
-# donc par une branche jetable et une PR, que tu merges. C'est plus lent d'un
-# push, mais ça respecte la protection que tu as mise en place au lieu de la
-# contourner en douce.
+# Le workflow n'écrit jamais directement sur SITE. La branche porte un ruleset
+# qui impose une pull request, et le bot n'est pas dans la liste de
+# contournement : un `git push` direct serait refusé. Il passe donc par une
+# branche jetable et une PR, que tu merges. C'est plus lent d'un push, mais ça
+# respecte la protection que tu as mise en place au lieu de la contourner en
+# douce.
+#
+# Un seul déclencheur possible : SITE. Pas `main`, et pas de cron. Les deux
+# sont structurellement incapables de tourner, et ce n'est pas une question de
+# configuration — voir « Pourquoi pas main, et pourquoi pas de cron » plus bas.
 
 on:
   push:
-    branches: [main, SITE]
-  schedule:
-    # Chaque matin à 5 h 12 UTC. L'heure est volontairement décalée des
-    # créneaux ronds : les workflows planifiés se partagent les tops
-    # d'horloge, et 12 minutes suffisent à les étaler.
-    - cron: '12 5 * * *'
+    branches: [SITE]
+    # Second garde-fou, pas le premier. Le premier est dans tools/commits.mjs :
+    # les commits de fusion et ceux du robot sont exclus du graphe, donc merger
+    # la PR ne change rien et le fichier ne bouge pas. Si ce garde-fou sautait,
+    # on ne verrait qu'une exécution de runner en plus.
+    #
+    # Il ne peut pas masquer un vrai besoin : tools/commits.mjs n'est pas dans
+    # la liste, donc une modification du générateur relance bien le workflow.
+    paths-ignore:
+      - data/commits.json
+      - pages/branches.html
   workflow_dispatch:
 
 permissions:
-  # `contents: write` pour pousser la branche de la PR, `pull-requests: write`
-  # pour l'ouvrir. Aucun droit sur les autres branches.
+  # `contents: write` est un droit d'écriture sur le dépôt entier, pas sur la
+  # seule branche de la PR. C'est le ruleset qui interdit d'atteindre SITE en
+  # écriture directe, pas cette ligne : `permissions:` ne dit rien des règles
+  # de protection, il ne fait que retirer des droits par rapport à ce que le
+  # jeton aurait par défaut.
   contents: write
+  # `pull-requests: write` pour ouvrir la PR. Indispensable lui aussi : sans
+  # lui, l'étape « Ouvrir la pull request » est refusée.
   pull-requests: write
 
-# Une seule exécution à la fois. Sans ça, un push et le cron du matin
-# pourraient tous les deux ouvrir une PR sur le même fichier.
+# Une seule exécution à la fois, tous déclencheurs confondus. Le groupe est
+# volontairement constant et non dérivé de `github.ref` : il n'y a qu'une cible,
+# donc rien à distinguer, et un groupe constant ne peut pas se dédoubler par
+# accident si un jour un second déclencheur apparaît.
 concurrency:
-  group: commits-${{ github.ref }}
+  group: commits-graphe
   cancel-in-progress: false
 
 jobs:
   commits:
     runs-on: ubuntu-latest
+    # Un job qui se bloque ne doit pas tenir un runner jusqu'à la limite de six
+    # heures. Le générateur rend en quelques secondes.
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
+          # Toujours SITE, même si le déclenchement vient d'ailleurs. Le
+          # générateur et les fichiers qu'il produit n'existent que là.
+          ref: SITE
           # Le graphe compare main et SITE : il faut tout l'historique, pas
-          # seulement la branche déclencheuse.
+          # seulement la branche cochée.
           fetch-depth: 0
 
-      # Le checkout d'un push ne crée qu'une seule branche locale : sur un push
-      # vers SITE, `main` est un nom inconnu, alors que le graphe compare les
-      # deux. On ne peut pas'aller la chercher dans refs/heads : le runner est
-      # positionné sur la branche du push et git refuse d'y écrire. La refspec
-      # cible donc refs/remotes/origin, que le script sait lire.
+      - uses: actions/setup-node@v7
+        with:
+          # Node 20 est hors de support depuis avril 2026.
+          node-version: '24'
+
+      # Le checkout d'une seule branche ne crée qu'un nom local pour cette
+      # branche : `main` n'existe donc pas dans refs/heads. On ne peut pas l'y
+      # créer, le runner est positionné sur SITE et git refuse d'y écrire. La
+      # refspec cible donc refs/remotes/origin, que le script sait lire.
+      #
+      # `fetch-depth: 0` a déjà récupéré toutes les branches ; cette étape est
+      # un filet si cette garantie change, et elle affiche ce qui est visible.
       - name: Rapporter les deux branches en références distantes
         run: |
           git fetch --no-tags --prune origin \
             '+refs/heads/*:refs/remotes/origin/*'
-          echo "branche courante : $(git branch --show-current)"
-          git branch -a --list '*main*' '*SITE*'
+          git branch -a --list 'remotes/origin/main' 'remotes/origin/SITE'
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Régénérer data/commits.json
+      - name: Régénérer data/commits.json et pages/branches.html
         run: node tools/commits.mjs
 
       # Le générateur écrit deux fichiers : le JSON des chiffres et le HTML du
       # graphe. Les deux doivent être committés ensemble, sinon la page et le
       # JSON divergent et personne ne sait lequel fait foi.
+      #
+      # `git status --porcelain` et non `git diff --quiet` : ce dernier ne voit
+      # que les fichiers suivis. Le premier jour, où les deux fichiers n'existent
+      # pas encore, `git diff` est muet et le workflow annonçait « déjà à jour »
+      # sur un dépôt vide.
       - name: Vérifier si les fichiers ont changé
         id: diff
         run: |
-          if git diff --quiet -- data/commits.json pages/branches.html; then
+          if [ -z "$(git status --porcelain -- data/commits.json pages/branches.html)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Le graphe est déjà à jour."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            git --no-pager diff --stat -- data/commits.json pages/branches.html
+            git --no-pager status --short -- data/commits.json pages/branches.html
           fi
 
       # La branche de la PR est fixe, donc réutilisée d'une exécution à
       # l'autre. On repart de la branche cible à chaque fois, sinon la
       # deuxième exécution empilerait les commits sur la première.
+      #
+      # La cible passe par l'environnement, jamais par `${{ }}` dans le script.
+      # Une interpolation directe est du texte que le shell.evalue, alors
+      # qu'un nom de branche peut contenir `$`, un accent grave ou un
+      # guillemet : `workflow_dispatch` lancé depuis une branche au nom forgé
+      # exécuterait du code.
       - name: Préparer la branche de la pull request
         if: steps.diff.outputs.changed == 'true'
+        env:
+          CIBLE: SITE
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git switch --force-create commits-graphe "origin/${{ github.ref_name }}"
+          git switch --force-create commits-graphe "origin/$CIBLE"
           git add data/commits.json pages/branches.html
           git commit -m 'Graphique des commits : mise à jour de l’instantané'
           git push --force-with-lease origin commits-graphe
 
+      # Cette étape dépend d'un réglage hors du dépôt : dans
+      # Settings → Actions → General, « Allow GitHub Actions to create and
+      # approve pull requests ». Sans lui, `gh pr create` échoue avec
+      # « GitHub Actions is not permitted to create or approve pull requests ».
+      # Le jeton du workflow ne peut pas s'accorder ce droit lui-même ; il
+      # faudrait un jeton personnel ou une GitHub App.
       - name: Ouvrir la pull request
         if: steps.diff.outputs.changed == 'true'
         env:
           # gh est préinstallé sur les runners GitHub, pas une dépendance
           # ajoutée au projet.
           GH_TOKEN: ${{ github.token }}
-          BRANCHE: ${{ github.ref_name }}
+          CIBLE: SITE
         run: |
           # Une PR peut déjà être ouverte d'une exécution précédente : on la
           # réutilise au lieu d'échouer sur un doublon.
-          if gh pr list --head commits-graphe --base "$BRANCHE" \
-               --state open --json number --jq '.[0].number' | grep -q .; then
-            echo "Une PR est déjà ouverte pour commits-graphe, elle suffit."
+          #
+          # Le test porte sur la valeur capturée, pas sur un `grep -q` : avec
+          # `pipefail`, gh reçoit un SIGPIPE dès que grep a ce qu'il cherche et
+          # le script poursuivrait en croyant qu'il n'y a pas de PR.
+          ouverte=$(gh pr list --head commits-graphe --base "$CIBLE" \
+                      --state open --json number --jq '.[0].number')
+          if [ -n "$ouverte" ]; then
+            echo "La PR #$ouverte est déjà ouverte, elle suffit."
             exit 0
           fi
 
+          # Le corps passe par un heredoc : la indentation doit rester celle du
+          # bloc `run:`, sinon les lignes de liste font sortir le document du
+          # mapping YAML.
+          corps=$(cat <<'FIN'
+          Les deux fichiers régénérés par `node tools/commits.mjs` :
+
+          - `data/commits.json`, les chiffres ;
+          - `pages/branches.html`, la grille et la liste des derniers commits.
+
+          Rien d'autre n'est touché : c'est le même contenu que
+          `tools/commits.mjs` produit en local. La PR est là parce que `SITE`
+          est protégée par un ruleset, et qu'un push direct serait refusé.
+          FIN
+          )
+
           gh pr create \
             --head commits-graphe \
-            --base "$BRANCHE" \
+            --base "$CIBLE" \
             --title 'Graphique des commits : mise à jour automatique' \
-            --body 'Fichier `data/commits.json` régénéré par `node tools/commits.mjs`.
+            --body "$corps"
 
-          Rien d’autre n’est touché : c’est le même contenu que
-          `tools/commits.mjs` produit en local. La PR est là parce que `main`
-          et `SITE` sont protégées par un ruleset, et qu’un push direct serait
-          refusé.'
+# Pourquoi pas main, et pourquoi pas de cron
+# ------------------------------------------
+#
+# Les deux étaient déclarés. Aucun des deux n'a jamais tourné, et ce n'est
+# pas un réglage à corriger.
+#
+# `main` ne contient ni `.github/`, ni `tools/commits.mjs`, ni `pages/`, ni
+# `data/` : la branche a été créée avec `--orphan` et n'a rien reçu du site.
+# Or GitHub ne déclenche un workflow que si sa définition est présente sur la
+# branche d'où vient l'événement. Un push sur `main` n'a donc jamais lancé ce
+# fichier, et le graphe ne se rafraîchit pas au rythme de `main`.
+#
+# Le cron est mort pour la même raison, et il était mort deux fois : un
+# workflow planifié s'exécute depuis la branche par défaut, ici `main`, où ce
+# fichier n'existe pas. Même en le recopiant, `node tools/commits.mjs` y
+# échouerait faute de générateur.
+#
+# Faire rafraîchir le graphe à chaque push sur `main` demanderait de recopier le
+# générateur et le workflow dans `main` — c'est-à-dire d'annuler la séparation
+# que la branche orpheline existe pour établir. Le compromis retenu : le
+# graphe se met à jour à chaque push sur `SITE` et à la main, et comme il
+# compare les deux branches, l'activité de `main` apparaît à la mise à jour
+# suivante. Pour forcer un rafraîchissement sans push :
+#
+#     gh workflow run commits.yml
