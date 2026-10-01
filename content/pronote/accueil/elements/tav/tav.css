@@ -261,12 +261,6 @@ body.papillon-pronote .widget.travailafaire .titre-matiere {
   line-height: 1.25 !important;
 }
 
-/* La pastille d'état ne se comprime pas et ne se coupe jamais : c'est le nom qui cède. */
-body.papillon-pronote .widget.travailafaire .as-header .tag-style {
-  flex: 0 0 auto !important;
-  white-space: nowrap !important;
-}
-
 /* Émoji sujet */
 body.papillon-pronote .widget.travailafaire .pap-tav-emoji {
   font-size: 20px !important;
