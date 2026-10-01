@@ -921,72 +921,96 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
 .swatch-main { background: #2c9581; }
 .swatch-site { background: #8f62e0; }
 
-/* Le graphique
-   ---------- */
+/* La grille
+   --------
+   Une ligne par branche, une colonne par jour, le nombre écrit dans la case.
+   La couleur ne porte qu'un ordre de grandeur ; c'est le chiffre qui porte
+   l'information, donc rien n'a à être déduit d'une teinte. */
 
-.chart {
+.grille {
   display: block;
   width: 100%;
   height: auto;
-  margin-top: 14px;
+  margin-top: 18px;
   overflow: visible;
-  font-size: 11px;
 }
 
-.chart-grille line {
-  stroke: var(--papillon-border);
-  stroke-width: 1;
-}
-
-.chart-val,
-.chart-dates text {
+.grille-dates text {
   fill: var(--papillon-muted);
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
 
-/* vector-effect garde 2px à l'écran : sans ça, la ligne s'épaissit quand la
-   fenêtre rétrécit et le graphique se déforme. */
-.chart-ligne {
+.grille-etiquette {
+  fill: var(--papillon-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cellule rect {
+  stroke: transparent;
+  stroke-width: 1.5;
+}
+
+.cellule text {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* Une case vide reste un rectangle, sinon la ligne semble s'arrêter au
+   dernier jour où il y a eu du travail. */
+.cellule.niv-0 rect {
   fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
+  stroke: var(--papillon-border);
+  stroke-dasharray: 3 3;
 }
 
-.chart-aire {
-  stroke: none;
-}
+.cellule.niv-0 text { fill: var(--papillon-muted); font-weight: 400; }
 
-/* currentColor porte la teinte : le dégradé s'y réfère, ce qui évite de
-   répéter le code couleur dans le SVG généré. */
-.chart-aire-main { color: #2c9581; fill: url(#aire-main); }
-.chart-aire-site { color: #8f62e0; fill: url(#aire-site); }
-.chart-ligne-main { color: #2c9581; }
-.chart-ligne-site { color: #8f62e0; }
+/* Cinq paliers par branche. L'échelle est propre à chaque branche — `main`
+   atteint 14, `SITE` 10 — donc les paliers ne sont pas les mêmes couleurs
+   d'une ligne à l'autre : ce qui compte, c'est que `SITE` n'ait pas l'air
+   calme le jour où elle a fait dix commits. */
+.cell-main.niv-1 rect { fill: #cfe8e1; }
+.cell-main.niv-2 rect { fill: #8fcbba; }
+.cell-main.niv-3 rect { fill: #2b7f6d; }
+.cell-main.niv-4 rect { fill: #1c6b5a; }
+.cell-main.niv-1 text { fill: #145045; }
+.cell-main.niv-2 text { fill: #0e3a31; }
+.cell-main.niv-3 text { fill: #ffffff; }
+.cell-main.niv-4 text { fill: #ffffff; }
 
-.chart-pts circle {
-  fill: var(--papillon-surface);
-  stroke: currentColor;
-  stroke-width: 2;
-  vector-effect: non-scaling-stroke;
-}
+.cell-site.niv-1 rect { fill: #e5d9f8; }
+.cell-site.niv-2 rect { fill: #c3a7ee; }
+.cell-site.niv-3 rect { fill: #7a51cc; }
+.cell-site.niv-4 rect { fill: #553199; }
+.cell-site.niv-1 text { fill: #4a2a80; }
+.cell-site.niv-2 text { fill: #3a1f6b; }
+.cell-site.niv-3 text { fill: #ffffff; }
+.cell-site.niv-4 text { fill: #ffffff; }
 
-.chart-pts-main { color: #2c9581; }
-.chart-pts-site { color: #8f62e0; }
+html.dark .cell-main.niv-1 rect { fill: #14413a; }
+html.dark .cell-main.niv-2 rect { fill: #1c6153; }
+html.dark .cell-main.niv-3 rect { fill: #257060; }
+html.dark .cell-main.niv-4 rect { fill: #4ecfb4; }
+html.dark .cell-main.niv-1 text { fill: #7fc9ba; }
+html.dark .cell-main.niv-2 text { fill: #a5ddcf; }
+html.dark .cell-main.niv-3 text { fill: #ffffff; }
+html.dark .cell-main.niv-4 text { fill: #06231d; }
 
-.chart-pts circle:hover {
-  fill: currentColor;
-  r: 5;
-}
+html.dark .cell-site.niv-1 rect { fill: #2c2247; }
+html.dark .cell-site.niv-2 rect { fill: #42306e; }
+html.dark .cell-site.niv-3 rect { fill: #6b47b5; }
+html.dark .cell-site.niv-4 rect { fill: #b593ee; }
+html.dark .cell-site.niv-1 text { fill: #b79ce8; }
+html.dark .cell-site.niv-2 text { fill: #cfc0ef; }
+html.dark .cell-site.niv-3 text { fill: #ffffff; }
+html.dark .cell-site.niv-4 text { fill: #1b0f33; }
 
-html.dark .chart-aire-main { color: #4ecfb4; }
-html.dark .chart-aire-site { color: #c4a9fb; }
-html.dark .chart-ligne-main { color: #4ecfb4; }
-html.dark .chart-ligne-site { color: #c4a9fb; }
-html.dark .chart-pts-main { color: #4ecfb4; }
-html.dark .chart-pts-site { color: #c4a9fb; }
+.cellule:hover rect { stroke: var(--papillon-ink); }
 
 .graph-foot {
   margin-top: 18px;
@@ -1084,7 +1108,11 @@ html.dark .branche-main { background: #14352c; color: #4ecfb4; }
 html.dark .branche-site { background: #2a2140; color: #c4a9fb; }
 
 @media (max-width: 620px) {
-  .chart { font-size: 13px; }
+  /* Sur un téléphone, 19 colonnes casées dans 320px donneraient des cases de
+     13px : les chiffres deviendraient illisibles. La grille défile donc
+     horizontalement plutôt que de rétrécir. */
+  .graph { overflow-x: auto; }
+  .grille { min-width: 580px; }
   .commit-list a { grid-template-columns: 62px 1fr; }
   .commit-list .branche { grid-column: 2; justify-self: start; }
 }

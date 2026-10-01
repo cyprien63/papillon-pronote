@@ -99,26 +99,43 @@ fichier identique et le workflow s'arrête avant la PR.
 
 ### Ce que montre le graphique
 
-Une courbe en aire par branche, sur un axe des dates, écrite en SVG par le
-générateur. Deux choix méritent d'être signalés.
+Une grille : **une ligne par branche, une colonne par jour calendaire, et le
+nombre de commits écrit dans chaque case.** En SVG, écrit par le générateur.
 
-L'abscisse suit le **calendrier**, pas la liste des jours. Entre le 17/09 et le
-24/09 il n'y a aucun commit ; espacer les jours à égalité ferait croire à une
-activité continue pendant une semaine de silence.
+La demande était « voir tout de suite que le 1er octobre il y a dix commits ».
+Trois choix en découlent.
 
-Les jours sans commit sont à **zéro**, pas absents. Un trou dans la courbe
-signifie donc « personne n'a rien commité ce jour-là », et non « le fichier ne
-sait pas ». Le remplissage qui relie les points est une commodité de lecture :
-il ne prétend pas que le travail s'est réparti ainsi entre deux dates.
+**Le nombre est écrit, pas seulement codé par la couleur.** C'est ce qui évite
+d'avoir à déduire une hauteur. La couleur ne porte qu'un ordre de grandeur, et
+le chiffre porte l'information.
 
-Chaque point porte le nombre exact en infobulle, et le SVG a un `<desc>` qui
-résume l'ensemble pour les lecteurs d'écran.
+**Les jours sans commit ont leur case**, vide et en pointillés. Gratter les
+colonnes vides aurait fait disparaître la semaine de silence du 18 au 23/09, et
+le graphique aurait laissé croire à une activité continue. Une case vide
+signifie « personne n'a rien commité ce jour-là », pas « le fichier ne sait
+pas ».
 
-Une grille de carrés façon « contributions GitHub » aurait été l'autre option.
-Elle est écartée : elle demande un an d'historique pour avoir l'air pleine, et
-sur douze jours elle rendrait une bande de trois cases.
+**L'échelle d'intensité est propre à chaque branche.** `main` atteint 14
+commits, `SITE` 10, et les deux n'ont pas les mêmes volumes. Une échelle
+commune aurait fait passer le premier jour de `SITE` pour une journée calme
+alors qu'elle en compte onze.
 
-### Quatre pièges que ce générateur a désamorcés
+Un `<desc>` résume l'ensemble pour les lecteurs d'écran, et chaque case porte
+son chiffre en infobulle.
+
+### Ce qui a été essayé avant, et pourquoi c'est parti
+
+Une courbe en aire par branche, façon GitHub Pulse, avec un axe des dates. Elle
+ne convenait pas : deux séries partageant un axe unique, l'aire de `main`
+recouvrait tout et la ligne de `SITE` restait collée au sol sur onze jours. Les
+deux informations s'y lisaient mal, et il fallait des hauteurs pour retrouver
+des chiffres.
+
+Avant cela, une bande de traits, un trait par commit. Plus illisible encore :
+au-delà de quatorze traits par jour la ligne débordait, et le graphique mentait
+sur les jours chargés.
+
+### Cinq pièges que ce générateur a désamorcés
 
 **Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
 `git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
@@ -136,12 +153,19 @@ renvoie modifié, sans toucher au disque.
 Un troisième, dans la même famille : deux clés `h` dans la géométrie du
 graphique — la hauteur et la marge haute. La seconde écrasait la première, et
 le `viewBox` sortait à 14 pixels de haut. Les clés s'appellent maintenant
-`larg`, `haut`, `mg`, `md`, `mh`, `mb`.
+`larg`, `haut`, `etiquette`, `hautCase`, `pasCase`.
 
 Un quatrième, lui aussi invisible : `git clone` ne recopie que l'état *commité*
 d'un dépôt. Un test de boucle lancé depuis un clone ne teste donc pas les
 modifications non commitées, mais la version précédente du script — et conclut
 que le correctif n'a rien changé. Le test copie l'arbre de travail.
+
+Un cinquième : le script qui vérifiait le contraste des cases appariait
+« conforme » alors qu'il assemblait un texte du thème clair sur un fond du
+thème sombre. Treize paires, neuf déclarées non conformes, aucune vraie. Le
+contraste se vérifie en appariant la ligne CSS entière — thème, branche, niveau,
+et le couple fond/texte — et non en relisant les couleurs une par une. Les seize
+paires réelles passent, de 4.80 à 9.19.
 
 ### Deux détails qui ont coûté du temps
 

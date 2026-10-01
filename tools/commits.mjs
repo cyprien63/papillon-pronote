@@ -179,13 +179,13 @@ const donnees = {
 
 /* --- Rendu HTML ------------------------------------------------------------ */
 
-/* Géométrie du graphique, en unités du viewBox : le SVG est redimensionné par
+/* Géométrie de la grille, en unités du viewBox : le SVG est redimensionné par
  * le CSS, donc rien ici n'est en pixels d'écran.
  *
- * mg/md/mh/mb sont les marges gauche, droite, haute et basse. Les noms sont
- * longs volontairement : deux clés courtes qui se ressemblent, c'est la façon
- * la plus rapide de se retrouver avec une hauteur de 14px. */
-const PLAN = { larg: 760, haut: 268, mg: 36, md: 14, mh: 18, mb: 34 };
+ * Les noms sont longs volontairement. Deux clés courtes qui se ressemblent —
+ * `h` pour la hauteur et pour la marge haute — se sont déjà fait confondre une
+ * fois, et le viewBox est sorti à 14 pixels de haut. */
+const PLAN = { larg: 780, haut: 148, etiquette: 56, hautCase: 46, pasCase: 5 };
 const SERIE = [
   { cle: 'main', classe: 'main' },
   { cle: 'SITE', classe: 'site' },
@@ -230,43 +230,38 @@ function carteResume(b, r, indent) {
   ].join('\n');
 }
 
-/* Jour calendaire en nombre, pour poser l'abscisse.
+/* Jour calendaire en nombre, pour poser les colonnes de la grille.
  *
- * Les jours ne sont pas consécutifs : le 17/09, le 24/09… Entre les deux, la
- * personne n'a commité. Les espacer à égalité ferait mentir le graphique sur
- * le temps — il montrerait une activité continue pendant une semaine de
- * silence. L'abscisse suit donc le calendrier, et les trous se voient. */
+ * Toutes les cases sont là, y compris les jours sans commit. Gratter les
+ * colonnes vides ferait disparaître la semaine de silence du 18 au 23/09, et
+ * le graphique laisserait croire à une activité continue. */
 const jourNum = (cle) =>
   Date.UTC(+cle.slice(0, 4), +cle.slice(5, 7) - 1, +cle.slice(8, 10)) / 86400000;
 
-/* La courbe, une aire par branche : deux lignes qui se lisent l'une par rapport
- * à l'autre. C'est la forme que GitHub utilise dans Pulse, et la seule qui
- * reste lisible avec une poignée de points — une grille de carrés comme les
- * contributions aurait exigé un an d'historique pour avoir l'air pleine. */
+/* Niveau d'intensité d'une case, de 0 à 4.
+ *
+ * L'échelle est propre à chaque branche : `main` atteint 14, `SITE` 10, et les
+ * deux n'ont pas les mêmes volumes. Une échelle commune ferait passer la
+ * première journée de SITE pour une journée calme alors qu'elle compte dix
+ * commits. Le nombre est écrit dans la case de toute façon, donc l'intensité
+ * n'a pas à être exacte — elle donne juste l'ordre de grandeur d'un coup
+ * d'œil. */
+function niveau(v, max) {
+  if (v <= 0) return 0;
+  return Math.max(1, Math.min(4, Math.ceil((v / max) * 4)));
+}
+
+/* La grille : une ligne par branche, une colonne par jour calendaire, le
+ * nombre de commits écrit dans chaque case.
+ *
+ * C'est la forme demandée : « voir tout de suite que le 1er octobre il y a dix
+ * commits ». La courbe était un mauvais choix — deux séries partageant un axe
+ * unique, l'aire de `main` recouvrait tout et la ligne de `SITE` restait
+ * collée au sol. Ici chaque valeur est écrite, donc rien n'a à être déduit
+ * d'une hauteur. */
 function grapheHtml(indent) {
   const p = ' '.repeat(indent);
-  const n = jours.length;
   const L = [];
-
-  const picBrut = n ? Math.max(...jours.map((j) => j.main + j.SITE)) : 0;
-  const pas = pasRond(picBrut);
-  const plafond = Math.max(pas, Math.ceil(picBrut / pas) * pas);
-  const x0 = PLAN.mg;
-  const x1 = PLAN.larg - PLAN.md;
-  const yHaut = PLAN.mh;
-  const yBas = PLAN.haut - PLAN.mb;
-
-  const depart = n ? jourNum(jours[0].jour) : 0;
-  const etendue = n ? Math.max(1, jourNum(jours[n - 1].jour) - depart) : 1;
-  const px = (i) => x0 + ((jourNum(jours[i].jour) - depart) / etendue) * (x1 - x0);
-  const py = (v) => yBas - (v / plafond) * (yBas - yHaut);
-
-  /* Graduations de dates, elles aussi arrondies : 0, 5, 10, 15 jours. */
-  const pasJours = pasRond(etendue, 6);
-  const jourLabel = (t) => {
-    const d = new Date((depart + t) * 86400000);
-    return `${String(d.getUTCMonth() + 1).padStart(2, '0')}/${String(d.getUTCDate()).padStart(2, '0')}`;
-  };
 
   L.push(`${p}<div class="graph-head">`);
   L.push(`${p}  <div class="graph-legend">`);
@@ -282,98 +277,114 @@ function grapheHtml(indent) {
   );
   L.push(`${p}</div>`);
 
-  if (!n) {
+  const actives = SERIE.filter((s) => presentes.includes(s.cle));
+  if (!jours.length || !actives.length) {
     L.push(`${p}<p class="graph-foot">Aucun commit à représenter.</p>`);
     return L.join('\n');
   }
 
-  L.push(
-    `${p}<svg class="chart" viewBox="0 0 ${PLAN.larg} ${PLAN.haut}" role="img" aria-labelledby="titre-chart desc-chart">`
-  );
-  L.push(
-    `${p}  <title id="titre-chart">Commits par jour sur ${n} jour${n > 1 ? 's' : ''}</title>`
-  );
-  L.push(
-    `${p}  <desc id="desc-chart">${SERIE.filter((s) => presentes.includes(s.cle))
-      .map((s) => `${s.cle}, ${resume[s.cle].commits} commits au total`)
-      .join(' ; ')}. Du ${moisCourts(jours[0].jour)} au ${moisCourts(jours[n - 1].jour)}, ${n} jours avec commit. Pic à ${picBrut} commit${picBrut > 1 ? 's' : ''} sur une journée.</desc>`
-  );
-  L.push(`${p}  <defs>`);
-  for (const s of SERIE) {
-    L.push(
-      `${p}    <linearGradient id="aire-${s.classe}" x1="0" y1="0" x2="0" y2="1">`
-    );
-    L.push(`${p}      <stop offset="0%" stop-color="currentColor" stop-opacity=".34"/>`);
-    L.push(`${p}      <stop offset="100%" stop-color="currentColor" stop-opacity=".03"/>`);
-    L.push(`${p}    </linearGradient>`);
+  /* Toutes les colonnes du calendrier, avec le nombre d'un jour cherché une
+   * seule fois. */
+  const depart = jourNum(jours[0].jour);
+  const fin = jourNum(jours[jours.length - 1].jour);
+  const parJour = new Map(jours.map((j) => [j.jour, j]));
+  const colonnes = [];
+  for (let t = 0; t <= fin - depart; t++) {
+    const cle = new Date((depart + t) * 86400000).toISOString().slice(0, 10);
+    colonnes.push({ cle, jour: parJour.get(cle) });
   }
-  L.push(`${p}  </defs>`);
 
-  /* Graduations horizontales, avec leur valeur. */
-  L.push(`${p}  <g class="chart-grille">`);
-  for (let v = 0; v <= plafond; v += pas) {
-    const y = py(v).toFixed(1);
-    L.push(`${p}    <line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}"/>`);
-    L.push(
-      `${p}    <text class="chart-val" x="${x0 - 8}" y="${y}" dy=".32em" text-anchor="end">${v}</text>`
-    );
+  const pasCase =
+    (PLAN.larg - PLAN.etiquette) / colonnes.length - PLAN.pasCase;
+  const cx = (i) => PLAN.etiquette + i * (pasCase + PLAN.pasCase);
+
+  const maxPar = {};
+  for (const s of actives) {
+    maxPar[s.cle] = Math.max(...jours.map((j) => j[s.cle] || 0));
   }
+  const pic = Math.max(...actives.map((s) => maxPar[s.cle]));
+  const total = jours.reduce((s, j) => s + j.main + j.SITE, 0);
+  const debut = jours[0].jour;
+  const dernierJour = jours[jours.length - 1].jour;
+
+  L.push(
+    `${p}<svg class="grille" viewBox="0 0 ${PLAN.larg} ${PLAN.haut}" role="img" aria-labelledby="titre-grille desc-grille">`
+  );
+  L.push(
+    `${p}  <title id="titre-grille">Commits par jour et par branche, du ${moisCourts(debut)} au ${moisCourts(dernierJour)}</title>`
+  );
+  L.push(
+    `${p}  <desc id="desc-grille">${actives
+      .map((s) => {
+        const actifs = jours.filter((j) => (j[s.cle] || 0) > 0);
+        const meilleur = [...actifs].sort(
+          (a, b) => (b[s.cle] || 0) - (a[s.cle] || 0)
+        )[0];
+        return (
+          `${s.cle} : ${resume[s.cle].commits} commits sur ` +
+          `${actifs.length} jour${actifs.length > 1 ? 's' : ''} d'activité, ` +
+          `maximum ${maxPar[s.cle]} le ${moisCourts(meilleur[s.cle] ? meilleur.jour : dernierJour)}`
+        );
+      })
+      .join('. ')}.</desc>`
+  );
+
+  /* Les dates, environ une sur trois, pour qu'elles ne se chevauchent pas.
+   * La première est calée sur le bord gauche de sa case et la dernière sur le
+   * bord droit : centrées, elles débordent l'une et l'autre de la grille. */
+  L.push(`${p}  <g class="grille-dates">`);
+  const stride = Math.max(1, Math.round(colonnes.length / 7));
+  colonnes.forEach((col, i) => {
+    const dernier = i === colonnes.length - 1;
+    if (i % stride !== 0 && !dernier) return;
+    const d = new Date((depart + i) * 86400000);
+    const etiquette =
+      `${String(d.getUTCDate()).padStart(2, '0')}/` +
+      `${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+    const x = i === 0 ? cx(i) : dernier ? cx(i) + pasCase : cx(i) + pasCase / 2;
+    const ancre = i === 0 ? 'start' : dernier ? 'end' : 'middle';
+    L.push(
+      `${p}    <text x="${x.toFixed(1)}" y="14" text-anchor="${ancre}">${etiquette}</text>`
+    );
+  });
   L.push(`${p}  </g>`);
 
-  /* Un point par jour, avec son nombre en infobulle. Sans ça, la courbe ne
-   * donne pas les chiffres exacts — on ne verrait que la forme. */
-  for (const s of SERIE) {
-    if (!presentes.includes(s.cle)) continue;
-    L.push(`${p}  <g class="chart-pts chart-pts-${s.classe}">`);
-    jours.forEach((j, i) => {
-      const v = j[s.cle] || 0;
+  /* Une ligne par branche. */
+  actives.forEach((s, r) => {
+    const y = 30 + r * (PLAN.hautCase + 16);
+    L.push(
+      `${p}  <text class="grille-etiquette" x="0" y="${y + PLAN.hautCase / 2}" dy=".34em">${s.cle}</text>`
+    );
+    colonnes.forEach((col, i) => {
+      const v = col.jour ? col.jour[s.cle] || 0 : 0;
+      const n = niveau(v, maxPar[s.cle]);
+      const x = cx(i);
       const pluriel = v > 1 ? 's' : '';
+      const aide =
+        v === 0
+          ? `${s.cle} — ${col.cle} : rien`
+          : `${s.cle} — ${col.cle} : ${v} commit${pluriel}`;
       L.push(
-        `${p}    <circle cx="${px(i).toFixed(1)}" cy="${py(v).toFixed(1)}" r="3.2"><title>${s.cle} — ${j.jour} : ${v} commit${pluriel}</title></circle>`
+        `${p}    <g class="cellule cell-${s.classe} niv-${n}">` +
+          `<title>${aide}</title>` +
+          `<rect x="${x.toFixed(1)}" y="${y}" width="${pasCase.toFixed(1)}" height="${PLAN.hautCase}" rx="7"/>` +
+          `<text x="${(x + pasCase / 2).toFixed(1)}" y="${y + PLAN.hautCase / 2}" dy=".34em">${v}</text>` +
+          `</g>`
       );
     });
-    L.push(`${p}  </g>`);
-  }
+  });
 
-  /* Aires puis courbes : la ligne par-dessus, sinon le dégradé de la branche du
-   * dessus avale celle d'en dessous. */
-  for (const s of SERIE) {
-    if (!presentes.includes(s.cle)) continue;
-    const chemin = jours
-      .map((j, i) => `${i ? 'L' : 'M'}${px(i).toFixed(1)} ${py(j[s.cle] || 0).toFixed(1)}`)
-      .join(' ');
-    const fermeture = `L${px(n - 1).toFixed(1)} ${yBas.toFixed(1)} L${x0} ${yBas.toFixed(1)} Z`;
-    L.push(`${p}  <path class="chart-aire chart-aire-${s.classe}" d="${chemin} ${fermeture}"/>`);
-    L.push(`${p}  <path class="chart-ligne chart-ligne-${s.classe}" d="${chemin}"/>`);
-  }
-
-  /* Dates en bas, sur l'échelle du temps.
-   *
-   * Les graduations tombent sur des multiples de pasJours. La dernière peut
-   * donc rester en deçà du bout de l'axe — le graphique finirait sur une date
-   * qui n'est pas celle de la dernière donnée. On colle une graduation de fin
-   * quand il reste plus de la moitié d'un pas. */
-  L.push(`${p}  <g class="chart-dates">`);
-  const reperes = [];
-  for (let t = 0; t < etendue; t += pasJours) reperes.push(t);
-  if (etendue - reperes[reperes.length - 1] > pasJours * 0.5) {
-    reperes.push(etendue);
-  } else {
-    reperes[reperes.length - 1] = etendue;
-  }
-  for (const [i, t] of reperes.entries()) {
-    const x = x0 + (t / etendue) * (x1 - x0);
-    const ancre = i === 0 ? 'start' : t === etendue ? 'end' : 'middle';
-    L.push(
-      `${p}    <text x="${x.toFixed(1)}" y="${yBas + 18}" text-anchor="${ancre}">${jourLabel(t)}</text>`
-    );
-  }
-  L.push(`${p}  </g>`);
   L.push(`${p}</svg>`);
 
-  const total = jours.reduce((s, j) => s + j.main + j.SITE, 0);
+  const sansCommit = colonnes.length - jours.length;
   L.push(
-    `${p}<p class="graph-foot">${total} commits répartis sur ${n} jour${n > 1 ? 's' : ''} d'activité, du ${moisCourts(jours[0].jour)} au ${moisCourts(jours[n - 1].jour)}. Pic à ${picBrut} sur une journée. Les jours sans commit sont à zéro : les trous de la courbe sont des jours sans travail, pas des données manquantes. Survole un point pour le chiffre du jour.</p>`
+    `${p}<p class="graph-foot">Chaque case porte le nombre de commits du jour. ` +
+      `<b>${total} commits</b> du ${moisCourts(debut)} au ${moisCourts(dernierJour)}, ` +
+      `dont <b>${pic} au maximum</b> sur une journée. ` +
+      (sansCommit > 0
+        ? `Les ${sansCommit} cases vides sont des jours sans commit, pas des données manquantes.`
+        : `Aucun jour sans commit sur la période.`) +
+      `</p>`
   );
   return L.join('\n');
 }

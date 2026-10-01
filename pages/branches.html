@@ -71,7 +71,7 @@
       </article>
       <article class="branch-card">
         <h3><span class="swatch swatch-site"></span>SITE</h3>
-        <div class="count">10</div>
+        <div class="count">11</div>
         <div class="since">commits, premier le 2026-10-01</div>
       </article>
 <!-- graphe:resume:fin -->
@@ -89,70 +89,60 @@
         </div>
         <span class="since">2026/10/01 — instantané</span>
       </div>
-      <svg class="chart" viewBox="0 0 760 268" role="img" aria-labelledby="titre-chart desc-chart">
-        <title id="titre-chart">Commits par jour sur 12 jours</title>
-        <desc id="desc-chart">main, 67 commits au total ; SITE, 10 commits au total. Du 2026/09/13 au 2026/10/01, 12 jours avec commit. Pic à 14 commits sur une journée.</desc>
-        <defs>
-          <linearGradient id="aire-main" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="currentColor" stop-opacity=".34"/>
-            <stop offset="100%" stop-color="currentColor" stop-opacity=".03"/>
-          </linearGradient>
-          <linearGradient id="aire-site" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="currentColor" stop-opacity=".34"/>
-            <stop offset="100%" stop-color="currentColor" stop-opacity=".03"/>
-          </linearGradient>
-        </defs>
-        <g class="chart-grille">
-          <line x1="36" y1="234.0" x2="746" y2="234.0"/>
-          <text class="chart-val" x="28" y="234.0" dy=".32em" text-anchor="end">0</text>
-          <line x1="36" y1="162.0" x2="746" y2="162.0"/>
-          <text class="chart-val" x="28" y="162.0" dy=".32em" text-anchor="end">5</text>
-          <line x1="36" y1="90.0" x2="746" y2="90.0"/>
-          <text class="chart-val" x="28" y="90.0" dy=".32em" text-anchor="end">10</text>
-          <line x1="36" y1="18.0" x2="746" y2="18.0"/>
-          <text class="chart-val" x="28" y="18.0" dy=".32em" text-anchor="end">15</text>
+      <svg class="grille" viewBox="0 0 780 148" role="img" aria-labelledby="titre-grille desc-grille">
+        <title id="titre-grille">Commits par jour et par branche, du 2026/09/13 au 2026/10/01</title>
+        <desc id="desc-grille">main : 67 commits sur 12 jours d'activité, maximum 14 le 2026/09/26. SITE : 11 commits sur 1 jour d'activité, maximum 11 le 2026/10/01.</desc>
+        <g class="grille-dates">
+          <text x="56.0" y="14" text-anchor="start">13/09</text>
+          <text x="186.9" y="14" text-anchor="middle">16/09</text>
+          <text x="301.2" y="14" text-anchor="middle">19/09</text>
+          <text x="415.5" y="14" text-anchor="middle">22/09</text>
+          <text x="529.8" y="14" text-anchor="middle">25/09</text>
+          <text x="644.1" y="14" text-anchor="middle">28/09</text>
+          <text x="775.0" y="14" text-anchor="end">01/10</text>
         </g>
-        <g class="chart-pts chart-pts-main">
-          <circle cx="36.0" cy="205.2" r="3.2"><title>main — 2026-09-13 : 2 commits</title></circle>
-          <circle cx="75.4" cy="176.4" r="3.2"><title>main — 2026-09-14 : 4 commits</title></circle>
-          <circle cx="114.9" cy="61.2" r="3.2"><title>main — 2026-09-15 : 12 commits</title></circle>
-          <circle cx="154.3" cy="205.2" r="3.2"><title>main — 2026-09-16 : 2 commits</title></circle>
-          <circle cx="193.8" cy="176.4" r="3.2"><title>main — 2026-09-17 : 4 commits</title></circle>
-          <circle cx="469.9" cy="133.2" r="3.2"><title>main — 2026-09-24 : 7 commits</title></circle>
-          <circle cx="509.3" cy="190.8" r="3.2"><title>main — 2026-09-25 : 3 commits</title></circle>
-          <circle cx="548.8" cy="32.4" r="3.2"><title>main — 2026-09-26 : 14 commits</title></circle>
-          <circle cx="588.2" cy="162.0" r="3.2"><title>main — 2026-09-27 : 5 commits</title></circle>
-          <circle cx="627.7" cy="90.0" r="3.2"><title>main — 2026-09-28 : 10 commits</title></circle>
-          <circle cx="667.1" cy="205.2" r="3.2"><title>main — 2026-09-29 : 2 commits</title></circle>
-          <circle cx="746.0" cy="205.2" r="3.2"><title>main — 2026-10-01 : 2 commits</title></circle>
-        </g>
-        <g class="chart-pts chart-pts-site">
-          <circle cx="36.0" cy="234.0" r="3.2"><title>SITE — 2026-09-13 : 0 commit</title></circle>
-          <circle cx="75.4" cy="234.0" r="3.2"><title>SITE — 2026-09-14 : 0 commit</title></circle>
-          <circle cx="114.9" cy="234.0" r="3.2"><title>SITE — 2026-09-15 : 0 commit</title></circle>
-          <circle cx="154.3" cy="234.0" r="3.2"><title>SITE — 2026-09-16 : 0 commit</title></circle>
-          <circle cx="193.8" cy="234.0" r="3.2"><title>SITE — 2026-09-17 : 0 commit</title></circle>
-          <circle cx="469.9" cy="234.0" r="3.2"><title>SITE — 2026-09-24 : 0 commit</title></circle>
-          <circle cx="509.3" cy="234.0" r="3.2"><title>SITE — 2026-09-25 : 0 commit</title></circle>
-          <circle cx="548.8" cy="234.0" r="3.2"><title>SITE — 2026-09-26 : 0 commit</title></circle>
-          <circle cx="588.2" cy="234.0" r="3.2"><title>SITE — 2026-09-27 : 0 commit</title></circle>
-          <circle cx="627.7" cy="234.0" r="3.2"><title>SITE — 2026-09-28 : 0 commit</title></circle>
-          <circle cx="667.1" cy="234.0" r="3.2"><title>SITE — 2026-09-29 : 0 commit</title></circle>
-          <circle cx="746.0" cy="90.0" r="3.2"><title>SITE — 2026-10-01 : 10 commits</title></circle>
-        </g>
-        <path class="chart-aire chart-aire-main" d="M36.0 205.2 L75.4 176.4 L114.9 61.2 L154.3 205.2 L193.8 176.4 L469.9 133.2 L509.3 190.8 L548.8 32.4 L588.2 162.0 L627.7 90.0 L667.1 205.2 L746.0 205.2 L746.0 234.0 L36 234.0 Z"/>
-        <path class="chart-ligne chart-ligne-main" d="M36.0 205.2 L75.4 176.4 L114.9 61.2 L154.3 205.2 L193.8 176.4 L469.9 133.2 L509.3 190.8 L548.8 32.4 L588.2 162.0 L627.7 90.0 L667.1 205.2 L746.0 205.2"/>
-        <path class="chart-aire chart-aire-site" d="M36.0 234.0 L75.4 234.0 L114.9 234.0 L154.3 234.0 L193.8 234.0 L469.9 234.0 L509.3 234.0 L548.8 234.0 L588.2 234.0 L627.7 234.0 L667.1 234.0 L746.0 90.0 L746.0 234.0 L36 234.0 Z"/>
-        <path class="chart-ligne chart-ligne-site" d="M36.0 234.0 L75.4 234.0 L114.9 234.0 L154.3 234.0 L193.8 234.0 L469.9 234.0 L509.3 234.0 L548.8 234.0 L588.2 234.0 L627.7 234.0 L667.1 234.0 L746.0 90.0"/>
-        <g class="chart-dates">
-          <text x="36.0" y="252" text-anchor="start">09/13</text>
-          <text x="233.2" y="252" text-anchor="middle">09/18</text>
-          <text x="430.4" y="252" text-anchor="middle">09/23</text>
-          <text x="627.7" y="252" text-anchor="middle">09/28</text>
-          <text x="746.0" y="252" text-anchor="end">10/01</text>
-        </g>
+        <text class="grille-etiquette" x="0" y="53" dy=".34em">main</text>
+          <g class="cellule cell-main niv-1"><title>main — 2026-09-13 : 2 commits</title><rect x="56.0" y="30" width="33.1" height="46" rx="7"/><text x="72.6" y="53" dy=".34em">2</text></g>
+          <g class="cellule cell-main niv-2"><title>main — 2026-09-14 : 4 commits</title><rect x="94.1" y="30" width="33.1" height="46" rx="7"/><text x="110.7" y="53" dy=".34em">4</text></g>
+          <g class="cellule cell-main niv-4"><title>main — 2026-09-15 : 12 commits</title><rect x="132.2" y="30" width="33.1" height="46" rx="7"/><text x="148.8" y="53" dy=".34em">12</text></g>
+          <g class="cellule cell-main niv-1"><title>main — 2026-09-16 : 2 commits</title><rect x="170.3" y="30" width="33.1" height="46" rx="7"/><text x="186.9" y="53" dy=".34em">2</text></g>
+          <g class="cellule cell-main niv-2"><title>main — 2026-09-17 : 4 commits</title><rect x="208.4" y="30" width="33.1" height="46" rx="7"/><text x="225.0" y="53" dy=".34em">4</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-18 : rien</title><rect x="246.5" y="30" width="33.1" height="46" rx="7"/><text x="263.1" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-19 : rien</title><rect x="284.6" y="30" width="33.1" height="46" rx="7"/><text x="301.2" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-20 : rien</title><rect x="322.7" y="30" width="33.1" height="46" rx="7"/><text x="339.3" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-21 : rien</title><rect x="360.8" y="30" width="33.1" height="46" rx="7"/><text x="377.4" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-22 : rien</title><rect x="398.9" y="30" width="33.1" height="46" rx="7"/><text x="415.5" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-23 : rien</title><rect x="437.1" y="30" width="33.1" height="46" rx="7"/><text x="453.6" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-2"><title>main — 2026-09-24 : 7 commits</title><rect x="475.2" y="30" width="33.1" height="46" rx="7"/><text x="491.7" y="53" dy=".34em">7</text></g>
+          <g class="cellule cell-main niv-1"><title>main — 2026-09-25 : 3 commits</title><rect x="513.3" y="30" width="33.1" height="46" rx="7"/><text x="529.8" y="53" dy=".34em">3</text></g>
+          <g class="cellule cell-main niv-4"><title>main — 2026-09-26 : 14 commits</title><rect x="551.4" y="30" width="33.1" height="46" rx="7"/><text x="567.9" y="53" dy=".34em">14</text></g>
+          <g class="cellule cell-main niv-2"><title>main — 2026-09-27 : 5 commits</title><rect x="589.5" y="30" width="33.1" height="46" rx="7"/><text x="606.0" y="53" dy=".34em">5</text></g>
+          <g class="cellule cell-main niv-3"><title>main — 2026-09-28 : 10 commits</title><rect x="627.6" y="30" width="33.1" height="46" rx="7"/><text x="644.1" y="53" dy=".34em">10</text></g>
+          <g class="cellule cell-main niv-1"><title>main — 2026-09-29 : 2 commits</title><rect x="665.7" y="30" width="33.1" height="46" rx="7"/><text x="682.2" y="53" dy=".34em">2</text></g>
+          <g class="cellule cell-main niv-0"><title>main — 2026-09-30 : rien</title><rect x="703.8" y="30" width="33.1" height="46" rx="7"/><text x="720.3" y="53" dy=".34em">0</text></g>
+          <g class="cellule cell-main niv-1"><title>main — 2026-10-01 : 2 commits</title><rect x="741.9" y="30" width="33.1" height="46" rx="7"/><text x="758.4" y="53" dy=".34em">2</text></g>
+        <text class="grille-etiquette" x="0" y="115" dy=".34em">SITE</text>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-13 : rien</title><rect x="56.0" y="92" width="33.1" height="46" rx="7"/><text x="72.6" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-14 : rien</title><rect x="94.1" y="92" width="33.1" height="46" rx="7"/><text x="110.7" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-15 : rien</title><rect x="132.2" y="92" width="33.1" height="46" rx="7"/><text x="148.8" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-16 : rien</title><rect x="170.3" y="92" width="33.1" height="46" rx="7"/><text x="186.9" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-17 : rien</title><rect x="208.4" y="92" width="33.1" height="46" rx="7"/><text x="225.0" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-18 : rien</title><rect x="246.5" y="92" width="33.1" height="46" rx="7"/><text x="263.1" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-19 : rien</title><rect x="284.6" y="92" width="33.1" height="46" rx="7"/><text x="301.2" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-20 : rien</title><rect x="322.7" y="92" width="33.1" height="46" rx="7"/><text x="339.3" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-21 : rien</title><rect x="360.8" y="92" width="33.1" height="46" rx="7"/><text x="377.4" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-22 : rien</title><rect x="398.9" y="92" width="33.1" height="46" rx="7"/><text x="415.5" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-23 : rien</title><rect x="437.1" y="92" width="33.1" height="46" rx="7"/><text x="453.6" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-24 : rien</title><rect x="475.2" y="92" width="33.1" height="46" rx="7"/><text x="491.7" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-25 : rien</title><rect x="513.3" y="92" width="33.1" height="46" rx="7"/><text x="529.8" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-26 : rien</title><rect x="551.4" y="92" width="33.1" height="46" rx="7"/><text x="567.9" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-27 : rien</title><rect x="589.5" y="92" width="33.1" height="46" rx="7"/><text x="606.0" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-28 : rien</title><rect x="627.6" y="92" width="33.1" height="46" rx="7"/><text x="644.1" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-29 : rien</title><rect x="665.7" y="92" width="33.1" height="46" rx="7"/><text x="682.2" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-0"><title>SITE — 2026-09-30 : rien</title><rect x="703.8" y="92" width="33.1" height="46" rx="7"/><text x="720.3" y="115" dy=".34em">0</text></g>
+          <g class="cellule cell-site niv-4"><title>SITE — 2026-10-01 : 11 commits</title><rect x="741.9" y="92" width="33.1" height="46" rx="7"/><text x="758.4" y="115" dy=".34em">11</text></g>
       </svg>
-      <p class="graph-foot">77 commits répartis sur 12 jours d'activité, du 2026/09/13 au 2026/10/01. Pic à 14 sur une journée. Les jours sans commit sont à zéro : les trous de la courbe sont des jours sans travail, pas des données manquantes. Survole un point pour le chiffre du jour.</p>
+      <p class="graph-foot">Chaque case porte le nombre de commits du jour. <b>78 commits</b> du 2026/09/13 au 2026/10/01, dont <b>14 au maximum</b> sur une journée. Les 7 cases vides sont des jours sans commit, pas des données manquantes.</p>
 <!-- graphe:graphe:fin -->
     </div>
 
@@ -170,6 +160,13 @@
 
     <ul class="commit-list" id="commits" data-apparait>
       <!-- graphe:commits:debut -->
+      <li>
+        <a href="https://github.com/cyprien63/papillon-pronote/commit/7b3049d" rel="noopener" target="_blank">
+          <span class="sha">7b3049d</span>
+          <span class="sujet">Nommer l'adresse de commit au lieu de la decrire</span>
+          <span class="branche branche-site" title="2026-10-01">SITE</span>
+        </a>
+      </li>
       <li>
         <a href="https://github.com/cyprien63/papillon-pronote/commit/df46c35" rel="noopener" target="_blank">
           <span class="sha">df46c35</span>
@@ -258,13 +255,6 @@
         <a href="https://github.com/cyprien63/papillon-pronote/commit/99d33f1" rel="noopener" target="_blank">
           <span class="sha">99d33f1</span>
           <span class="sujet">Page Anciens bilans : restyle façon Papillon de l'arbre des bilans périodiques, classes pap-anb-*</span>
-          <span class="branche branche-main" title="2026-09-29">main</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/cyprien63/papillon-pronote/commit/388fe8c" rel="noopener" target="_blank">
-          <span class="sha">388fe8c</span>
-          <span class="sujet">Page Livret de compétences numériques : restyle façon Papillon de la grille et du pied</span>
           <span class="branche branche-main" title="2026-09-29">main</span>
         </a>
       </li>
