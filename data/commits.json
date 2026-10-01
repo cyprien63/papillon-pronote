@@ -20,12 +20,12 @@
       ]
     },
     "SITE": {
-      "commits": 15,
+      "commits": 16,
       "premier": "2026-10-01",
       "auteurs": [
         {
           "compte": "cyprien63",
-          "commits": 12
+          "commits": 13
         },
         {
           "compte": "non rattaché",
@@ -960,8 +960,21 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 15,
+      "SITE": 16,
       "commits": [
+        {
+          "hash": "9892459",
+          "auteur": "Cyprien63",
+          "email": "p.cyprien6312@gmail.com",
+          "compte": "cyprien63",
+          "date": "2026-10-01T21:35:27+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Dire qui a ecrit les commits, pas seulement combien",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
         {
           "hash": "ffd96b5",
           "auteur": "Cyprien63",
