@@ -17,6 +17,15 @@
       if (t === 'dark') { document.documentElement.classList.add('dark'); }
       document.documentElement.style.colorScheme = t;
     } catch (e) {}
+    document.documentElement.className += ' js';
+
+    /* Filet de securite : si site.js ne se charge pas, les sections resteraient
+       a opacity 0 et le contenu serait invisible. On retire donc la classe .js
+       si le signal de pretude n'arrive pas. Sans JavaScript, ce bloc ne s'execute
+       pas et rien n'est masque non plus. */
+    window.papillonRepli = window.setTimeout(function () {
+      document.documentElement.classList.remove('js');
+    }, 1500);
   })();
 </script>
 </head>
@@ -56,7 +65,7 @@
   </p>
 
   <!-- Connexion ---------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="0">
     <h2 class="section-title">Connexion</h2>
 
     <div class="card">
@@ -87,7 +96,7 @@
   </section>
 
   <!-- Accueil ------------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="40">
     <h2 class="section-title">Accueil élèves</h2>
 
     <div class="card">
@@ -139,7 +148,7 @@
   </section>
 
   <!-- Espace PRONOTE ------------------------------------------------------ -->
-  <section>
+  <section data-apparait data-retard="80">
     <h2 class="section-title">Le reste de PRONOTE</h2>
 
     <div class="grid">
@@ -191,7 +200,7 @@
   </section>
 
   <!-- Choix de moyenne ---------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="120">
     <h2 class="section-title">Les moyennes</h2>
 
     <div class="card">
@@ -236,7 +245,7 @@
   </section>
 
   <!-- Design -------------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="160">
     <h2 class="section-title">Le design</h2>
 
     <div class="card">
@@ -288,7 +297,7 @@
   </section>
 
   <!-- Limites ------------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="200">
     <h2 class="section-title">Ce qui n'est pas fait</h2>
 
     <div class="card card-empty">

@@ -591,8 +591,10 @@ td strong { color: var(--papillon-ink); font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  * { transition: none !important; }
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   .btn:hover { transform: none; }
+  .shot { box-shadow: var(--papillon-shadow); }
+  [data-apparait] { opacity: 1; transform: none; }
 }
 /* --- Maquette CSS de l'accueil ------------------------------------------- */
 /* Reproduit la mise en page de l'accueil PRONOTE restylé. Dessinée en CSS
@@ -698,3 +700,177 @@ td strong { color: var(--papillon-ink); font-weight: 600; }
 .b1 { background: #35bba0; }
 .b2 { background: #3a56d0; }
 .b3 { background: #e8901c; }
+
+/* ==========================================================================
+   Animations
+   Volontairement peu nombreuses et courtes. La règle : rien ne bouge au repos,
+   rien ne bloque la lecture, et tout est désactivé si le visiteur demande
+   moins d'animations.
+   ========================================================================== */
+
+/* --- Apparition au défilement --------------------------------------------- */
+/* .js est posé par le script inline de chaque <head>. Sans JavaScript, aucune
+   classe n'est ajoutée et le contenu reste normalement visible : c'est le
+   seul moyen d'éviter une page vide si le script ne charge pas. */
+.js [data-apparait] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .55s cubic-bezier(.22, .61, .36, 1), transform .55s cubic-bezier(.22, .61, .36, 1);
+  will-change: opacity, transform;
+}
+
+.js [data-apparait].apparu {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* --- Bandeau : reflet qui traverse le dégradé ------------------------------ */
+/* Un seul passage au chargement, puis plus rien. */
+.site-header {
+  position: relative;
+  overflow: hidden;
+}
+
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .22), transparent);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.site-header::after { animation: reflet 1.5s cubic-bezier(.4, 0, .2, 1) .3s 1 both; }
+
+@keyframes reflet {
+  to { transform: translateX(360%); }
+}
+
+/* --- Titre du hero : montée douce ----------------------------------------- */
+.js .hero > * {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: monte .6s cubic-bezier(.22, .61, .36, 1) forwards;
+}
+
+.js .hero > :nth-child(1) { animation-delay: .05s; }
+.js .hero > :nth-child(2) { animation-delay: .13s; }
+.js .hero > :nth-child(3) { animation-delay: .21s; }
+.js .hero > :nth-child(4) { animation-delay: .29s; }
+.js .hero > :nth-child(5) { animation-delay: .37s; }
+
+@keyframes monte {
+  to { opacity: 1; transform: none; }
+}
+
+/* --- Maquette : respiration lente ----------------------------------------- */
+.mock {
+  animation: respirer 7s ease-in-out infinite;
+}
+
+@keyframes respirer {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Pastilles de cours : décalage vertical, comme l'emploi du temps */
+.mock-row { animation: glisser 5.5s ease-in-out infinite; }
+.mock-row:nth-child(2) { animation-delay: .35s; }
+.mock-row:nth-child(3) { animation-delay: .7s; }
+
+@keyframes glisser {
+  0%, 100% { transform: translateY(0); opacity: .8; }
+  50% { transform: translateY(-2px); opacity: 1; }
+}
+
+/* --- Boutons --------------------------------------------------------------- */
+.btn-primary {
+  transition: transform .16s cubic-bezier(.22, .61, .36, 1), box-shadow .16s ease, filter .16s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 22px rgba(34, 126, 107, .3);
+  filter: brightness(1.06);
+}
+
+.btn-primary:active { transform: translateY(0) scale(.985); }
+
+/* --- Cartes : Soulèvement au survol ---------------------------------------- */
+.card,
+.stat {
+  transition: transform .2s cubic-bezier(.22, .61, .36, 1), box-shadow .2s ease, border-color .2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(16, 19, 15, .07);
+}
+
+html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
+
+.card:hover { border-color: rgba(53, 187, 160, .4); }
+
+.stat:hover { transform: translateY(-2px); }
+
+/* Le teal des chiffres s'intensifie brièvement */
+.stat b { transition: color .2s ease; }
+.stat:hover b { color: var(--papillon-link); }
+
+/* --- Filet de titre de section --------------------------------------------- */
+.section-title::before {
+  transform-origin: center;
+}
+
+.js .section-title::before { animation: filet .6s cubic-bezier(.22, .61, .36, 1) backwards; }
+
+@keyframes filet {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* --- Ligne de la liste de fonctionnalités ---------------------------------- */
+.feature-list li { transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+
+.feature-list li:hover {
+  transform: translateX(3px);
+  border-color: rgba(53, 187, 160, .42);
+}
+
+/* --- Pastilles ------------------------------------------------------------- */
+.chip { transition: transform .16s ease, border-color .16s ease; }
+.chip:hover { transform: translateY(-1px); border-color: var(--papillon-link); }
+
+/* --- Bascule de thème : rotation douce ------------------------------------- */
+.theme-toggle svg { transition: transform .3s cubic-bezier(.22, .61, .36, 1); }
+.theme-toggle:hover svg { transform: rotate(-18deg); }
+
+/* --- Menu mobile ----------------------------------------------------------- */
+.site-nav.open { animation: descendre .2s cubic-bezier(.22, .61, .36, 1); }
+
+@keyframes descendre {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* --- Retours visuels au clavier -------------------------------------------- */
+:is(a, button):focus-visible {
+  outline: 2px solid var(--papillon-link);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.site-header :is(a, button):focus-visible {
+  outline-color: #fff;
+}
+
+/* --- Pas d'animation si l'onglet est en arrière-plan ------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .mock, .mock-row, .site-header::after { animation: none !important; }
+  .js .hero > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .js .section-title::before { animation: none !important; }
+  .card:hover, .stat:hover, .feature-list li:hover, .chip:hover { transform: none; }
+}

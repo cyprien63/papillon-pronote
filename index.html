@@ -18,6 +18,15 @@
       if (t === 'dark') { document.documentElement.classList.add('dark'); }
       document.documentElement.style.colorScheme = t;
     } catch (e) {}
+    document.documentElement.className += ' js';
+
+    /* Filet de securite : si site.js ne se charge pas, les sections resteraient
+       a opacity 0 et le contenu serait invisible. On retire donc la classe .js
+       si le signal de pretude n'arrive pas. Sans JavaScript, ce bloc ne s'execute
+       pas et rien n'est masque non plus. */
+    window.papillonRepli = window.setTimeout(function () {
+      document.documentElement.classList.remove('js');
+    }, 1500);
   })();
 </script>
 </head>
@@ -50,7 +59,7 @@
 <main class="wrap">
 
   <!-- Hero ---------------------------------------------------------------- -->
-  <section class="grid-2">
+  <section class="grid-2 hero">
     <div>
       <div class="chip-row" style="margin-bottom:18px">
         <span class="chip">Manifest V3</span>
@@ -109,7 +118,7 @@
   </section>
 
   <!-- Chiffres ------------------------------------------------------------ -->
-  <section>
+  <section data-apparait data-retard="40">
     <ul class="stats">
       <li class="stat"><b>27</b><span>pages couvertes</span></li>
       <li class="stat"><b>1</b><span>permission Chrome</span></li>
@@ -119,7 +128,7 @@
   </section>
 
   <!-- Principe ------------------------------------------------------------ -->
-  <section>
+  <section data-apparait data-retard="80">
     <h2 class="section-title">L'extension ne fait que repeindre</h2>
 
     <div class="grid">
@@ -153,7 +162,7 @@
   </section>
 
   <!-- Périmètre ----------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="120">
     <h2 class="section-title">Ce qui est couvert</h2>
 
     <div class="grid">
@@ -212,7 +221,7 @@
   </section>
 
   <!-- Installation -------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="160">
     <h2 class="section-title">Installation</h2>
 
     <div class="card">
@@ -245,7 +254,7 @@
   </section>
 
   <!-- Données ------------------------------------------------------------- -->
-  <section>
+  <section data-apparait data-retard="200">
     <h2 class="section-title">Ce qui est stocké</h2>
 
     <div class="card">

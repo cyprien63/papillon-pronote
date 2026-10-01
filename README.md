@@ -83,9 +83,45 @@ une script inline dans chaque `<head>`, sinon la page clignote en clair.
 
 ## Thème et navigation
 
-`assets/js/site.js` fait deux choses : appliquer le thème et gérer le menu mobile.
-Sans JavaScript, la page reste lisible et navigable, seule la bascule de thème
+`assets/js/site.js` applique le thème, gère le menu mobile, déclenche les
+apparitions au défilement et ferme le menu avec la touche Échap. Sans
+JavaScript, la page reste lisible et navigable : seule la bascule de thème
 disparaît.
+
+## Animations
+
+Peu nombreuses, courtes, toutes facultatives.
+
+| Effet | Durée | Où |
+|---|---|---|
+| Apparition au défilement, décalée en escalier | 550 ms | chaque section, via `data-apparait` + `data-retard` |
+| Montée du hero | 600 ms, 80 ms d'écart | les 5 blocs du premier écran |
+| Reflet traversant le bandeau | 1,5 s, une fois | en-tête au chargement |
+| Soulèvement au survol | 200 ms | cartes, statistiques, pastilles |
+| Respiration de la maquette | 7 s en boucle | visuel du hero |
+| Rotation de l'icône de thème | 300 ms | au survol du bouton |
+
+Uniquement `transform` et `opacity`, donc aucun reflow. Les apparitions
+utilisent un `IntersectionObserver` qui se désabonne après le premier passage :
+un élément ne peut pas réapparaître en remontant la page.
+
+Trois garde-fous, du plus au moins important :
+
+1. **`prefers-reduced-motion`** coupe tout. Ce bloc est en fin de fichier et
+   écrase celui qui existait auparavant, qui faisait `transition: none` sur `*`
+   et annulait au passage les transitions de couleur utiles au survol.
+2. **Pas d'`IntersectionObserver`** : les éléments reçoivent immédiatement la
+   classe `apparu`, rien ne reste masqué.
+3. **Filet de sécurité dans chaque `<head>`** : la classe `js` n'est conservée que
+   si `site.js` s'est exécuté.
+
+Le point 3 est la partie non évidente du code. La classe `js` doit être posée
+dans la tête, avant le premier rendu, sinon les sections apparaissent une
+fraction de seconde avant de repartir en fondu — le clignotement est exactement
+ce qu'on cherche à éviter. Mais la poser avant de savoir si `site.js` va
+arriver expose la page vide si ce script échoue. D'où le `setTimeout` de 1,5 s
+qui retire la classe, annulé par `site.js` dès son chargement. Sans JavaScript
+du tout, ce bloc ne s'exécute pas et rien n'est masqué.
 
 ## Ce qui est volontaire
 
