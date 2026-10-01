@@ -877,7 +877,8 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
 
 /* ==========================================================================
    Graphe des commits
-   Barres empilées par jour, deux colonnes : une pour main, une pour SITE.
+   Une courbe en aire par branche, sur un axe des dates. SVG écrit par
+   tools/commits.mjs : ici on ne règle que la couleur et l'épaisseur.
    ========================================================================== */
 
 .graph {
@@ -920,46 +921,72 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
 .swatch-main { background: #2c9581; }
 .swatch-site { background: #8f62e0; }
 
-/* Une ligne par jour : deux piste côte à côte */
-.graph-row {
-  display: grid;
-  grid-template-columns: 78px 1fr 1fr;
-  gap: 8px;
-  align-items: center;
-  padding: 3px 0;
-  font-size: .8rem;
+/* Le graphique
+   ---------- */
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 14px;
+  overflow: visible;
+  font-size: 11px;
 }
 
-.graph-date {
-  color: var(--papillon-muted);
+.chart-grille line {
+  stroke: var(--papillon-border);
+  stroke-width: 1;
+}
+
+.chart-val,
+.chart-dates text {
+  fill: var(--papillon-muted);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
-.lane {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--papillon-hover);
-  padding: 3px;
-  overflow: hidden;
+/* vector-effect garde 2px à l'écran : sans ça, la ligne s'épaissit quand la
+   fenêtre rétrécit et le graphique se déforme. */
+.chart-ligne {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
-.lane.is-empty { background: transparent; }
-
-.tick {
-  width: 5px;
-  min-width: 5px;
-  border-radius: 2px;
-  background: #2c9581;
-  transition: transform .16s ease;
+.chart-aire {
+  stroke: none;
 }
 
-.lane-site .tick { background: #8f62e0; }
+/* currentColor porte la teinte : le dégradé s'y réfère, ce qui évite de
+   répéter le code couleur dans le SVG généré. */
+.chart-aire-main { color: #2c9581; fill: url(#aire-main); }
+.chart-aire-site { color: #8f62e0; fill: url(#aire-site); }
+.chart-ligne-main { color: #2c9581; }
+.chart-ligne-site { color: #8f62e0; }
 
-.tick:hover { transform: scaleY(1.35); }
+.chart-pts circle {
+  fill: var(--papillon-surface);
+  stroke: currentColor;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-pts-main { color: #2c9581; }
+.chart-pts-site { color: #8f62e0; }
+
+.chart-pts circle:hover {
+  fill: currentColor;
+  r: 5;
+}
+
+html.dark .chart-aire-main { color: #4ecfb4; }
+html.dark .chart-aire-site { color: #c4a9fb; }
+html.dark .chart-ligne-main { color: #4ecfb4; }
+html.dark .chart-ligne-site { color: #c4a9fb; }
+html.dark .chart-pts-main { color: #4ecfb4; }
+html.dark .chart-pts-site { color: #c4a9fb; }
 
 .graph-foot {
   margin-top: 18px;
@@ -1057,16 +1084,7 @@ html.dark .branche-main { background: #14352c; color: #4ecfb4; }
 html.dark .branche-site { background: #2a2140; color: #c4a9fb; }
 
 @media (max-width: 620px) {
-  .graph-row { grid-template-columns: 62px 1fr 1fr; gap: 5px; font-size: .72rem; }
-  .tick { width: 3px; min-width: 3px; }
+  .chart { font-size: 13px; }
   .commit-list a { grid-template-columns: 62px 1fr; }
   .commit-list .branche { grid-column: 2; justify-self: start; }
-}
-
-.tick-more {
-  font-size: .68rem;
-  font-weight: 700;
-  color: var(--papillon-muted);
-  padding-left: 3px;
-  white-space: nowrap;
 }

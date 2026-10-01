@@ -76,7 +76,7 @@ serait refusé. Le workflow pousse donc sur une branche jetable
 (`commits-graphe`) et ouvre une PR, que tu merges. C'est plus lent d'un push
 direct, mais ça respecte la protection au lieu de la contourner en douce.
 
-### Deux pièges que le script désamorce
+### Trois pièges que le script désamorce
 
 **Le robot ne se compte pas lui-même.** Sans précaution, le workflow
 s'auto-entretient : le fichier est commité, la PR est mergée, ce commit entre
@@ -84,11 +84,64 @@ dans l'historique de `SITE`, donc le fichier régénéré diffère encore, donc 
 nouvelle PR — indéfiniment. Les commits dont l'auteur contient `[bot]` sont
 donc écartés du graphe.
 
+**Et les fusions non plus.** C'est la boucle que tu as réellement subie, et le
+filtre `[bot]` ne l'attrapait pas. Tu merges la PR du graphe, ce qui crée un
+commit « Merge pull request #18… » à ton nom ; le fichier le comptait, donc il
+changeait, donc le workflow ouvrait une PR — laquelle en créait une autre.
+Écarter les fusions ne perd rien : les commits qu'elles rapprochent sont déjà
+comptés un par un.
+
 **La date ne bouge que si le contenu bouge.** Le workflow tourne chaque matin.
 Si `genereLe` prenait l'heure du jour, le fichier serait différent tous les
 matins et le workflow ouvrirait une PR ne contenant qu'une date. La date est
 celle du dernier changement réel, donc une journée sans commit produit un
 fichier identique et le workflow s'arrête avant la PR.
+
+### Ce que montre le graphique
+
+Une courbe en aire par branche, sur un axe des dates, écrite en SVG par le
+générateur. Deux choix méritent d'être signalés.
+
+L'abscisse suit le **calendrier**, pas la liste des jours. Entre le 17/09 et le
+24/09 il n'y a aucun commit ; espacer les jours à égalité ferait croire à une
+activité continue pendant une semaine de silence.
+
+Les jours sans commit sont à **zéro**, pas absents. Un trou dans la courbe
+signifie donc « personne n'a rien commité ce jour-là », et non « le fichier ne
+sait pas ». Le remplissage qui relie les points est une commodité de lecture :
+il ne prétend pas que le travail s'est réparti ainsi entre deux dates.
+
+Chaque point porte le nombre exact en infobulle, et le SVG a un `<desc>` qui
+résume l'ensemble pour les lecteurs d'écran.
+
+Une grille de carrés façon « contributions GitHub » aurait été l'autre option.
+Elle est écartée : elle demande un an d'historique pour avoir l'air pleine, et
+sur douze jours elle rendrait une bande de trois cases.
+
+### Quatre pièges que ce générateur a désamorcés
+
+**Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
+`git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
+s'est effacé lors d'une réécriture du fichier, et le découpage a cassé
+silencieusement : `main` est tombé à 0 commit sans lever la moindre erreur.
+Il est désormais écrit `\u001e`, en échappement, pour que ça ne puisse plus
+arriver.
+
+**Une fonction pure, ou le graphe disparaît.** La fonction qui insère le
+contenu entre les marqueurs relisait le fichier à chaque appel. Les deux
+premiers résultats étaient donc écrasés par le suivant : la liste des commits
+passait, le graphe et le résumé non. Elle reçoit désormais le HTML et le
+renvoie modifié, sans toucher au disque.
+
+Un troisième, dans la même famille : deux clés `h` dans la géométrie du
+graphique — la hauteur et la marge haute. La seconde écrasait la première, et
+le `viewBox` sortait à 14 pixels de haut. Les clés s'appellent maintenant
+`larg`, `haut`, `mg`, `md`, `mh`, `mb`.
+
+Un quatrième, lui aussi invisible : `git clone` ne recopie que l'état *commité*
+d'un dépôt. Un test de boucle lancé depuis un clone ne teste donc pas les
+modifications non commitées, mais la version précédente du script — et conclut
+que le correctif n'a rien changé. Le test copie l'arbre de travail.
 
 ### Deux détails qui ont coûté du temps
 
@@ -103,21 +156,6 @@ de GitHub Actions ne crée qu'une seule branche locale, donc sur un push vers
 essaie les formes de référence une par une, et une branche absente est
 simplement omise du JSON avec un avertissement, plutôt que de faire échouer le
 workflow.
-
-### Deux pièges que ce générateur aтыхisés
-
-**Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
-`git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
-s'est effacé lors d'une réécriture du fichier, et le découpage a cassé
-silencieusement : `main` est tombé à 0 commit sans lever la moindre erreur.
-Il est désormais écrit `\u001e`, en échappement, pour que ça ne puisse plus
-arriver.
-
-**Une fonction pure, ou le graphe disparaît.** La fonction qui insère le
-contenu entre les marqueurs relisait le fichier à chaque appel. Les deux
-premiers résultats étaient donc écrasés par le suivant : la liste des commits
-passait, le graphe et le résumé non. Elle reçoit désormais le HTML et le
-renvoie modifié, sans toucher au disque.
 
 ### Un repli incohérent qu'il ne fallait pas laisser
 
