@@ -114,9 +114,10 @@ const lus = brut.split('\n').filter(Boolean).map((ligne) => {
  * commit pour que la boucle reste fermée. */
 const estRobot = (c) => c.auteur.includes('[bot]');
 const estFusion = (c) => /^Merge (remote-tracking branch|pull request|branch)/.test(c.sujet);
-const commits = lus.filter((c) => !estRobot(c) && !estFusion(c));
-const nbRobot = lus.filter(estRobot).length;
-const nbFusion = lus.length - nbRobot - commits.length;
+for (const c of lus) c.ecarte = estRobot(c) ? 'robot' : estFusion(c) ? 'fusion' : null;
+const commits = lus.filter((c) => !c.ecarte);
+const nbRobot = lus.filter((c) => c.ecarte === 'robot').length;
+const nbFusion = lus.filter((c) => c.ecarte === 'fusion').length;
 
 const appartenance = new Map(BRANCHES.map((b) => [b, new Set()]));
 const introuvables = [];
@@ -137,7 +138,10 @@ if (introuvables.length) {
   );
 }
 
-for (const c of commits) {
+/* `sur` est posé sur tous les commits lus, y compris les écartés : c'est la
+ * seule façon de dire « la branche en compte 72, dont 5 fusions » plutôt qu'un
+ * total global qui ne dit rien. */
+for (const c of lus) {
   for (const b of BRANCHES) {
     if (appartenance.get(b).has(c.hash)) c.sur.push(b);
   }
@@ -164,10 +168,25 @@ const premier = (b) => {
   return dates[0] ?? null;
 };
 
+/* Le compte que GitHub affiche sur la branche, et la raison de l'écart avec le
+ * compte ci-dessus. Sans ces deux nombres, la page annonce 67 et 12 là où le
+ * dépôt en affiche 72 et 20, et le lecteur n'a aucun moyen de réconcilier les
+ * deux — il conclut que le compte est faux. */
+const dansLaBranche = (b, motif) =>
+  lus.filter((c) => c.sur.includes(b) && (!motif || c.ecarte === motif)).length;
+
 const presentes = BRANCHES.filter((b) => !introuvables.includes(b));
 const resume = {};
 for (const b of presentes) {
-  resume[b] = { commits: total(b), premier: premier(b) };
+  const fusions = dansLaBranche(b, 'fusion');
+  const robots = dansLaBranche(b, 'robot');
+  resume[b] = {
+    commits: total(b),
+    total: dansLaBranche(b),
+    fusions,
+    robots,
+    premier: premier(b),
+  };
 }
 
 const donnees = {
@@ -220,12 +239,20 @@ function pasRond(max, cible = 4) {
 function carteResume(b, r, indent) {
   const p = ' '.repeat(indent);
   const classe = b === 'main' ? 'swatch-main' : 'swatch-site';
-  const pluriel = r.commits > 1 ? 's' : '';
+  const pluriel = (n) => (n > 1 ? 's' : '');
+  const ecarts = [];
+  if (r.fusions) ecarts.push(`${r.fusions} fusion${pluriel(r.fusions)}`);
+  if (r.robots) ecarts.push(`${r.robots} commit${pluriel(r.robots)} du robot`);
   return [
     `${p}<article class="branch-card">`,
     `${p}  <h3><span class="swatch ${classe}"></span>${b}</h3>`,
     `${p}  <div class="count">${r.commits}</div>`,
-    `${p}  <div class="since">commit${pluriel}, premier le ${r.premier}</div>`,
+    `${p}  <div class="since">commit${pluriel(r.commits)} représenté${pluriel(r.commits)}, premier le ${r.premier}</div>`,
+    ...(ecarts.length
+      ? [
+          `${p}  <p class="ecart">sur ${r.total} dans la branche — écartés : ${ecarts.join(', ')}</p>`,
+        ]
+      : []),
     `${p}</article>`,
   ].join('\n');
 }
@@ -326,7 +353,7 @@ function grapheHtml(indent) {
           `maximum ${maxPar[s.cle]} le ${moisCourts(meilleur[s.cle] ? meilleur.jour : dernierJour)}`
         );
       })
-      .join('. ')}.</desc>`
+      .join('. ')}. ${lus.length} commits dans les deux branches, dont ${nbRobot + nbFusion} non représentés : ${nbFusion} fusions et ${nbRobot} commits du workflow, qui régénèrent ce fichier.</desc>`
   );
 
   /* Les dates, environ une sur trois, pour qu'elles ne se chevauchent pas.
@@ -377,6 +404,7 @@ function grapheHtml(indent) {
   L.push(`${p}</svg>`);
 
   const sansCommit = colonnes.length - jours.length;
+  const ecartGlobal = lus.length - total;
   L.push(
     `${p}<p class="graph-foot">Chaque case porte le nombre de commits du jour. ` +
       `<b>${total} commits</b> du ${moisCourts(debut)} au ${moisCourts(dernierJour)}, ` +
@@ -386,6 +414,15 @@ function grapheHtml(indent) {
         : `Aucun jour sans commit sur la période.`) +
       `</p>`
   );
+  if (ecartGlobal > 0) {
+    L.push(
+      `${p}<p class="graph-foot">GitHub affiche <b>${lus.length} commits</b> sur les deux ` +
+        `branches, pas ${total}. L'écart de ${ecartGlobal} n'est pas une perte : ` +
+        `${nbFusion} fusions rapprochent des commits déjà comptés un par un, et les ` +
+        `${nbRobot} commits du workflow régénèrent cette page. Les compter ferait ` +
+        `boucler la mise à jour toute seule.</p>`
+    );
+  }
   return L.join('\n');
 }
 
@@ -466,5 +503,13 @@ if (nbFusion) {
   console.log(`  ${nbFusion} commit(s) de fusion écartés du graphe`);
 }
 for (const b of presentes) {
-  console.log(`  ${b} : ${resume[b].commits} commits, premier le ${resume[b].premier}`);
+  const r = resume[b];
+  const ecarts = [];
+  if (r.fusions) ecarts.push(`${r.fusions} fusion${r.fusions > 1 ? 's' : ''}`);
+  if (r.robots) ecarts.push(`${r.robots} commit${r.robots > 1 ? 's' : ''} du robot`);
+  console.log(
+    `  ${b} : ${r.commits} représentés sur ${r.total} dans la branche` +
+      (ecarts.length ? ` (écartés : ${ecarts.join(', ')})` : '') +
+      `, premier le ${r.premier}`
+  );
 }

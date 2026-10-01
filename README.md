@@ -63,6 +63,35 @@ donne les chiffres sans qu'il faille lire le HTML.
 node tools/commits.mjs
 ```
 
+### Les deux comptes, et l'écart entre eux
+
+La page annonce **67** commits pour `main` et **12** pour `SITE`. GitHub affiche
+**72** et **20**. Les deux chiffres sont justes, et c'est exactement ce qui rend
+la page trompeuse : le lecteur compare, tombe sur 5 et 8 d'écart, et conclut que
+le générateur compte mal.
+
+L'écart est la contrepartie d'une décision nécessaire. Les fusions et les
+commits du robot sont exclus du graphe — sans quoi le workflow régénère le
+fichier, la PR est mergée, le fichier diffère encore, et la boucle ne se ferme
+jamais. Mais **un compte filtré ne doit pas se présenter comme le compte de la
+branche.** Chaque carte porte donc les deux nombres :
+
+```
+main   67  commits représentés
+          sur 72 dans la branche — écartés : 5 fusions
+SITE   12  commits représentés
+          sur 20 dans la branche — écartés : 5 fusions, 3 commits du robot
+```
+
+L'arithmétique est vérifiable à la main et le générateur l'affiche :
+`67 + 5 + 0 = 72`, `12 + 5 + 3 = 20`, `79 + 13 = 92`.
+
+Les compteurs de fusions et de commits du robot vivaient dans une variable
+unique, calculée sur `git log --all` : ils étaient vrais globalement et
+impossibles à répartir sur une branche. C'est pour ça que `sur` est désormais
+posé sur *tous* les commits lus, y compris les écartés — sinon il n'y a aucun
+moyen de distinguer, pour `main`, ses 5 fusions des 5 fusions de `SITE`.
+
 Zéro dépendance, comme le `tools/build.mjs` prévu pour la variante Firefox. Le
 workflow `.github/workflows/commits.yml` le relance à chaque push sur `main` ou
 `SITE`, chaque matin, et à la main. Il n'ouvre une PR que si le fichier a
@@ -135,7 +164,7 @@ Avant cela, une bande de traits, un trait par commit. Plus illisible encore :
 au-delà de quatorze traits par jour la ligne débordait, et le graphique mentait
 sur les jours chargés.
 
-### Cinq pièges que ce générateur a désamorcés
+### Six pièges que ce générateur a désamorcés
 
 **Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
 `git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
@@ -166,6 +195,14 @@ thème sombre. Treize paires, neuf déclarées non conformes, aucune vraie. Le
 contraste se vérifie en appariant la ligne CSS entière — thème, branche, niveau,
 et le couple fond/texte — et non en relisant les couleurs une par une. Les seize
 paires réelles passent, de 4.80 à 9.19.
+
+Un sixième, de la même famille : en diagnostiquant l'écart de comptes, j'ai
+cherché les commits du robot sur le **sujet** du message — « Corriger la
+refspec du workflow… » contient « workflow » — au lieu de l'**auteur**. Deux
+vrais commits de travail sont apparus comme automatisés, et j'ai conclu à tort
+que le générateur en perdait un. Le filtre lui-même testait l'auteur et était
+juste ; c'est le coup d'œil qui mentait. Un filtre se vérifie sur le même champ
+que celui qu'il lit.
 
 ### Deux détails qui ont coûté du temps
 

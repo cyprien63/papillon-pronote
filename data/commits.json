@@ -7,10 +7,16 @@
   "resume": {
     "main": {
       "commits": 67,
+      "total": 72,
+      "fusions": 5,
+      "robots": 0,
       "premier": "2026-09-13"
     },
     "SITE": {
       "commits": 12,
+      "total": 20,
+      "fusions": 5,
+      "robots": 3,
       "premier": "2026-10-01"
     }
   },
@@ -28,7 +34,8 @@
           "sujet": "page de conection ok mes page pronot gros bug pas utilisable",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "0438f67",
@@ -38,7 +45,8 @@
           "sujet": "Refonte page de connexion ENT façon Papillon + options clair/sombre",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -55,7 +63,8 @@
           "sujet": "Widget travail à faire façon Papillon (cards, emoji, toggle Terminé)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "5e55288",
@@ -65,7 +74,8 @@
           "sujet": "Widget emploi du temps façon Papillon + popup date picker",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "c151307",
@@ -75,7 +85,8 @@
           "sujet": "accuille pronot ok base",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "60a1bb2",
@@ -85,7 +96,8 @@
           "sujet": "correction bug interface pronote",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -102,7 +114,8 @@
           "sujet": "Bouton QR : ne colle plus au bord bas, aligné en bas à droite",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "7170b37",
@@ -112,7 +125,8 @@
           "sujet": "Restyle façon Papillon de la page Compte PRONOTE",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "7d6d914",
@@ -122,7 +136,8 @@
           "sujet": "ajout pasge de deconection",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "c800fa0",
@@ -132,7 +147,8 @@
           "sujet": "claude",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "8a10c8b",
@@ -142,7 +158,8 @@
           "sujet": "claude",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "2a99b4c",
@@ -152,7 +169,8 @@
           "sujet": "Popups Notifications & Aide : animation, positionnement, icônes SVG, zéros blancs",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "eacc4ac",
@@ -162,7 +180,8 @@
           "sujet": "Header supprimé, icône flèche verte sur tous les boutons Tout voir",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "242f376",
@@ -172,7 +191,8 @@
           "sujet": "Popups et menu contextuel stylés façon Papillon",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "b14fe9c",
@@ -182,7 +202,8 @@
           "sujet": "Header : top bar stylée façon Papillon (plus épaisse, blocs rapprochés)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "7a83b3e",
@@ -192,7 +213,8 @@
           "sujet": "Ressources : carte entière cliquable pour ouvrir le fichier",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "c40ebf0",
@@ -202,7 +224,8 @@
           "sujet": "EDT : surligner cours annulés et changements de salle, corriger badge En cours",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "6822d77",
@@ -212,7 +235,8 @@
           "sujet": "Widgets accueil façon Papillon : dernières notes, carnet de correspondance, informations, ressources pédagogiques",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -229,7 +253,8 @@
           "sujet": "Fix page Documents : panneau droit non restylé au changement de rubrique",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "37c59cc",
@@ -239,7 +264,8 @@
           "sujet": "Restyle façon Papillon de la page Documents PRONOTE",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -256,7 +282,8 @@
           "sujet": "Page Documents : cartes alignées, titre du second menu sans chevauchement, typo de l'état vide",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "884da1a",
@@ -266,7 +293,8 @@
           "sujet": "Fix police Inter : chemins woff2 relatifs (404 sur PRONOTE) + bandeaux informatifs masqués",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "2a03810",
@@ -276,7 +304,8 @@
           "sujet": "Header : barres sticky mesurées en JS (ResizeObserver) et third menu façon Papillon",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "1b76fd6",
@@ -286,7 +315,8 @@
           "sujet": "Restyle façon Papillon de la page Contenus et ressources PRONOTE",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -303,7 +333,8 @@
           "sujet": "Forums : les deux boutons de toolbar (recherche/filtre) ne dépassent plus (enveloppes natives neutralisées, pas de wrap ni débordement)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "368aa17",
@@ -313,7 +344,8 @@
           "sujet": "Page Forums pédagogiques : restyle façon Papillon (trois colonnes en cartes, toolbar pills, sélection teintée, états vides, mode sombre)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "d733e5e",
@@ -323,7 +355,8 @@
           "sujet": "Travail à faire : toggle « J'ai terminé » façon Papillon (check CSS, pill teintée, inline color de la matière)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "5090b9b",
@@ -333,7 +366,8 @@
           "sujet": "Page Travail à faire : squelette (dossier + marquage idempotent + fondations CSS + manifest)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "23dafe6",
@@ -343,7 +377,8 @@
           "sujet": "Contenus : sélecteur de période façon pill, wrappers transparents (fini le halo blanc autour des cartes)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "403ebd8",
@@ -353,7 +388,8 @@
           "sujet": "Notes : plus de double barème (le /20 n'est ajouté que si la note est déjà sur 20)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "b4af4f3",
@@ -363,7 +399,8 @@
           "sujet": "Ajout du widget Devoirs Surveillés (DS) façon Papillon",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -380,7 +417,8 @@
           "sujet": "Doc : vues hebdomadaires du cahier de textes (CSS partage, fiche modale, pieges DOM)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "daa7f6b",
@@ -390,7 +428,8 @@
           "sujet": "Cahier de textes : vues hebdomadaires façon Papillon",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "9bf00cd",
@@ -400,7 +439,8 @@
           "sujet": "Réorganiser les pages PRONOTE et actualiser le manifeste",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -417,7 +457,8 @@
           "sujet": "Page Mes notes : moyenne de classe robuste, mode Par matière, scroll à la molette et pied de liste en bandeau sombre",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "064431a",
@@ -427,7 +468,8 @@
           "sujet": "EduConnect : restyle façon Papillon de la page « Confirmation de l'identité » (date de naissance) et centrage de la colonne",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "0da4d8b",
@@ -437,7 +479,8 @@
           "sujet": "Mes notes : icônes de la recherche et des pièces jointes recadrées, plus de débordement horizontal ni fond blanc en mode sombre",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "4487292",
@@ -447,7 +490,8 @@
           "sujet": "Page Mes notes : restyle façon Papillon (carte Moyennes avec graphique SVG animé, lignes en cartes, détail avec héros note et barre de position, mode sombre)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "f5f23eb",
@@ -457,7 +501,8 @@
           "sujet": "Travail a faire : aligner la rangee sujet sur les bords de la carte",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "e2cc545",
@@ -467,7 +512,8 @@
           "sujet": "Travail a faire : afficher l'etat plutot que la date",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "55bc77b",
@@ -477,7 +523,8 @@
           "sujet": "Travail a faire : resserrer la rangee sujet",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "fd8ecb2",
@@ -487,7 +534,8 @@
           "sujet": "Menu : garder le libelle clair sur le selecteur d'eleve",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "4a75cef",
@@ -497,7 +545,8 @@
           "sujet": "Bascule clair / sombre dans la barre de menu",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "75f63dc",
@@ -507,7 +556,8 @@
           "sujet": "Travail a faire : ne plus tronquer le nom des matieres",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "68a703e",
@@ -517,7 +567,8 @@
           "sujet": "Lisibilite des textes : audit de contraste WCAG sur la page d'accueil",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "a1cefc1",
@@ -527,7 +578,8 @@
           "sujet": "Theme sombre : filigrane des widgets illisible (blanc eclatant)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "20b1607",
@@ -537,7 +589,8 @@
           "sujet": "Travail a faire : drapeaux de matiere dessines en SVG",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "6bfb185",
@@ -547,7 +600,8 @@
           "sujet": "Menu principal : libelles illisibles en theme clair (blanc sur blanc)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -564,7 +618,8 @@
           "sujet": "Page Anciens bulletins : restyle façon Papillon de l'arbre des bulletins et de la pop-up de dépôt du PDF",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "cc6e6ce",
@@ -574,7 +629,8 @@
           "sujet": "Page Bulletin de ma classe : restyle façon Papillon de la carte d'état vide, icône user, mode sombre",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "c4d6752",
@@ -584,7 +640,8 @@
           "sujet": "Bandeau : coller le troisième menu au second menu et retirer les blocs masqués en visibility:hidden",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "a553f22",
@@ -594,7 +651,8 @@
           "sujet": "Page Mon bulletin de notes : restyle façon Papillon de la carte d'état vide, mode sombre, et dé-classement des marques du Relevé",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "1a0b8a8",
@@ -604,7 +662,8 @@
           "sujet": "Page Relevé : restyle façon Papillon de la carte d'etat vide, des colonnes et des modales de calcul de moyenne",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -621,7 +680,8 @@
           "sujet": "Page Niveaux de maitrise par matière : carte d'état vide façon Papillon (icône graduation-hat, pas de date), classes pap-nm-*",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "dc0af43",
@@ -631,7 +691,8 @@
           "sujet": "Page Évaluations par compétence : restyle façon Papillon de la grille Items/Niveau/Validé le, carte centrée, repli des colonnes vides",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "49101ab",
@@ -641,7 +702,8 @@
           "sujet": "Page Bilan périodique de ma classe : restyle façon Papillon de la carte d'état vide (icône user), classes pap-bpc-*",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "095529a",
@@ -651,7 +713,8 @@
           "sujet": "Page Mon bilan périodique : restyle façon Papillon de la carte d'état vide, icône graduation-hat, mode sombre",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "9ce8b05",
@@ -661,7 +724,8 @@
           "sujet": "Doc : guide d'organisation pour les comptes Étudiant, Parent et Professeur",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "9b1725e",
@@ -671,7 +735,8 @@
           "sujet": "Doc : déplacer MULTI-NAVIGATEURS.md dans « a ajouter plus tard »",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "df0c1db",
@@ -681,7 +746,8 @@
           "sujet": "Page Difficultés et points d'appui : restyle façon Papillon des deux cartes de compétences",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "f45189b",
@@ -691,7 +757,8 @@
           "sujet": "README : corriger le lien du site Papillon",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "1d441a2",
@@ -701,7 +768,8 @@
           "sujet": "Doc : guide d'organisation et de build Chrome + Firefox",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "bad2ea3",
@@ -711,7 +779,8 @@
           "sujet": "Page Mes évaluations : restyle façon Papillon du widget Compétences",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -728,7 +797,8 @@
           "sujet": "Page Anciens bilans : restyle façon Papillon de l'arbre des bilans périodiques, classes pap-anb-*",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "388fe8c",
@@ -738,7 +808,8 @@
           "sujet": "Page Livret de compétences numériques : restyle façon Papillon de la grille et du pied",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     },
@@ -755,7 +826,8 @@
           "sujet": "Grille de cases avec le nombre ecrit, plutot qu une courbe",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "7b3049d",
@@ -765,7 +837,8 @@
           "sujet": "Nommer l'adresse de commit au lieu de la decrire",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "df46c35",
@@ -775,7 +848,8 @@
           "sujet": "Remplacer la bande de traits par une vraie courbe, et fermer la boucle des PR",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "5b71105",
@@ -785,7 +859,8 @@
           "sujet": "Regenerer le graphe apres le merge de la PR 18",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "7a56705",
@@ -795,7 +870,8 @@
           "sujet": "Ecrire le graphe des commits dans le HTML plutot que dans le navigateur",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "e748cb2",
@@ -805,7 +881,8 @@
           "sujet": "Corriger la refspec du workflow, qui echouait sur le runner reel",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "b75f59c",
@@ -815,7 +892,8 @@
           "sujet": "Reparer le workflow qui echouait en CI",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "298f92c",
@@ -825,7 +903,8 @@
           "sujet": "Contraste des barres du graphe et README du site",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "772b5e4",
@@ -835,7 +914,8 @@
           "sujet": "Ajouter la page Branches et le graphe des commits",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "34331f7",
@@ -845,7 +925,8 @@
           "sujet": "Ajouter les animations au site",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "02fb165",
@@ -855,7 +936,8 @@
           "sujet": "Créer le site de présentation de l'extension",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "c5166d6",
@@ -865,7 +947,8 @@
           "sujet": "Initialiser la branche SITE pour le site de présentation",
           "sur": [
             "SITE"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "8b6e8b5",
@@ -875,7 +958,8 @@
           "sujet": "README : réorganiser la documentation (sommaire, tableau des pages couvertes, structure à jour)",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         },
         {
           "hash": "3d62e9f",
@@ -885,7 +969,8 @@
           "sujet": "Ajouter la vidéo de présentation et le diagramme référencés par le README",
           "sur": [
             "main"
-          ]
+          ],
+          "ecarte": null
         }
       ]
     }
