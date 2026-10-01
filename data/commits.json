@@ -20,12 +20,12 @@
       ]
     },
     "SITE": {
-      "commits": 19,
+      "commits": 20,
       "premier": "2026-10-01",
       "auteurs": [
         {
           "compte": "cyprien63",
-          "commits": 14
+          "commits": 15
         },
         {
           "compte": "non rattaché",
@@ -1025,8 +1025,21 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 19,
+      "SITE": 20,
       "commits": [
+        {
+          "hash": "880bc8e",
+          "auteur": "Cyprien63",
+          "email": "p.cyprien6312@gmail.com",
+          "compte": "cyprien63",
+          "date": "2026-10-01T21:54:14+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Regenerer le graphe apres le rebasage",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
         {
           "hash": "5fdd5db",
           "auteur": "Cyprien63",
