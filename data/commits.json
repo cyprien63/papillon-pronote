@@ -10,7 +10,7 @@
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 11,
+      "commits": 12,
       "premier": "2026-10-01"
     }
   },
@@ -745,8 +745,18 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 11,
+      "SITE": 12,
       "commits": [
+        {
+          "hash": "d960882",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T21:03:32+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Grille de cases avec le nombre ecrit, plutot qu une courbe",
+          "sur": [
+            "SITE"
+          ]
+        },
         {
           "hash": "7b3049d",
           "auteur": "Cyprien63",
