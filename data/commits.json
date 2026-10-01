@@ -6,12 +6,12 @@
   ],
   "resume": {
     "main": {
-      "commits": 67,
+      "commits": 72,
       "premier": "2026-09-13",
       "auteurs": [
         {
           "compte": "cyprien63",
-          "commits": 57
+          "commits": 62
         },
         {
           "compte": "SpartisPerso",
@@ -20,16 +20,16 @@
       ]
     },
     "SITE": {
-      "commits": 16,
+      "commits": 19,
       "premier": "2026-10-01",
       "auteurs": [
         {
           "compte": "cyprien63",
-          "commits": 13
+          "commits": 14
         },
         {
           "compte": "non rattaché",
-          "commits": 3
+          "commits": 5
         }
       ]
     }
@@ -926,9 +926,74 @@
     },
     {
       "jour": "2026-09-29",
-      "main": 2,
+      "main": 7,
       "SITE": 0,
       "commits": [
+        {
+          "hash": "5f246c7",
+          "auteur": "Cyprien63",
+          "email": "cyprien63@users.noreply.github.com",
+          "compte": "cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/15' into test-prs",
+          "sur": [
+            "main"
+          ],
+          "ecarte": null
+        },
+        {
+          "hash": "7b85fb5",
+          "auteur": "Cyprien63",
+          "email": "cyprien63@users.noreply.github.com",
+          "compte": "cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/13' into test-prs",
+          "sur": [
+            "main"
+          ],
+          "ecarte": null
+        },
+        {
+          "hash": "94a12a3",
+          "auteur": "Cyprien63",
+          "email": "cyprien63@users.noreply.github.com",
+          "compte": "cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/12' into test-prs",
+          "sur": [
+            "main"
+          ],
+          "ecarte": null
+        },
+        {
+          "hash": "fa39d6f",
+          "auteur": "Cyprien63",
+          "email": "cyprien63@users.noreply.github.com",
+          "compte": "cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/9' into test-prs",
+          "sur": [
+            "main"
+          ],
+          "ecarte": null
+        },
+        {
+          "hash": "75aa89e",
+          "auteur": "Cyprien63",
+          "email": "cyprien63@users.noreply.github.com",
+          "compte": "cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/8' into test-prs",
+          "sur": [
+            "main"
+          ],
+          "ecarte": null
+        },
         {
           "hash": "99d33f1",
           "auteur": "Cyprien63",
@@ -960,8 +1025,21 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 16,
+      "SITE": 19,
       "commits": [
+        {
+          "hash": "0670284",
+          "auteur": "Cyprien63",
+          "email": "p.cyprien6312@gmail.com",
+          "compte": "cyprien63",
+          "date": "2026-10-01T21:52:31+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Compter tes fusions, pas seulement les miennes",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
         {
           "hash": "9892459",
           "auteur": "Cyprien63",
@@ -1041,6 +1119,19 @@
           "ecarte": null
         },
         {
+          "hash": "065139c",
+          "auteur": "Cyprien63",
+          "email": "cyprien@users.noreply.github.com",
+          "compte": null,
+          "date": "2026-10-01T20:51:09+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Merge remote-tracking branch 'origin/SITE' into SITE",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
+        {
           "hash": "df46c35",
           "auteur": "Cyprien63",
           "email": "cyprien@users.noreply.github.com",
@@ -1061,6 +1152,19 @@
           "date": "2026-10-01T19:46:35+02:00",
           "jour": "2026-10-01",
           "sujet": "Regenerer le graphe apres le merge de la PR 18",
+          "sur": [
+            "SITE"
+          ],
+          "ecarte": null
+        },
+        {
+          "hash": "6f89d76",
+          "auteur": "Cyprien63",
+          "email": "cyprien@users.noreply.github.com",
+          "compte": null,
+          "date": "2026-10-01T19:45:59+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Merge remote-tracking branch 'origin/SITE' into SITE",
           "sur": [
             "SITE"
           ],

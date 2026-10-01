@@ -146,24 +146,31 @@ if (inconnues.length) {
 /* Deux familles de commits sortent du graphe, et ce n'est pas cosmétique :
  * sans ça, le fichier se met à jour lui-même et tu merges des PR sans fin.
  *
- * Les commits du robot : le workflow commite le résultat, la PR est mergée, ce
- * commit entre dans l'historique de SITE, donc le HTML régénéré diffère encore,
- * donc une nouvelle PR — indéfiniment.
+ * Les commits du robot : le workflow commite le résultat, ce commit entre dans
+ * l'historique de SITE, donc le HTML régénéré diffère encore, donc une nouvelle
+ * PR — indéfiniment.
  *
- * Les commits de fusion : c'est la boucle que tu as subie. Tu merges la PR du
- * graphe, ça crée un commit « Merge pull request #18… » à ton nom. Le fichier
- * le comptait, donc il changeait, donc le workflow ouvrait une nouvelle PR —
- * laquelle en créait une autre à son tour. Exclure les fusions ne perd rien :
- * les commits qu'elles rapprochent sont déjà comptés un par un.
+ * Les fusions de la PR du graphe : c'est la boucle que tu as subie. Tu merges
+ * la PR du graphe, GitHub crée « Merge pull request #25 from
+ * cyprien63/commits-graphe » à ton nom, le fichier le comptait, il changeait,
+ * le workflow rouvrait une PR, laquelle en créait une autre.
  *
- * Les deux filtres sont cumulés : il suffit que l'un des deux attrape le
- * commit pour que la boucle reste fermée. */
+ * Les deux filtres sont cumulés : il suffit que l'un des deux attrape le commit
+ * pour que la boucle reste fermée. Mais ils doivent viser la mécanique et rien
+ * d'autre. Exclure toute fusion donnait 16 commits le 1er octobre là où il y en
+ * avait 26 : les 2 « Merge remote-tracking branch 'origin/SITE' into SITE » que
+ * tu as faites à la main, et les 5 de `main`, disparaissaient avec les 3 du
+ * pipeline. Un filtre large ne se contente pas de jeter le bruit : il emporte
+ * le travail au passage, et le compte faux a l'air plus innocent qu'un compte
+ *bruyant. */
 const estRobot = (c) => c.auteur.includes('[bot]') || c.email.includes('[bot]');
-const estFusion = (c) => /^Merge (remote-tracking branch|pull request|branch)/.test(c.sujet);
-for (const c of lus) c.ecarte = estRobot(c) ? 'robot' : estFusion(c) ? 'fusion' : null;
+const estPipeline = (c) =>
+  /^Merge pull request #\d+ from \S+\/commits-graphe\s*$/.test(c.sujet);
+for (const c of lus)
+  c.ecarte = estRobot(c) ? 'robot' : estPipeline(c) ? 'pipeline' : null;
 const commits = lus.filter((c) => !c.ecarte);
 const nbRobot = lus.filter((c) => c.ecarte === 'robot').length;
-const nbFusion = lus.filter((c) => c.ecarte === 'fusion').length;
+const nbPipeline = lus.filter((c) => c.ecarte === 'pipeline').length;
 
 const appartenance = new Map(BRANCHES.map((b) => [b, new Set()]));
 const introuvables = [];
@@ -583,20 +590,20 @@ writeFileSync(SORTIE_HTML, html);
 console.log(`pages/branches.html : graphe écrit (${jours.length} jours)`);
 console.log(`data/commits.json   : ${commits.length} commits`);
 if (nbRobot) {
-  console.log(`  ${nbRobot} commit(s) automatisé(s) écartés du graphe`);
+  console.log(`  ${nbRobot} commit(s) du robot écartés du graphe`);
 }
-if (nbFusion) {
-  console.log(`  ${nbFusion} commit(s) de fusion écartés du graphe`);
+if (nbPipeline) {
+  console.log(`  ${nbPipeline} fusion(s) de la PR du graphe écartée(s) du graphe`);
 }
 /* Le décompte complet, ici et nulle part ailleurs. C'est le seul endroit où il
  * peut figurer : un fichier versionné serait réécrit par ce que ce décompte
  * mesure. */
 for (const b of presentes) {
   const r = resume[b];
-  const fusions = dansLaBranche(b, 'fusion');
+  const fusions = dansLaBranche(b, 'pipeline');
   const robots = dansLaBranche(b, 'robot');
   const ecarts = [];
-  if (fusions) ecarts.push(`${fusions} fusion${fusions > 1 ? 's' : ''}`);
+  if (fusions) ecarts.push(`${fusions} fusion${fusions > 1 ? 's' : ''} de la PR du graphe`);
   if (robots) ecarts.push(`${robots} commit${robots > 1 ? 's' : ''} du robot`);
   console.log(
     `  ${b} : ${r.commits} représentés sur ${dansLaBranche(b)} dans la branche` +

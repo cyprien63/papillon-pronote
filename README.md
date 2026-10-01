@@ -65,46 +65,47 @@ node tools/commits.mjs
 
 ### Pourquoi la page annonce moins de commits que GitHub
 
-La page annonce **67** commits pour `main` et **15** pour `SITE`. GitHub affiche
-**72** et **23**. Les deux chiffres sont justes, et c'est ce qui peut rendre la
-page trompeuse : le lecteur compare, tombe sur l'écart, et conclut que le
-générateur compte mal.
+La page annonce **72** commits pour `main` et **19** pour `SITE`. GitHub affiche
+**72** et **25**. `main` tombe juste. `SITE` a 6 commits d'écart, et ils ont
+tous la même origine.
 
-L'écart vient de deux familles de commits que le graphe laisse dehors, et le
-raisonnement tient en une phrase : **le graphe mesure le travail, pas la
-mécanique qui l'affiche.** Les fusions rapprochent des commits déjà comptés un
-par un ; les commits du workflow régénèrent la page. Les compter ferait que le
-fichier change à chaque fois qu'il est régénéré.
+L'écart vient des commits que la mécanique crée en se régénérant : les commits
+du workflow, et les fusions de sa propre pull request. Le raisonnement tient en
+une phrase : **un fichier produit par un générateur ne peut pas compter ce que
+la génération produit.** Le workflow écrit la page, tu merges sa PR, la
+branche gagne deux commits, la page change, le workflow rouvre une PR. Sans
+exclusion, le cycle n'a pas de fin.
 
-La page explique donc la règle en mots, sans chiffres. La réconciliation est
-dans la sortie du générateur :
+Ce sont donc les seuls commits écartés, et le filtre est écrit pour viser cette
+mécanique-là, rien de plus. La réconciliation est dans la sortie du générateur :
 
 ```
 $ node tools/commits.mjs
-  main : 67 représentés sur 72 dans la branche (écartés : 5 fusions)
-  SITE : 15 représentés sur 23 dans la branche (écartés : 5 fusions, 3 commits du robot)
+  main : 72 représentés sur 72 dans la branche
+  SITE : 19 représentés sur 25 dans la branche (écartés : 3 fusions de la PR du graphe, 3 commits du robot)
 ```
 
-**Le terminal, et lui seul, peut porter ce décompte.** C'est la leçon de la
-section suivante : ces chiffres ne peuvent pas revenir dans un fichier versionné.
+**Le terminal, et lui seul, peut porter le compte des écartés.** C'est la leçon
+de la section suivante : ces chiffres ne peuvent pas revenir dans un fichier
+versionné, puisque le fichier les ferait changer.
 
-Les compteurs de fusions et de commits du robot vivaient dans une variable
-unique, calculée sur `git log --all` : ils étaient vrais globalement et
-impossibles à répartir sur une branche. C'est pour ça que `sur` est désormais
-posé sur *tous* les commits lus, y compris les écartés — sinon il n'y a aucun
-moyen de distinguer, pour `main`, ses 5 fusions des 5 fusions de `SITE`.
+Les compteurs vivaient dans une variable unique, calculée sur `git log --all` :
+ils étaient vrais globalement et impossibles à répartir sur une branche. C'est
+pour ça que `sur` est posé sur *tous* les commits lus, y compris les écartés —
+sinon il n'y a aucun moyen de distinguer, pour `main`, ses fusions de celles de
+`SITE`.
 
-### « 67 commits sur main » n'est pas ton nombre de commits
+### « 72 commits sur main » n'est pas ton nombre de commits
 
 Un deuxième écart, de même nature mais qu'aucun réglage ne referme : le gros
 chiffre compte l'activité du dépôt, et le dépôt n'est pas à toi seul.
 
 ```
-main   67   dont 10 par SpartisPerso
-SITE   15   dont 3 par une adresse sans compte
+main   72   dont 10 par SpartisPerso
+SITE   19   dont 5 par une adresse sans compte
 ```
 
-Donc 57 commits de `main` et 12 de `SITE` t'appartiennent. Le reste est réel —
+Donc 62 commits de `main` et 14 de `SITE` t'appartiennent. Le reste est réel —
 le travail de SpartisPerso sur les menus, le thème sombre et le contraste est
 dans l'historique — mais il ne se retrouve pas sur ton profil GitHub. C'est ce
 qui rendait le chiffre « faux » à qui le comparait à son profil : il l'était
@@ -134,10 +135,10 @@ navigateur.
 Le coupable n'était pas la boucle qu'on cherchait à éviter, mais le moyen de la
 montrer.
 
-La page disait « 67 représentés sur 72 dans la branche — 5 fusions écartées ».
-À la regeneration suivante, le bot crée son commit, la PR est mergée, et la
-branche compte donc **73** commits : le fichier change, une PR se rouvre, on la
-merge, on arrive à 74. Le cycle ne s'arrêtait jamais. Vérifié sur un clone : le
+La page disait « 72 représentés sur 72 dans la branche — 3 fusions écartées ».
+À la régénération suivante, le bot crée son commit, la PR est mergée, et la
+branche compte donc **74** commits : le fichier change, une PR se rouvre, on la
+merge, on arrive à 76. Le cycle ne s'arrêtait jamais. Vérifié sur un clone : le
 diff ne faisait que grossir, `97 commits, 17 non représentés`, puis `99, 19`.
 
 Le graphe lui-même n'avait rien à voir là-dedans. La grille ne bougeait pas, la
@@ -180,12 +181,21 @@ dans l'historique de `SITE`, donc le fichier régénéré diffère encore, donc 
 nouvelle PR — indéfiniment. Les commits dont l'auteur contient `[bot]` sont
 donc écartés du graphe.
 
-**Et les fusions non plus.** C'est la boucle que tu as réellement subie, et le
-filtre `[bot]` ne l'attrapait pas. Tu merges la PR du graphe, ce qui crée un
-commit « Merge pull request #18… » à ton nom ; le fichier le comptait, donc il
-changeait, donc le workflow ouvrait une PR — laquelle en créait une autre.
-Écarter les fusions ne perd rien : les commits qu'elles rapprochent sont déjà
-comptés un par un.
+**Et les fusions de la PR du graphe non plus.** C'est la boucle que tu as
+réellement subie, et le filtre `[bot]` ne l'attrapait pas. Tu merges la PR du
+graphe, ce qui crée un commit « Merge pull request #25 from
+cyprien63/commits-graphe » à ton nom ; le fichier le comptait, donc il changeait,
+donc le workflow ouvrait une PR — laquelle en créait une autre.
+
+Le piège est la largeur du filtre. Écrire `/^Merge /` règle la boucle d'un
+coup, et ça marche : la boucle se ferme. Mais le 1er octobre, la page annonçait
+**16** commits là où il y en avait **26**. Les 2 « Merge remote-tracking branch
+'origin/SITE' into SITE » que tu avais faites à la main, et les 5 de `main`,
+étaient jetées avec les 3 du pipeline. Un filtre large ne se contente pas
+d'écarter le bruit : il emporte du travail au passage, et un compte faux paraît
+plus innocent qu'un compte bruyant. Le filtre vise donc la branche
+`commits-graphe`, et rien d'autre. `main` est maintenant à 72 sur 72,
+exactement ce que GitHub affiche.
 
 **La date de l'instantané ne bouge que si le travail bouge.** `genereLe` prend
 la date du dernier commit représenté, pas celle du jour où le script tourne.
