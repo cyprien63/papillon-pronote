@@ -9,11 +9,38 @@ Ce skill encode la façon de committer et pousser sur le dépôt **papillon-pron
 
 ## Identité Git
 
-- L'auteur des commits est toujours **Cyprien63** :
-  - `git config user.name = Cyprien63`
-  - `git config user.email` = l'adresse liée au compte GitHub Cyprien63
-- Si l'identité globale de la machine n'est pas celle-ci, la forcer *par dépôt* :
-  `git config user.name "Cyprien63"` (et l'email associé) avant de committer.
+L'auteur des commits est toujours **Cyprien63**, avec une adresse **réellement
+rattachée au compte GitHub** `cyprien63` (id 157894664) :
+
+```
+git config user.name  "Cyprien63"
+git config user.email "p.cyprien6312@gmail.com"
+```
+
+C'est l'adresse déclarée sur le compte, et elle est déjà publique dans
+`pages/mentions-legales.html`. Elle est aussi utilisée par les commits
+existants sur `main`.
+
+**L'email doit être nommé en clair, jamais décrit.** Une formule comme
+« l'adresse liée au compte » invite à en inventer une : `cyprien@…` n'est
+rattachée à aucun compte, et GitHub affiche alors les commits comme	pushés par
+quelqu'un d'autre — ici un compte `cyprien` qui n'est pas toi.
+
+Pour vérifier qu'une adresse est bien rattachée au bon compte avant de
+committer :
+
+```bash
+curl -s "https://api.github.com/search/commits?q=author-email:<adresse>" \
+  -H "Accept: application/vnd.github+json" | grep -oE '"login": *"[^"]*"' | head -1
+```
+
+Si l'adresse renvoie `cyprien63`, elle convient. Si elle renvoie un autre
+login, ou **rien du tout** — c'est le cas d'une adresse inventée — les commits
+ne seront pas attribués au compte. L'absence de sortie est le symptôme le plus
+fréquent, parce qu'elle ne ressemble pas à une erreur.
+
+Si l'identité globale de la machine n'est pas celle-ci, la forcer *par dépôt*
+avec les deux commandes ci-dessus avant de committer.
 
 ## Commit
 
