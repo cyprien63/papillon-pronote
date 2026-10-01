@@ -21,12 +21,11 @@ pas au site.
 ```
 index.html              page d'accueil
 pages/                  pages secondaires
-data/commits.json       instantané des commits, pour la page Branches
-tools/commits.mjs       régénère data/commits.json
+data/commits.json       chiffres des commits, source du générateur
+tools/commits.mjs       écrit le graphe dans la page + le JSON
 .github/workflows/      régénération automatique de l'instantané
 assets/css/style.css    feuille de style unique
-assets/js/site.js       thème + navigation mobile
-assets/js/branches.js   rendu du graphe des commits
+assets/js/site.js       thème, navigation mobile, apparition au défilement
 assets/fonts/           Inter 400→800, embarquée (10 fichiers woff2)
 assets/img/             logotype, icônes, splash
 LICENSE                 MIT
@@ -44,11 +43,21 @@ directement dans un navigateur.
 ## Le graphe des commits
 
 `pages/branches.html` affiche l'activité par jour et par branche. Les données
-viennent de `data/commits.json`, **pas** de l'API GitHub.
+viennent de l'historique Git, **pas** de l'API GitHub.
 
 Ce choix est une contrainte : la page des mentions légales promet qu'aucune
 requête ne part du navigateur. Récupérer le graphe à l'affichage rendrait cette
-promesse fausse. Le fichier est donc produit en amont et versionné.
+promesse fausse. Il est donc produit en amont, par `tools/commits.mjs`.
+
+Le graphe est **écrit directement dans le HTML**, entre des marqueurs
+`<!-- graphe:…:debut -->`, et non injecté par le navigateur. Conséquence
+concrète : « voir la source » montre le graphe, et la page reste lisible
+sans JavaScript. `assets/js/branches.js` a été supprimé, il n'avait plus de
+rôle. Le site n'a donc plus que deux scripts, et un seul pour tout le site :
+`site.js`.
+
+`data/commits.json` est conservé : c'est lui qui alimente le générateur, et il
+donne les chiffres sans qu'il faille lire le HTML.
 
 ```bash
 node tools/commits.mjs
@@ -95,8 +104,28 @@ essaie les formes de référence une par une, et une branche absente est
 simplement omise du JSON avec un avertissement, plutôt que de faire échouer le
 workflow.
 
-Le rendu se dégrade proprement : si le JSON est absent, la page affiche un
-encadré expliquant comment le produire, sans erreur visible.
+### Deux pièges que ce générateur aтыхisés
+
+**Le caractère sentinelle disparaît.** Le script découpe chaque ligne de
+`git log` sur un caractère de contrôle, `U+001E`. Invisible dans le source, il
+s'est effacé lors d'une réécriture du fichier, et le découpage a cassé
+silencieusement : `main` est tombé à 0 commit sans lever la moindre erreur.
+Il est désormais écrit `\u001e`, en échappement, pour que ça ne puisse plus
+arriver.
+
+**Une fonction pure, ou le graphe disparaît.** La fonction qui insère le
+contenu entre les marqueurs relisait le fichier à chaque appel. Les deux
+premiers résultats étaient donc écrasés par le suivant : la liste des commits
+passait, le graphe et le résumé non. Elle reçoit désormais le HTML et le
+renvoie modifié, sans toucher au disque.
+
+### Un repli incohérent qu'il ne fallait pas laisser
+
+Le site avait un filet pour les animations : si le JavaScript ne charge pas,
+une minuterie retire la classe qui masque le contenu, sinon la page resterait
+vide. Le graphe, lui, n'avait aucun repli — il dépendait entièrement de
+`branches.js`. Le même socle, deux traitements différents, ce qui se voyait.
+D'où le pré-rendu : le filet est devenu inutile pour cette partie.
 
 ## Identité visuelle
 

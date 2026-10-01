@@ -62,15 +62,18 @@ jobs:
       - name: Régénérer data/commits.json
         run: node tools/commits.mjs
 
-      - name: Vérifier si le fichier a changé
+      # Le générateur écrit deux fichiers : le JSON des chiffres et le HTML du
+      # graphe. Les deux doivent être committés ensemble, sinon la page et le
+      # JSON divergent et personne ne sait lequel fait foi.
+      - name: Vérifier si les fichiers ont changé
         id: diff
         run: |
-          if git diff --quiet -- data/commits.json; then
+          if git diff --quiet -- data/commits.json pages/branches.html; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Le fichier est déjà à jour."
+            echo "Le graphe est déjà à jour."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            git --no-pager diff --stat -- data/commits.json
+            git --no-pager diff --stat -- data/commits.json pages/branches.html
           fi
 
       # La branche de la PR est fixe, donc réutilisée d'une exécution à
@@ -82,7 +85,7 @@ jobs:
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch --force-create commits-graphe "origin/${{ github.ref_name }}"
-          git add data/commits.json
+          git add data/commits.json pages/branches.html
           git commit -m 'Graphique des commits : mise à jour de l’instantané'
           git push --force-with-lease origin commits-graphe
 
