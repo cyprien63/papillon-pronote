@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fonctionnalités · Papillon — Portail ENT</title>
+<meta name="description" content="Détail des pages couvertes par l'extension : connexion ENT, EduConnect, accueil élèves, cahier de textes, notes, compétences.">
+<link rel="icon" href="../assets/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t !== 'dark' && t !== 'light') {
+        t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      if (t === 'dark') { document.documentElement.classList.add('dark'); }
+      document.documentElement.style.colorScheme = t;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../index.html" aria-label="Papillon — Portail ENT, accueil">
+    <img src="../assets/img/logotype.png" alt="Papillon — Portail ENT" width="119" height="26">
+  </a>
+
+  <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-principal" aria-label="Ouvrir le menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+  </button>
+
+  <nav class="site-nav" id="nav-principal" data-nav aria-label="Navigation principale">
+    <a href="../index.html">Accueil</a>
+    <a href="fonctionnalites.html" aria-current="page">Fonctionnalités</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </nav>
+
+  <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Basculer le thème clair / sombre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+  </button>
+</header>
+
+<main class="wrap">
+
+  <h1>Fonctionnalités</h1>
+  <p class="lead">
+    Vingt-sept pages, réparties sur trois espaces : les portails de connexion,
+    l'accueil élèves et le reste de PRONOTE. Chaque page a son propre dossier,
+    son CSS et son script, et n'agit que sur la sienne.
+  </p>
+
+  <!-- Connexion ---------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Connexion</h2>
+
+    <div class="card">
+      <h3>Portail ENT (Skolengo CAS)</h3>
+      <p>
+        Le bandeau passe en dégradé Papillon avec le logotype, le panneau central
+        se centre sur toute la page, et le choix d'établissement devient une carte
+        arrondie cliquable sur toute sa surface : Élève ou parent, Enseignant,
+        Accélérateur. La carte sélectionnée passe au vert <code>#29947a</code>.
+      </p>
+      <p>
+        Les accordéons et le logo Skolengo sont masqués, les icônes
+        <code>+</code> et <code>−</code> prennent la couleur Papillon.
+      </p>
+      <p class="chip-row" style="margin-bottom:0">
+        <span class="chip">cas.ent.auvergnerhonealpes.fr</span>
+        <span class="chip chip-quiet">*.ent.auvergnerhonealpes.fr</span>
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>EduConnect</h3>
+      <p>
+        Bannière pleine largeur, panneau de 560px, onglets, champs et boutons aux
+        couleurs Papillon. Les profils Élève et Responsable ont chacun leur icône.
+      </p>
+    </div>
+  </section>
+
+  <!-- Accueil ------------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Accueil élèves</h2>
+
+    <div class="card">
+      <p>
+        Le logo PRONOTE et celui de l'établissement sont masqués au profit du
+        bandeau Papillon. Le menu principal passe en pastilles avec icônes
+        Papicons, et les widgets deviennent des cartes à coins arrondis.
+      </p>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <article class="card">
+        <h3>Emploi du temps</h3>
+        <p>
+          Chaque cours devient une carte, avec un badge « En cours » sur le cours
+          en cours. Les pauses Sunrise, Cutlery et Sun ont chacune leur
+          séparateur.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Travail à faire</h3>
+        <p>
+          Table matière convertie en emoji, avec une case « J'ai terminé »
+          directement dans la ligne.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Dernières notes</h3>
+        <p>
+          Cartes arrondies et pastille de note colorée sur 20.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Barres et bascule de thème</h3>
+        <p>
+          Les barres du menu et de la barre secondaire restent affichées au
+          défilement. Le bouton clair / sombre est dans le menu.
+        </p>
+      </article>
+    </div>
+
+    <p class="lead" style="margin-top:20px">
+      Widgets également couverts : vie scolaire, informations, ressources,
+      déconnexion, devoirs surveillés.
+    </p>
+  </section>
+
+  <!-- Espace PRONOTE ------------------------------------------------------ -->
+  <section>
+    <h2 class="section-title">Le reste de PRONOTE</h2>
+
+    <div class="grid">
+      <article class="card">
+        <h3>Cahier de textes</h3>
+        <p>
+          Contenus, travail à faire et forums. Les vues hebdomadaires ont leur
+          propre script.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Mes données</h3>
+        <p>Compte et documents.</p>
+      </article>
+
+      <article class="card">
+        <h3>Notes</h3>
+        <p>
+          Moyennes avec historique tracé en SVG, relevés, bulletin individuel,
+          bulletin de classe, anciens bulletins par année et par trimestre.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Compétences</h3>
+        <p>
+          Évaluations, difficultés et points d'appui, bilan périodique
+          individuel et de classe, évaluation par compétence, niveaux de maîtrise,
+          livret de compétences numériques, anciens bilans.
+        </p>
+      </article>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>Le fil d'Ariane</h3>
+      <p>
+        PRONOTE garde le même conteneur <code>&lt;main&gt;</code> d'une page à
+        l'autre, ce qui rend le repérage fragile. L'extension s'en sort avec
+        treize ancres <code>h1#breadcrumbBandeau</code> mutuellement exclusives,
+        chacune pilotant l'activation ou la désactivation des modules présents sur
+        la page.
+      </p>
+      <p style="margin-bottom:0">
+        Le mode développeur de PRONOTE expose ces ancres, ce qui permet de
+        vérifier le comportement sans ouvrir chaque page manuellement.
+      </p>
+    </div>
+  </section>
+
+  <!-- Choix de moyenne ---------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Les moyennes</h2>
+
+    <div class="card">
+      <p>
+        La page Moyennes offre trois méthodes de calcul. Le choix est mémorisé
+        dans <code>chrome.storage.local</code>, sous la clé
+        <code>papillonMesNotesAlgo</code>, et s'applique à toutes les pages de
+        notes.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Méthode</th>
+              <th>Ce qu'elle calcule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Générale</strong></td>
+              <td>La moyenne de toutes les matières, coefficients inclus</td>
+            </tr>
+            <tr>
+              <td><strong>Par matière</strong></td>
+              <td>Une moyenne par matière, puis une moyenne générale</td>
+            </tr>
+            <tr>
+              <td><strong>Médiane</strong></td>
+              <td>La valeur centrale de la série, insensible aux valeurs extrêmes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="notice" style="margin-top:20px">
+        <b>Ces formules n'ont aucune valeur officielle.</b> Ce sont des
+        calculs d'affichage, affichés à titre indicatif à côté de ceux de
+        PRONOTE. En cas d'écart, c'est PRONOTE qui fait foi.
+      </p>
+    </div>
+  </section>
+
+  <!-- Design -------------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Le design</h2>
+
+    <div class="card">
+      <p>
+        L'extension ne propose pas sa propre identité : elle reprend celle de
+        l'application Papillon. Les mêmes valeurs servent au site que vous êtes
+        en train de lire.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Élément</th>
+              <th>Valeur</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Dégradé de marque</strong></td>
+              <td><code>linear-gradient(140deg, #35bba0, #2ea08a 46%, #227e6b)</code></td>
+            </tr>
+            <tr>
+              <td><strong>Rayon des cartes</strong></td>
+              <td><code>25px</code></td>
+            </tr>
+            <tr>
+              <td><strong>Pastilles et puces</strong></td>
+              <td><code>300px</code></td>
+            </tr>
+            <tr>
+              <td><strong>Police</strong></td>
+              <td>Inter, poids 400 à 800, embarquée</td>
+            </tr>
+            <tr>
+              <td><strong>Vert de sélection</strong></td>
+              <td><code>#29947a</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin-top:20px; margin-bottom:0">
+        Le fond sombre utilisé ici, <code>#101513</code>, n'est pas le fond sombre
+        officiel de Papillon (<code>#121212</code>). Il a été choisi avec une
+        légère dominante verte. C'est volontaire.
+      </p>
+    </div>
+  </section>
+
+  <!-- Limites ------------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Ce qui n'est pas fait</h2>
+
+    <div class="card card-empty">
+      <p>
+        Les documents publiés — relevés, bulletins, bilans, livret — sont
+        traités comme des états vides. Leur structure DOM n'est pas connue tant
+        qu'aucune période n'est publiée sur PRONOTE, et deviner ferait
+        crasher l'affichage sur une vraie classe.
+      </p>
+      <p style="margin-bottom:0">
+        Firefox et le Chrome Web Store ne sont pas encore supportés. Les profils
+        Étudiant, Parent et Professeur ne sont pas implémentés.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong>Papillon — Portail ENT</strong> — projet personnel de Cyprien63.<br>
+      Ni Papillon ni l'académie ne sont impliqués dans ce projet.
+    </div>
+    <nav class="footer-links" aria-label="Liens de pied de page">
+      <a href="../index.html">Accueil</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="https://github.com/cyprien63/papillon-pronote">Code source</a>
+    </nav>
+    <div>© <span data-annee>2026</span> Cyprien63 — licence MIT</div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

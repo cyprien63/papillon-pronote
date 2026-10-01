@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Papillon — Portail ENT · L'extension qui refont PRONOTE</title>
+<meta name="description" content="Extension Chrome (Manifest V3) qui refond les pages du portail ENT et de PRONOTE avec le design de l'application Papillon. Aucune donnée collectée, une seule permission, aucun appel réseau.">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  /* Applique le thème avant le rendu, sinon la page clignote en clair. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t !== 'dark' && t !== 'light') {
+        t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      if (t === 'dark') { document.documentElement.classList.add('dark'); }
+      document.documentElement.style.colorScheme = t;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" aria-label="Papillon — Portail ENT, accueil">
+    <img src="assets/img/logotype.png" alt="Papillon — Portail ENT" width="119" height="26">
+  </a>
+
+  <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-principal" aria-label="Ouvrir le menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+  </button>
+
+  <nav class="site-nav" id="nav-principal" data-nav aria-label="Navigation principale">
+    <a href="index.html" aria-current="page">Accueil</a>
+    <a href="pages/fonctionnalites.html">Fonctionnalités</a>
+    <a href="pages/mentions-legales.html">Mentions légales</a>
+  </nav>
+
+  <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Basculer le thème clair / sombre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+  </button>
+</header>
+
+<main class="wrap">
+
+  <!-- Hero ---------------------------------------------------------------- -->
+  <section class="grid-2">
+    <div>
+      <div class="chip-row" style="margin-bottom:18px">
+        <span class="chip">Manifest V3</span>
+        <span class="chip">Version 1.1.0</span>
+        <span class="chip chip-quiet">Aucune étape de build</span>
+      </div>
+
+      <h1>Le portail ENT et PRONOTE, avec le design de Papillon.</h1>
+
+      <p class="lead">
+        Papillon — Portail ENT est une extension Chrome qui refond 27 pages du réseau
+        ENT : la connexion, l'accueil, le cahier de textes, les notes, les compétences.
+        Elle s'installe en trente secondes et ne touche qu'à l'affichage.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn btn-primary" href="pages/fonctionnalites.html">
+          Voir ce que ça couvre
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/cyprien63/papillon-pronote">
+          Code sur GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- Maquette dessinée en CSS : ce n'est pas une capture d'écran inventée -->
+    <div class="shot">
+      <div class="mock">
+        <div class="mock-bar">
+          <span class="mock-logo"></span>
+          <span class="mock-dot"></span>
+          <span class="mock-dot"></span>
+          <span class="mock-dot"></span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-title"></div>
+          <div class="mock-cards">
+            <div class="mock-card">
+              <span class="mock-line w60"></span>
+              <span class="mock-line w40"></span>
+              <span class="mock-pill">En cours</span>
+            </div>
+            <div class="mock-card">
+              <span class="mock-line w75"></span>
+              <span class="mock-line w50"></span>
+            </div>
+          </div>
+          <div class="mock-card mock-card-tall">
+            <div class="mock-row"><span class="mock-line w35"></span><span class="mock-badge b1"></span></div>
+            <div class="mock-row"><span class="mock-line w55"></span><span class="mock-badge b2"></span></div>
+            <div class="mock-row"><span class="mock-line w45"></span><span class="mock-badge b3"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chiffres ------------------------------------------------------------ -->
+  <section>
+    <ul class="stats">
+      <li class="stat"><b>27</b><span>pages couvertes</span></li>
+      <li class="stat"><b>1</b><span>permission Chrome</span></li>
+      <li class="stat"><b>0</b><span>appel réseau sortant</span></li>
+      <li class="stat"><b>60</b><span>fichiers CSS et JS</span></li>
+    </ul>
+  </section>
+
+  <!-- Principe ------------------------------------------------------------ -->
+  <section>
+    <h2 class="section-title">L'extension ne fait que repeindre</h2>
+
+    <div class="grid">
+      <article class="card">
+        <h3>Elle lit le DOM, rien d'autre</h3>
+        <p>
+          Tout ce que PRONOTE affiche est déjà dans la page. L'extension relit ces
+          éléments et les réécrit en CSS. Elle n'intercepte rien, ne copie rien,
+          ne transmet rien.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Les formulaires restent intacts</h3>
+        <p>
+          Les radios, le <code>wayf.js</code>, le SAML et la soumission PRONOTE
+          fonctionnent exactement comme avant. Ni identifiant, ni mot de passe,
+          ni session d'authentification ne sont touchés.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Elle se répare toute seule</h3>
+        <p>
+          PRONOTE régénère son DOM à chaque navigation. Un double
+          <code>MutationObserver</code> rejoue les modules à chaque changement, et
+          chaque module se dé-marque quand il quitte sa page.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Périmètre ----------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Ce qui est couvert</h2>
+
+    <div class="grid">
+      <article class="card">
+        <h3>Connexion</h3>
+        <p>
+          Portail ENT Skolengo CAS et EduConnect. Bandeau, panneaux de connexion,
+          cartes Élève / parent / Enseignant.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Accueil élèves</h3>
+        <p>
+          Bandeau dégradé, menu à icônes, widgets en cartes, emploi du temps avec
+          badge « En cours », travail à faire, notes, vie scolaire.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Cahier de textes</h3>
+        <p>
+          Contenus, travail à faire et forums, avec les vues hebdomadaires
+          restylées.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Notes</h3>
+        <p>
+          Moyennes avec historique en SVG, relevés, bulletins, anciens bulletins.
+          Trois algorithmes de moyenne au choix : générale, par matière, médiane.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Compétences</h3>
+        <p>
+          Évaluations, bilan périodique, livret de compétences numériques, niveaux
+          de maîtrise, bilans d'années précédentes.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Thème clair et sombre</h3>
+        <p>
+          Basculable depuis le menu de l'accueil ou depuis la page d'options de
+          l'extension. Le choix est mémorisé sur l'appareil.
+        </p>
+      </article>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="pages/fonctionnalites.html">Le détail, page par page</a>
+    </div>
+  </section>
+
+  <!-- Installation -------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Installation</h2>
+
+    <div class="card">
+      <ol class="legal" style="margin:0">
+        <li>
+          Récupérer le dossier de l'extension, soit en le téléchargeant, soit en
+          le clonant le dépôt.
+        </li>
+        <li>
+          Ouvrir <code>chrome://extensions</code> dans Chrome ou Edge.
+        </li>
+        <li>
+          Activer le <strong>mode développeur</strong> en haut à droite.
+        </li>
+        <li>
+          Cliquer sur <strong>Charger l'extension non empaquetée</strong> et
+          choisir le dossier.
+        </li>
+        <li>
+          Se connecter au portail ENT ou ouvrir PRONOTE. Le restylage s'applique
+          immédiatement.
+        </li>
+      </ol>
+      <p class="notice" style="margin-top:20px">
+        <b>Pas de build, pas de dépendance.</b> Le dossier se charge tel quel,
+        avec du JavaScript et du CSS vanilla. Firefox et le Chrome Web Store ne
+        sont pas encore ciblés.
+      </p>
+    </div>
+  </section>
+
+  <!-- Données ------------------------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Ce qui est stocké</h2>
+
+    <div class="card">
+      <p>
+        L'extension déclare une seule permission Chrome, <code>storage</code>, et
+        s'en sert pour deux préférences. C'est la liste complète.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Emplacement</th>
+              <th>Clé</th>
+              <th>Contenu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>chrome.storage.sync</code></td>
+              <td><code>theme</code></td>
+              <td><strong>Thème choisi</strong> : clair ou sombre</td>
+            </tr>
+            <tr>
+              <td><code>chrome.storage.local</code></td>
+              <td><code>papillonMesNotesAlgo</code></td>
+              <td><strong>Algorithme de moyenne</strong> : générale, par matière ou médiane</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin-top:20px">
+        Aucune note, aucun nom, aucun identifiant, aucun jeton. Aucun SDK
+        d'analytique, aucun pixel, aucune balise. Les 24 appels
+        <code>fetch()</code> du code lisent des fichiers embarqués dans
+        l'extension, pas Internet.
+      </p>
+
+      <div class="btn-row">
+        <a class="btn btn-ghost" href="pages/mentions-legales.html">Mentions légales et RGPD</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong>Papillon — Portail ENT</strong> — projet personnel de Cyprien63.<br>
+      Ni Papillon ni l'académie ne sont impliqués dans ce projet.
+    </div>
+    <nav class="footer-links" aria-label="Liens de pied de page">
+      <a href="pages/fonctionnalites.html">Fonctionnalités</a>
+      <a href="pages/mentions-legales.html">Mentions légales</a>
+      <a href="https://github.com/cyprien63/papillon-pronote">Code source</a>
+    </nav>
+    <div>© <span data-annee>2026</span> Cyprien63 — licence MIT</div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>
