@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Branches · Papillon — Portail ENT</title>
+<meta name="description" content="Activité du dépôt par branche : main pour l'extension, SITE pour le site de présentation. Les deux historiques sont séparés.">
+<link rel="icon" href="../assets/img/favicon.png" type="image/png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t !== 'dark' && t !== 'light') {
+        t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      if (t === 'dark') { document.documentElement.classList.add('dark'); }
+      document.documentElement.style.colorScheme = t;
+    } catch (e) {}
+    document.documentElement.className += ' js';
+
+    window.papillonRepli = window.setTimeout(function () {
+      document.documentElement.classList.remove('js');
+    }, 1500);
+  })();
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="../index.html" aria-label="Papillon — Portail ENT, accueil">
+    <img src="../assets/img/logotype.png" alt="Papillon — Portail ENT" width="119" height="26">
+  </a>
+
+  <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-principal" aria-label="Ouvrir le menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+  </button>
+
+  <nav class="site-nav" id="nav-principal" data-nav aria-label="Navigation principale">
+    <a href="../index.html">Accueil</a>
+    <a href="fonctionnalites.html">Fonctionnalités</a>
+    <a href="branches.html" aria-current="page">Branches</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </nav>
+
+  <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Basculer le thème clair / sombre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+  </button>
+</header>
+
+<main class="wrap">
+
+  <h1>Branches</h1>
+  <p class="lead">
+    Deux branches, deux objets. <code>main</code> porte l'extension,
+    <code>SITE</code> porte ce site. Elles ne partagent aucun commit : les
+    branches sont créées avec <code>git checkout --orphan</code>, donc aucun
+    historique commun et aucun chemin possible vers un merge accidentel.
+  </p>
+
+  <div class="branch-cards" id="resume" data-apparait>
+    <!-- rempli par assets/js/site.js depuis data/commits.json -->
+  </div>
+
+  <section>
+    <h2 class="section-title">Activité par jour</h2>
+
+    <div class="graph" id="graph" data-apparait>
+      <!-- rempli par assets/js/site.js -->
+    </div>
+
+    <p class="notice" style="margin-top:16px">
+      <b>Ce graphique est un instantané, pas un appel réseau.</b> Les données
+      viennent de <code>data/commits.json</code>, régénéré sur la machine par
+      <code>node tools/commits.mjs</code>. La page ne contacte pas l'API GitHub
+      quand tu la consultes : c'est ce qui permet à la page des mentions légales
+      d'affirmer qu'aucune requête ne part de ton navigateur.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Les derniers commits</h2>
+
+    <ul class="commit-list" id="commits" data-apparait>
+      <!-- rempli par assets/js/site.js -->
+    </ul>
+  </section>
+
+  <!-- Fonctionnement des règles -------------------------------------------- -->
+  <section>
+    <h2 class="section-title">Ce qui protège les deux branches</h2>
+
+    <div class="card">
+      <p>
+        Sur GitHub, chaque branche porte un jeu de règles qui interdit la
+        suppression, le <em>force-push</em> et la fusion sans PR. Les deux
+        règles sont actives, et le compte <strong>Cyprien63</strong> est en
+        contournement explicite : c'est toi qui pushes sur les deux.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Règle</th>
+              <th>Effet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Suppression</strong></td>
+              <td>La branche ne peut pas être effacée par une personne qui n'est pas en contournement</td>
+            </tr>
+            <tr>
+              <td><strong>Force-push</strong></td>
+              <td>L'historique ne peut pas être écrasé : personne ne réécrit le passé</td>
+            </tr>
+            <tr>
+              <td><strong>Pull request</strong></td>
+              <td>Pas de fusion sans PR, donc chaque intégration est tracée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notice" style="margin-top:20px">
+        <p><b>Une limite à connaître.</b> GitHub n'a pas de règle du type
+        « cette branche ne peut pas aller vers celle-là ». Les règles lisent la
+        branche cible, jamais la source. Concrètement, <code>SITE</code> peut
+        toujours atteindre <code>main</code> par une PR que tu mergerais toi-même
+        au moment où tu le décides — et c'est précisément le but. Ce que les
+        règles empêchent, c'est que ça arrive par megarde, sans que tu t'en
+        aperçoives.</p>
+        <p>Si tu veux un blocage structurel, il faut que le site vive dans un
+        dépôt séparé : alors <code>main</code> de papillon-pronote ne peut
+        structurellement rien recevoir de <code>SITE</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ce que la séparation a couté ----------------------------------------- -->
+  <section>
+    <h2 class="section-title">Ce que la séparation coûte</h2>
+
+    <div class="card">
+      <p>
+        Rompre l'historique a un prix : les fichiers communs ne sont plus
+        partagés. Aujourd'hui, la branche <code>SITE</code> contient sa propre copie
+        de <code>CLAUDE.md</code>, des skills et des assets graphiques, alors
+        que <code>main</code> garde les siens.
+      </p>
+      <p>
+        Concrètement, une modification du design dans
+        <code>pronote.css</code> sur <code>main</code> n'atteint pas
+        automatiquement les valeurs du site, et inversement. Les deux copies
+        peuvent diverger.
+      </p>
+      <p style="margin-bottom:0">
+        C'est un compromis assumé : <code>main</code> reste un historique propre
+        de l'extension, et le site peut être déployé sans embarquer le code de
+        l'extension. Le jour où la divergence devient gênante, un sous-module
+        ou un dossier partagé réglerait ça, au prix d'une dépendance entre les
+        deux branches.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong>Papillon — Portail ENT</strong> — projet personnel de Cyprien63.<br>
+      Ni Papillon ni l'académie ne sont impliqués dans ce projet.
+    </div>
+    <nav class="footer-links" aria-label="Liens de pied de page">
+      <a href="../index.html">Accueil</a>
+      <a href="fonctionnalites.html">Fonctionnalités</a>
+      <a href="branches.html" aria-current="page">Branches</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </nav>
+    <div>© <span data-annee>2026</span> Cyprien63 — licence MIT</div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/branches.js"></script>
+</body>
+</html>

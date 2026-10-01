@@ -1,0 +1,47 @@
+name: Régénérer le graphe des commits
+
+# Le graphe de la page /branches est un instantané local, pas un appel à
+# l'API GitHub : la page des mentions légales promet qu'aucune requête ne part
+# du navigateur. Il faut donc régénérer le fichier depuis GitHub Actions.
+
+on:
+  push:
+    branches: [main, SITE]
+  schedule:
+    # Chaque matin à 5 h 12 UTC. L'heure est volontairement décalee des
+    # créneaux rounds : les workflows planifies se partagent les tops
+    # d'horloge, et 12 minutes suffisent à les étaler.
+    - cron: '12 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Le graphe compare main et SITE : il faut tout l'historique,
+          # pas seulement la branche déclencheuse.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Régénérer data/commits.json
+        run: node tools/commits.mjs
+
+      - name: Ne pousser que si le fichier a changé
+        run: |
+          if git diff --quiet -- data/commits.json; then
+            echo "Aucun changement, rien à pousser."
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/commits.json
+          git commit -m 'Graphique des commits : mise à jour automatique de l’instantané'
+          git push

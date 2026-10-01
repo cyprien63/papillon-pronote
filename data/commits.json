@@ -1,0 +1,853 @@
+{
+  "genereLe": "2026-10-01",
+  "branches": [
+    "main",
+    "SITE"
+  ],
+  "resume": {
+    "main": {
+      "commits": 72,
+      "premier": "2026-09-13"
+    },
+    "SITE": {
+      "commits": 3,
+      "premier": "2026-10-01"
+    }
+  },
+  "jours": [
+    {
+      "jour": "2026-09-13",
+      "main": 2,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "d7ac588",
+          "auteur": "Cyprien",
+          "date": "2026-09-13T18:24:51+02:00",
+          "jour": "2026-09-13",
+          "sujet": "page de conection ok mes page pronot gros bug pas utilisable",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "0438f67",
+          "auteur": "cyprien63",
+          "date": "2026-09-13T10:38:16+02:00",
+          "jour": "2026-09-13",
+          "sujet": "Refonte page de connexion ENT façon Papillon + options clair/sombre",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-14",
+      "main": 4,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "353a261",
+          "auteur": "cyprien63",
+          "date": "2026-09-14T22:13:15+02:00",
+          "jour": "2026-09-14",
+          "sujet": "Widget travail à faire façon Papillon (cards, emoji, toggle Terminé)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "5e55288",
+          "auteur": "cyprien63",
+          "date": "2026-09-14T21:15:37+02:00",
+          "jour": "2026-09-14",
+          "sujet": "Widget emploi du temps façon Papillon + popup date picker",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "c151307",
+          "auteur": "cyprien63",
+          "date": "2026-09-14T20:50:56+02:00",
+          "jour": "2026-09-14",
+          "sujet": "accuille pronot ok base",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "60a1bb2",
+          "auteur": "cyprien63",
+          "date": "2026-09-14T07:30:34+02:00",
+          "jour": "2026-09-14",
+          "sujet": "correction bug interface pronote",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-15",
+      "main": 12,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "a164bb3",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T21:56:23+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Bouton QR : ne colle plus au bord bas, aligné en bas à droite",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "7170b37",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T21:52:41+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Restyle façon Papillon de la page Compte PRONOTE",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "7d6d914",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T21:07:53+02:00",
+          "jour": "2026-09-15",
+          "sujet": "ajout pasge de deconection",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "c800fa0",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T20:53:46+02:00",
+          "jour": "2026-09-15",
+          "sujet": "claude",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "8a10c8b",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T20:50:31+02:00",
+          "jour": "2026-09-15",
+          "sujet": "claude",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "2a99b4c",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T19:29:06+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Popups Notifications & Aide : animation, positionnement, icônes SVG, zéros blancs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "eacc4ac",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T16:13:10+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Header supprimé, icône flèche verte sur tous les boutons Tout voir",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "242f376",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T15:00:08+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Popups et menu contextuel stylés façon Papillon",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "b14fe9c",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T14:35:37+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Header : top bar stylée façon Papillon (plus épaisse, blocs rapprochés)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "7a83b3e",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T14:11:14+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Ressources : carte entière cliquable pour ouvrir le fichier",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "c40ebf0",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T13:50:55+02:00",
+          "jour": "2026-09-15",
+          "sujet": "EDT : surligner cours annulés et changements de salle, corriger badge En cours",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "6822d77",
+          "auteur": "cyprien63",
+          "date": "2026-09-15T07:48:43+02:00",
+          "jour": "2026-09-15",
+          "sujet": "Widgets accueil façon Papillon : dernières notes, carnet de correspondance, informations, ressources pédagogiques",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-16",
+      "main": 2,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "2796394",
+          "auteur": "cyprien63",
+          "date": "2026-09-16T21:23:04+02:00",
+          "jour": "2026-09-16",
+          "sujet": "Fix page Documents : panneau droit non restylé au changement de rubrique",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "37c59cc",
+          "auteur": "Cyprien63",
+          "date": "2026-09-16T19:39:30+02:00",
+          "jour": "2026-09-16",
+          "sujet": "Restyle façon Papillon de la page Documents PRONOTE",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-17",
+      "main": 4,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "a140935",
+          "auteur": "Cyprien63",
+          "date": "2026-09-17T20:45:30+02:00",
+          "jour": "2026-09-17",
+          "sujet": "Page Documents : cartes alignées, titre du second menu sans chevauchement, typo de l'état vide",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "884da1a",
+          "auteur": "Cyprien63",
+          "date": "2026-09-17T20:45:27+02:00",
+          "jour": "2026-09-17",
+          "sujet": "Fix police Inter : chemins woff2 relatifs (404 sur PRONOTE) + bandeaux informatifs masqués",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "2a03810",
+          "auteur": "Cyprien63",
+          "date": "2026-09-17T20:45:24+02:00",
+          "jour": "2026-09-17",
+          "sujet": "Header : barres sticky mesurées en JS (ResizeObserver) et third menu façon Papillon",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "1b76fd6",
+          "auteur": "Cyprien63",
+          "date": "2026-09-17T20:45:23+02:00",
+          "jour": "2026-09-17",
+          "sujet": "Restyle façon Papillon de la page Contenus et ressources PRONOTE",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-24",
+      "main": 7,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "3d01411",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:53:02+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Forums : les deux boutons de toolbar (recherche/filtre) ne dépassent plus (enveloppes natives neutralisées, pas de wrap ni débordement)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "368aa17",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:51:24+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Page Forums pédagogiques : restyle façon Papillon (trois colonnes en cartes, toolbar pills, sélection teintée, états vides, mode sombre)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "d733e5e",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:36:41+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Travail à faire : toggle « J'ai terminé » façon Papillon (check CSS, pill teintée, inline color de la matière)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "5090b9b",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:33:07+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Page Travail à faire : squelette (dossier + marquage idempotent + fondations CSS + manifest)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "23dafe6",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:32:11+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Contenus : sélecteur de période façon pill, wrappers transparents (fini le halo blanc autour des cartes)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "403ebd8",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:12:35+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Notes : plus de double barème (le /20 n'est ajouté que si la note est déjà sur 20)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "b4af4f3",
+          "auteur": "Cyprien63",
+          "date": "2026-09-24T12:06:07+02:00",
+          "jour": "2026-09-24",
+          "sujet": "Ajout du widget Devoirs Surveillés (DS) façon Papillon",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-25",
+      "main": 3,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "176a469",
+          "auteur": "Cyprien63",
+          "date": "2026-09-25T19:50:20+02:00",
+          "jour": "2026-09-25",
+          "sujet": "Doc : vues hebdomadaires du cahier de textes (CSS partage, fiche modale, pieges DOM)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "daa7f6b",
+          "auteur": "Cyprien63",
+          "date": "2026-09-25T19:50:07+02:00",
+          "jour": "2026-09-25",
+          "sujet": "Cahier de textes : vues hebdomadaires façon Papillon",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "9bf00cd",
+          "auteur": "Cyprien63",
+          "date": "2026-09-25T10:12:58+02:00",
+          "jour": "2026-09-25",
+          "sujet": "Réorganiser les pages PRONOTE et actualiser le manifeste",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-26",
+      "main": 14,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "cb1d4cf",
+          "auteur": "Cyprien63",
+          "date": "2026-09-26T17:21:37+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Page Mes notes : moyenne de classe robuste, mode Par matière, scroll à la molette et pied de liste en bandeau sombre",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "064431a",
+          "auteur": "Cyprien63",
+          "date": "2026-09-26T16:41:55+02:00",
+          "jour": "2026-09-26",
+          "sujet": "EduConnect : restyle façon Papillon de la page « Confirmation de l'identité » (date de naissance) et centrage de la colonne",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "0da4d8b",
+          "auteur": "Cyprien63",
+          "date": "2026-09-26T16:41:51+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Mes notes : icônes de la recherche et des pièces jointes recadrées, plus de débordement horizontal ni fond blanc en mode sombre",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "4487292",
+          "auteur": "Cyprien63",
+          "date": "2026-09-26T09:41:01+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Page Mes notes : restyle façon Papillon (carte Moyennes avec graphique SVG animé, lignes en cartes, détail avec héros note et barre de position, mode sombre)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "f5f23eb",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:51:46+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Travail a faire : aligner la rangee sujet sur les bords de la carte",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "e2cc545",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:48:39+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Travail a faire : afficher l'etat plutot que la date",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "55bc77b",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:40:27+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Travail a faire : resserrer la rangee sujet",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "fd8ecb2",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:19:11+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Menu : garder le libelle clair sur le selecteur d'eleve",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "4a75cef",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:09:39+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Bascule clair / sombre dans la barre de menu",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "75f63dc",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:03:36+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Travail a faire : ne plus tronquer le nom des matieres",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "68a703e",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T04:03:36+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Lisibilite des textes : audit de contraste WCAG sur la page d'accueil",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "a1cefc1",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T03:39:16+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Theme sombre : filigrane des widgets illisible (blanc eclatant)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "20b1607",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T03:21:54+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Travail a faire : drapeaux de matiere dessines en SVG",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "6bfb185",
+          "auteur": "SpartisPerso",
+          "date": "2026-09-26T03:19:58+02:00",
+          "jour": "2026-09-26",
+          "sujet": "Menu principal : libelles illisibles en theme clair (blanc sur blanc)",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-27",
+      "main": 5,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "1a1ef13",
+          "auteur": "Cyprien63",
+          "date": "2026-09-27T21:26:56+02:00",
+          "jour": "2026-09-27",
+          "sujet": "Page Anciens bulletins : restyle façon Papillon de l'arbre des bulletins et de la pop-up de dépôt du PDF",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "cc6e6ce",
+          "auteur": "Cyprien63",
+          "date": "2026-09-27T20:52:06+02:00",
+          "jour": "2026-09-27",
+          "sujet": "Page Bulletin de ma classe : restyle façon Papillon de la carte d'état vide, icône user, mode sombre",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "c4d6752",
+          "auteur": "Cyprien63",
+          "date": "2026-09-27T20:44:20+02:00",
+          "jour": "2026-09-27",
+          "sujet": "Bandeau : coller le troisième menu au second menu et retirer les blocs masqués en visibility:hidden",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "a553f22",
+          "auteur": "Cyprien63",
+          "date": "2026-09-27T20:44:17+02:00",
+          "jour": "2026-09-27",
+          "sujet": "Page Mon bulletin de notes : restyle façon Papillon de la carte d'état vide, mode sombre, et dé-classement des marques du Relevé",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "1a0b8a8",
+          "auteur": "Cyprien63",
+          "date": "2026-09-27T16:21:45+02:00",
+          "jour": "2026-09-27",
+          "sujet": "Page Relevé : restyle façon Papillon de la carte d'etat vide, des colonnes et des modales de calcul de moyenne",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-28",
+      "main": 10,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "fdff2b2",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T21:29:12+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Niveaux de maitrise par matière : carte d'état vide façon Papillon (icône graduation-hat, pas de date), classes pap-nm-*",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "dc0af43",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T21:22:40+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Évaluations par compétence : restyle façon Papillon de la grille Items/Niveau/Validé le, carte centrée, repli des colonnes vides",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "49101ab",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T20:40:54+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Bilan périodique de ma classe : restyle façon Papillon de la carte d'état vide (icône user), classes pap-bpc-*",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "095529a",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T20:37:08+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Mon bilan périodique : restyle façon Papillon de la carte d'état vide, icône graduation-hat, mode sombre",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "9ce8b05",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T16:41:31+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Doc : guide d'organisation pour les comptes Étudiant, Parent et Professeur",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "9b1725e",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T16:41:30+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Doc : déplacer MULTI-NAVIGATEURS.md dans « a ajouter plus tard »",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "df0c1db",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T16:08:12+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Difficultés et points d'appui : restyle façon Papillon des deux cartes de compétences",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "f45189b",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T15:29:12+02:00",
+          "jour": "2026-09-28",
+          "sujet": "README : corriger le lien du site Papillon",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "1d441a2",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T15:29:12+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Doc : guide d'organisation et de build Chrome + Firefox",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "bad2ea3",
+          "auteur": "Cyprien63",
+          "date": "2026-09-28T15:29:09+02:00",
+          "jour": "2026-09-28",
+          "sujet": "Page Mes évaluations : restyle façon Papillon du widget Compétences",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-09-29",
+      "main": 7,
+      "SITE": 0,
+      "commits": [
+        {
+          "hash": "5f246c7",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/15' into test-prs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "7b85fb5",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/13' into test-prs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "94a12a3",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/12' into test-prs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "fa39d6f",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/9' into test-prs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "75aa89e",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:44:19+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Merge remote-tracking branch 'pr/8' into test-prs",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "99d33f1",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:42:12+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Page Anciens bilans : restyle façon Papillon de l'arbre des bilans périodiques, classes pap-anb-*",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "388fe8c",
+          "auteur": "Cyprien63",
+          "date": "2026-09-29T07:33:59+02:00",
+          "jour": "2026-09-29",
+          "sujet": "Page Livret de compétences numériques : restyle façon Papillon de la grille et du pied",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "jour": "2026-10-01",
+      "main": 2,
+      "SITE": 3,
+      "commits": [
+        {
+          "hash": "34331f7",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T17:43:31+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Ajouter les animations au site",
+          "sur": [
+            "SITE"
+          ]
+        },
+        {
+          "hash": "02fb165",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T17:29:46+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Créer le site de présentation de l'extension",
+          "sur": [
+            "SITE"
+          ]
+        },
+        {
+          "hash": "c5166d6",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T16:52:46+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Initialiser la branche SITE pour le site de présentation",
+          "sur": [
+            "SITE"
+          ]
+        },
+        {
+          "hash": "8b6e8b5",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T15:00:35+02:00",
+          "jour": "2026-10-01",
+          "sujet": "README : réorganiser la documentation (sommaire, tableau des pages couvertes, structure à jour)",
+          "sur": [
+            "main"
+          ]
+        },
+        {
+          "hash": "3d62e9f",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T15:00:35+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Ajouter la vidéo de présentation et le diagramme référencés par le README",
+          "sur": [
+            "main"
+          ]
+        }
+      ]
+    }
+  ]
+}

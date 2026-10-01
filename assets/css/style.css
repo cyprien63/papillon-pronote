@@ -874,3 +874,199 @@ html.dark .card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
   .js .section-title::before { animation: none !important; }
   .card:hover, .stat:hover, .feature-list li:hover, .chip:hover { transform: none; }
 }
+
+/* ==========================================================================
+   Graphe des commits
+   Barres empilées par jour, deux colonnes : une pour main, une pour SITE.
+   ========================================================================== */
+
+.graph {
+  background: var(--papillon-surface);
+  border: 1px solid var(--papillon-border);
+  border-radius: var(--papillon-radius);
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.graph-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: .84rem;
+  color: var(--papillon-muted);
+}
+
+.graph-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+.swatch-main { background: #2ea08a; }
+.swatch-site { background: #b08cf0; }
+
+/* Une ligne par jour : deux piste côte à côte */
+.graph-row {
+  display: grid;
+  grid-template-columns: 78px 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  font-size: .8rem;
+}
+
+.graph-date {
+  color: var(--papillon-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lane {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--papillon-hover);
+  padding: 3px;
+  overflow: hidden;
+}
+
+.lane.is-empty { background: transparent; }
+
+.tick {
+  width: 5px;
+  min-width: 5px;
+  border-radius: 2px;
+  background: #2ea08a;
+  transition: transform .16s ease;
+}
+
+.lane-site .tick { background: #b08cf0; }
+
+.tick:hover { transform: scaleY(1.35); }
+
+.graph-foot {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--papillon-border);
+  font-size: .82rem;
+  color: var(--papillon-muted);
+}
+
+/* Résumé chiffré */
+.branch-cards {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.branch-card {
+  background: var(--papillon-surface);
+  border: 1px solid var(--papillon-border);
+  border-radius: 20px;
+  padding: 20px;
+  transition: transform .2s cubic-bezier(.22, .61, .36, 1), box-shadow .2s ease;
+}
+
+.branch-card:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(16, 19, 15, .07); }
+html.dark .branch-card:hover { box-shadow: 0 8px 26px rgba(0, 0, 0, .45); }
+
+.branch-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1rem;
+  margin-bottom: .3rem;
+}
+
+.branch-card .count {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--papillon-ink);
+  line-height: 1.1;
+}
+
+.branch-card .since {
+  font-size: .82rem;
+  color: var(--papillon-muted);
+}
+
+/* Liste des derniers commits */
+.commit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--papillon-border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--papillon-surface);
+}
+
+.commit-list li + li { border-top: 1px solid var(--papillon-border); }
+
+.commit-list a {
+  display: grid;
+  grid-template-columns: 74px 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 12px 18px;
+  color: inherit;
+  font-size: .9rem;
+  transition: background .15s ease;
+}
+
+.commit-list a:hover { background: var(--papillon-hover); text-decoration: none; }
+
+.commit-list .sha {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  color: var(--papillon-link);
+}
+
+.commit-list .sujet { color: var(--papillon-ink); }
+
+.commit-list .branche {
+  font-size: .74rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 300px;
+  white-space: nowrap;
+}
+
+.branche-main { background: #e5f4ef; color: #1f7360; }
+.branche-site { background: #efe8fc; color: #6f43b8; }
+
+html.dark .branche-main { background: #14352c; color: #4ecfb4; }
+html.dark .branche-site { background: #2a2140; color: #c4a9fb; }
+
+@media (max-width: 620px) {
+  .graph-row { grid-template-columns: 62px 1fr 1fr; gap: 5px; font-size: .72rem; }
+  .tick { width: 3px; min-width: 3px; }
+  .commit-list a { grid-template-columns: 62px 1fr; }
+  .commit-list .branche { grid-column: 2; justify-self: start; }
+}
+
+.tick-more {
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--papillon-muted);
+  padding-left: 3px;
+  white-space: nowrap;
+}
