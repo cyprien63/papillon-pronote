@@ -10,7 +10,7 @@
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 11,
+      "commits": 12,
       "premier": "2026-10-01"
     }
   },
@@ -795,8 +795,18 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 11,
+      "SITE": 12,
       "commits": [
+        {
+          "hash": "ffaa910",
+          "auteur": "Cyprien",
+          "date": "2026-10-01T20:34:47+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Merge pull request #20 from cyprien63/commits-graphe",
+          "sur": [
+            "SITE"
+          ]
+        },
         {
           "hash": "5b71105",
           "auteur": "Cyprien63",
