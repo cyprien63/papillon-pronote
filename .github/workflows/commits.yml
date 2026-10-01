@@ -3,19 +3,35 @@ name: Régénérer le graphe des commits
 # Le graphe de la page /branches est un instantané local, pas un appel à
 # l'API GitHub : la page des mentions légales promet qu'aucune requête ne part
 # du navigateur. Il faut donc régénérer le fichier depuis GitHub Actions.
+#
+# Le workflow n'écrit jamais directement sur main ni sur SITE. Les deux
+# branches portent un ruleset qui impose une pull request, et le bot n'est pas
+# dans la liste de contournement : un `git push` direct serait refusé. Il passe
+# donc par une branche jetable et une PR, que tu merges. C'est plus lent d'un
+# push, mais ça respecte la protection que tu as mise en place au lieu de la
+# contourner en douce.
 
 on:
   push:
     branches: [main, SITE]
   schedule:
-    # Chaque matin à 5 h 12 UTC. L'heure est volontairement décalee des
-    # créneaux rounds : les workflows planifies se partagent les tops
+    # Chaque matin à 5 h 12 UTC. L'heure est volontairement décalée des
+    # créneaux ronds : les workflows planifiés se partagent les tops
     # d'horloge, et 12 minutes suffisent à les étaler.
     - cron: '12 5 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # `contents: write` pour pousser la branche de la PR, `pull-requests: write`
+  # pour l'ouvrir. Aucun droit sur les autres branches.
+  contents: write
+  pull-requests: write
+
+# Une seule exécution à la fois. Sans ça, un push et le cron du matin
+# pourraient tous les deux ouvrir une PR sur le même fichier.
+concurrency:
+  group: commits-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   commits:
@@ -23,9 +39,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Le graphe compare main et SITE : il faut tout l'historique,
-          # pas seulement la branche déclencheuse.
+          # Le graphe compare main et SITE : il faut tout l'historique, pas
+          # seulement la branche déclencheuse.
           fetch-depth: 0
+
+      # Le checkout d'un push ne crée qu'une seule branche locale. Sur un push
+      # vers SITE, `main` est donc un nom inconnu, même avec fetch-depth: 0 :
+      # seule origin/main existe. On crée les deux branches locales pour que
+      # le script trouve ce qu'il cherche.
+      - name: Rendre les deux branches visibles
+        run: |
+          git fetch --no-tags origin \
+            '+refs/heads/main:refs/heads/main' \
+            '+refs/heads/SITE:refs/heads/SITE'
+          git branch --list
 
       - uses: actions/setup-node@v4
         with:
@@ -34,14 +61,53 @@ jobs:
       - name: Régénérer data/commits.json
         run: node tools/commits.mjs
 
-      - name: Ne pousser que si le fichier a changé
+      - name: Vérifier si le fichier a changé
+        id: diff
         run: |
           if git diff --quiet -- data/commits.json; then
-            echo "Aucun changement, rien à pousser."
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Le fichier est déjà à jour."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git --no-pager diff --stat -- data/commits.json
           fi
+
+      # La branche de la PR est fixe, donc réutilisée d'une exécution à
+      # l'autre. On repart de la branche cible à chaque fois, sinon la
+      # deuxième exécution empilerait les commits sur la première.
+      - name: Préparer la branche de la pull request
+        if: steps.diff.outputs.changed == 'true'
+        run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --force-create commits-graphe "origin/${{ github.ref_name }}"
           git add data/commits.json
-          git commit -m 'Graphique des commits : mise à jour automatique de l’instantané'
-          git push
+          git commit -m 'Graphique des commits : mise à jour de l’instantané'
+          git push --force-with-lease origin commits-graphe
+
+      - name: Ouvrir la pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          # gh est préinstallé sur les runners GitHub, pas une dépendance
+          # ajoutée au projet.
+          GH_TOKEN: ${{ github.token }}
+          BRANCHE: ${{ github.ref_name }}
+        run: |
+          # Une PR peut déjà être ouverte d'une exécution précédente : on la
+          # réutilise au lieu d'échouer sur un doublon.
+          if gh pr list --head commits-graphe --base "$BRANCHE" \
+               --state open --json number --jq '.[0].number' | grep -q .; then
+            echo "Une PR est déjà ouverte pour commits-graphe, elle suffit."
+            exit 0
+          fi
+
+          gh pr create \
+            --head commits-graphe \
+            --base "$BRANCHE" \
+            --title 'Graphique des commits : mise à jour automatique' \
+            --body 'Fichier `data/commits.json` régénéré par `node tools/commits.mjs`.
+
+          Rien d’autre n’est touché : c’est le même contenu que
+          `tools/commits.mjs` produit en local. La PR est là parce que `main`
+          et `SITE` sont protégées par un ruleset, et qu’un push direct serait
+          refusé.'

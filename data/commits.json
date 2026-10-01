@@ -10,7 +10,7 @@
       "premier": "2026-09-13"
     },
     "SITE": {
-      "commits": 3,
+      "commits": 5,
       "premier": "2026-10-01"
     }
   },
@@ -795,8 +795,28 @@
     {
       "jour": "2026-10-01",
       "main": 2,
-      "SITE": 3,
+      "SITE": 5,
       "commits": [
+        {
+          "hash": "298f92c",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T19:01:21+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Contraste des barres du graphe et README du site",
+          "sur": [
+            "SITE"
+          ]
+        },
+        {
+          "hash": "772b5e4",
+          "auteur": "Cyprien63",
+          "date": "2026-10-01T18:35:44+02:00",
+          "jour": "2026-10-01",
+          "sujet": "Ajouter la page Branches et le graphe des commits",
+          "sur": [
+            "SITE"
+          ]
+        },
         {
           "hash": "34331f7",
           "auteur": "Cyprien63",

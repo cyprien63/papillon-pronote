@@ -56,14 +56,44 @@ node tools/commits.mjs
 
 Zéro dépendance, comme le `tools/build.mjs` prévu pour la variante Firefox. Le
 workflow `.github/workflows/commits.yml` le relance à chaque push sur `main` ou
-`SITE`, chaque matin, et à la main. Il ne pousse que si le fichier a changé, ce
-qui évite le commit vide quotidien.
+`SITE`, chaque matin, et à la main. Il n'ouvre une PR que si le fichier a
+réellement changé.
 
-Un détail qui a coûté du temps : l'appartenance d'un commit à une branche ne se
-lit pas dans l'étiquette `%D` de `git log`, qui ne liste que les références qui
-pointent *sur* le commit. Presque tous les commits anciens de `main` en sont
-dépourvus et seraient apparus sans branche. Le script utilise donc
-`git rev-list <branche>` pour l'appartenance réelle.
+### Le workflow passe par une PR, volontairement
+
+Les deux branches portent un ruleset qui impose une pull request, et le robot
+n'est pas dans la liste de contournement : un `git push` direct de sa part
+serait refusé. Le workflow pousse donc sur une branche jetable
+(`commits-graphe`) et ouvre une PR, que tu merges. C'est plus lent d'un push
+direct, mais ça respecte la protection au lieu de la contourner en douce.
+
+### Deux pièges que le script désamorce
+
+**Le robot ne se compte pas lui-même.** Sans précaution, le workflow
+s'auto-entretient : le fichier est commité, la PR est mergée, ce commit entre
+dans l'historique de `SITE`, donc le fichier régénéré diffère encore, donc une
+nouvelle PR — indéfiniment. Les commits dont l'auteur contient `[bot]` sont
+donc écartés du graphe.
+
+**La date ne bouge que si le contenu bouge.** Le workflow tourne chaque matin.
+Si `genereLe` prenait l'heure du jour, le fichier serait différent tous les
+matins et le workflow ouvrirait une PR ne contenant qu'une date. La date est
+celle du dernier changement réel, donc une journée sans commit produit un
+fichier identique et le workflow s'arrête avant la PR.
+
+### Deux détails qui ont coûté du temps
+
+L'appartenance d'un commit à une branche ne se lit pas dans l'étiquette `%D` de
+`git log`, qui ne liste que les références qui pointent *sur* le commit.
+Presque tous les commits anciens de `main` en sont dépourvus et seraient
+apparus sans branche. Le script utilise donc `git rev-list <branche>`.
+
+Et le nom `main` n'existe pas toujours : déclenché depuis un push, le checkout
+de GitHub Actions ne crée qu'une seule branche locale, donc sur un push vers
+`SITE`, `git rev-list main` échoue alors que `origin/main` est là. Le script
+essaie les formes de référence une par une, et une branche absente est
+simplement omise du JSON avec un avertissement, plutôt que de faire échouer le
+workflow.
 
 Le rendu se dégrade proprement : si le JSON est absent, la page affiche un
 encadré expliquant comment le produire, sans erreur visible.
