@@ -1244,3 +1244,102 @@ html.papillon-dark body.papillon-pronote .widget.devoirsurveille .pap-ds-desc {
 html.papillon-dark body.papillon-pronote footer.ObjetBandeauPied {
    background: #1a211e !important; border-top-color: #2a3531 !important; color: #93a79f !important;
 }
+
+/* ============================================================
+   Pages natives sans feuille dédiée — Communication (Informations
+   & sondages, Discussions, Rendez-vous, Agenda, Menu) et Vie
+   scolaire (Emploi du temps, Carnet, Équipe pédagogique).
+   Le thème sombre éclaircit le texte via body, mais ces pages gardent
+   leur fond blanc natif, ou leur texte noir / gris sur fond sombre.
+   Cibles par classe : redéfinir --color-text ou --theme-neutre-sombre
+   toucherait aussi des fonds (calendrier de l'EDT, pastille du pied).
+   ============================================================ */
+
+/* Surfaces natives restées blanches */
+html.papillon-dark body.papillon-pronote .InterfacePageInfoSondage,
+html.papillon-dark body.papillon-pronote .InterfaceListeMessagerie,
+html.papillon-dark body.papillon-pronote .InterfaceRDV,
+html.papillon-dark body.papillon-pronote .ifc_RecapVS,
+html.papillon-dark body.papillon-pronote .FlatListeEvenementsVS {
+  background: #1a211e !important;
+}
+html.papillon-dark body.papillon-pronote .ilm_gauche {
+  background: #202926 !important;
+}
+html.papillon-dark body.papillon-pronote .ifc_RecapVS .selectable.ie-ripple {
+  background: #14352c !important;
+}
+
+/* Les pages déjà restylées (présence d'un élément pap-*) gardent leur feuille */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) td.FondBlanc,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) td.Texte10 {
+  background: #1a211e !important;
+}
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .liste-totale-fd.liste-header > div {
+  background: #202926 !important;
+}
+
+/* Textes natifs noirs ou gris sur fond sombre */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) :is(.ie-texte, .ie-titre, .titre-gras, .titre-principal, .AlignementDroit, .ie_ellipsis, .taille-m),
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) td.Texte10,
+html.papillon-dark body.papillon-pronote .ifc_RecapVS div {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) :is(.ie-sous-titre, .info-duree, .time-contain, span.time, .message) {
+  color: #93a79f !important;
+}
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) :is(.theme_color_foncee, .zone-complementaire span) {
+  color: #35bba0 !important;
+}
+
+/* L'étiquette de cours reste blanche en sombre : son texte doit rester foncé */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .EtiquetteCours,
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .EtiquetteCours * {
+  color: #10130f !important;
+}
+
+html.papillon-dark body.papillon-pronote .objetBandeauEntete_thirdmenu .themeBoutonNeutre {
+  color: #e7efec !important;
+}
+
+/* Survol et sélection : PRONOTE les peint avec --theme-claire (menthe en clair).
+   On reprend ses valeurs sombres natives, limitées aux deux variables concernées
+   (activer sa classe dark-mode entière dégrade d'autres pages). */
+html.papillon-dark body.papillon-pronote .ThemePronote,
+html.papillon-dark body.papillon-pronote .ThemeProduitPN,
+html.papillon-dark body.papillon-pronote .ThemeCat-communication,
+html.papillon-dark body.papillon-pronote .ThemeVert {
+  --theme-claire: #00584c;
+  --theme-claire-scalePlus6: #005f52;
+  --theme-claire-scaleMoins10: #004a40;
+  --theme-claire-scaleMoins15: #00443b;
+  --theme-foncee: #cdf3ed;
+}
+
+/* Titres « Pour <date> » de l'accueil : fond vert profond au lieu du menthe vif */
+html.papillon-dark body.papillon-pronote .widget.travailafaire h3[id*="_date_"],
+html.papillon-dark body.papillon-pronote .widget.travailafaire h3[id*="_date_"] span,
+html.papillon-dark body.papillon-pronote .widget.travailafaire header ~ * h3 {
+  color: #e7efec !important;
+}
+html.papillon-dark body.papillon-pronote a.btn-collapse,
+html.papillon-dark body.papillon-pronote a.btn-collapse * {
+  color: #ffffff !important;
+}
+
+/* Vue « Par matière » des évaluations et heures de la liste des rendez-vous */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .ie-titre-gros {
+  color: #35bba0 !important;
+}
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) time.date-contain {
+  color: #cfd9d5 !important;
+  background: rgba(255, 255, 255, .08) !important;
+}
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .time-contain {
+  background: rgba(255, 255, 255, .08) !important;
+}
+
+/* Jour sélectionné du mini-calendrier : fond menthe posé en dur par PRONOTE */
+html.papillon-dark body.papillon-pronote main.interface_affV_client:not(:has([class*="pap-"])) .calendrier-jour.selected {
+  background: #00584c !important;
+}
