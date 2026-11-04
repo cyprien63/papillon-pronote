@@ -102,10 +102,12 @@
   }
 
   const EMOJI_MAP = [
+    ['educationphysique', '⚽'],
     ['allemand', '🇩🇪'],
     ['anglais', '🇬🇧'],
     ['espagnol', '🇪🇸'],
     ['italien', '🇮🇹'],
+    ['francais', '📖'],
     ['mathematique', '🧮'],
     ['math', '🧮'],
     ['physiquechimie', '🧪'],
@@ -125,7 +127,9 @@
     ['art', '🎨'],
     ['plastique', '🎨'],
     ['musique', '🎵'],
+    ['musical', '🎵'],
     ['philosophie', '🧠'],
+    ['parcourscitoyen', '⚖️'],
     ['emc', '⚖️'],
     ['enseignement', '⚖️'],
     ['latin', '🏛️'],

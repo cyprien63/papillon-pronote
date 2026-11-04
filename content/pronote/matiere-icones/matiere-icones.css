@@ -1,0 +1,173 @@
+/* ============================================================
+   Icônes de matière — LISTES ET EN-TÊTES (CSS)
+   Pendant de matiere-icones.js. Même rendu que l'icône du widget
+   « Travail à faire » de l'accueil (tav.css) : émoji de 20px, ou
+   drapeau SVG de 23x16, sans pastille. Quand l'icône est là, la
+   pastille native de PRONOTE (rond, bandeau, barre) est masquée.
+   ============================================================ */
+
+body.papillon-pronote .pap-subj-ico {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  /* Sans pile emoji explicite, Inter capte les caractères qu'elle sait
+     dessiner et les rend en noir et blanc au lieu de l'emoji couleur. */
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Segoe UI Symbol', sans-serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  text-indent: 0 !important;
+}
+
+/* L'émoji est porté par data-emoji (textContent reste celui de PRONOTE).
+   Les glyphes emoji dépassent leur boîte par le bas : on les remonte un peu. */
+body.papillon-pronote .pap-subj-ico::before {
+  content: attr(data-emoji);
+  position: relative;
+  top: -0.08em;
+}
+
+/* Drapeau dessiné en SVG : même emprise que .pap-tav-flag */
+body.papillon-pronote .pap-subj-ico .pap-subj-flag {
+  display: inline-flex !important;
+  width: 23px !important;
+  height: 16px !important;
+  border-radius: 3px !important;
+  overflow: hidden !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12) !important;
+}
+body.papillon-pronote .pap-subj-ico .pap-subj-flag svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* ---------- Liste des matières (gauche) : Contenus + Travail à faire ---------- */
+body.papillon-pronote .pap-contenus-left .zone-gauche.pap-subj-host > .ie-line-color {
+  display: none !important;
+}
+body.papillon-pronote .pap-contenus-left .zone-gauche.pap-subj-host {
+  display: flex !important;
+  align-items: center !important;
+}
+/* Le panneau a une largeur fixe : icône un peu plus petite pour garder le nom lisible */
+body.papillon-pronote .pap-contenus-left .zone-gauche.pap-subj-host > .pap-subj-ico {
+  font-size: 18px !important;
+}
+body.papillon-pronote .pap-contenus-left .zone-gauche.pap-subj-host > .pap-subj-ico .pap-subj-flag {
+  width: 21px !important;
+  height: 14px !important;
+}
+
+/* ---------- En-tête de contenu (droite) : Contenus ---------- */
+body.papillon-pronote .pap-contenus-right .couleur-matiere.pap-subj-on::before {
+  display: none !important;
+}
+body.papillon-pronote .pap-contenus-right .couleur-matiere.pap-subj-on {
+  gap: 10px !important;
+  align-items: center !important;
+}
+body.papillon-pronote .pap-contenus-right .couleur-matiere.pap-subj-on > .pap-subj-ico {
+  align-self: center !important;
+}
+
+/* ---------- En-tête de devoir (droite) : Travail à faire ---------- */
+body.papillon-pronote .pap-contenus-right .flex-contain.pap-subj-host {
+  align-items: center !important;
+  gap: 10px !important;
+}
+body.papillon-pronote .pap-contenus-right .flex-contain.pap-subj-host > div[style*="background-color"] {
+  display: none !important;
+}
+
+/* ---------- Titres <h3> des widgets de l'accueil ---------- */
+/* Icône et nom sur la même ligne, centrés verticalement, comme la rangée sujet de
+   Travail à faire. La barre de couleur native (::before de h3.ie-line-color) reste. */
+body.papillon-pronote .widget h3.pap-subj-on {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+body.papillon-pronote .widget h3.pap-subj-on::before {
+  margin-right: 0 !important;
+}
+/* Plus petite que la ligne de texte : elle ne doit pas mordre sur la date */
+body.papillon-pronote .widget h3.pap-subj-on > .pap-subj-ico {
+  font-size: 14px !important;
+}
+body.papillon-pronote .widget h3.pap-subj-on > .pap-subj-ico .pap-subj-flag {
+  width: 18px !important;
+  height: 12px !important;
+}
+body.papillon-pronote .widget h3.pap-subj-on > :not(.pap-subj-ico) {
+  min-width: 0 !important;
+}
+/* Ressources : même mécanique que la rangée sujet de Travail à faire (tav.css) :
+   ligne flex centrée, barre native étirée sur toute la hauteur, icône 20px, nom 14px. */
+body.papillon-pronote .widget.ressourcepedagogique h3.pap-subj-on {
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+body.papillon-pronote .widget.ressourcepedagogique h3.pap-subj-on > .pap-subj-ico {
+  align-self: center !important;
+  font-size: 20px !important;
+}
+body.papillon-pronote .widget.ressourcepedagogique h3.pap-subj-on > .pap-subj-ico::before {
+  top: 0 !important;
+}
+body.papillon-pronote .widget.ressourcepedagogique h3.pap-subj-on > .pap-subj-ico .pap-subj-flag {
+  width: 23px !important;
+  height: 16px !important;
+}
+body.papillon-pronote .widget.ressourcepedagogique h3.pap-subj-on::before {
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+}
+
+/* Notes et évaluations : l'icône occupe les deux lignes (nom + date), centrée comme
+   la pastille de note à droite ; la date s'aligne sous le nom. */
+body.papillon-pronote .widget.notes .liste-clickable > li.pap-grade .wrap:has(> h3.pap-subj-on),
+body.papillon-pronote .widget.competences .wrap:has(> h3.pap-subj-on) {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  column-gap: 10px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+body.papillon-pronote .widget.notes h3.pap-subj-on,
+body.papillon-pronote .widget.competences h3.pap-subj-on {
+  display: contents !important;
+}
+body.papillon-pronote .widget.notes h3.pap-subj-on > .pap-subj-ico,
+body.papillon-pronote .widget.competences h3.pap-subj-on > .pap-subj-ico {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  align-self: center !important;
+  font-size: 24px !important;
+}
+body.papillon-pronote .widget.notes h3.pap-subj-on > .pap-subj-ico .pap-subj-flag,
+body.papillon-pronote .widget.competences h3.pap-subj-on > .pap-subj-ico .pap-subj-flag {
+  width: 27px !important;
+  height: 18px !important;
+}
+
+/* Cartes de l'emploi du temps : plus compact, la carte est déjà colorée.
+   Le li est un bloc : on centre l'icône sur la ligne plutôt que sur la ligne de base. */
+body.papillon-pronote .widget.edt li.libelle-cours > .pap-subj-ico {
+  font-size: 16px !important;
+  margin-right: 7px !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  top: -1px !important;
+}
+body.papillon-pronote .widget.edt li.libelle-cours > .pap-subj-ico .pap-subj-flag {
+  width: 19px !important;
+  height: 13px !important;
+}
