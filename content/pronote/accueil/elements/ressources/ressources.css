@@ -102,6 +102,8 @@ body.papillon-pronote .widget.ressourcepedagogique header .papillon-icon {
 }
 
 body.papillon-pronote .widget.ressourcepedagogique .cta-conteneur {
+  /* Cf. tav.css : PRONOTE le pose en position:absolute, le titre passait dessous. */
+  position: static !important;
   flex: 0 0 auto !important;
   margin-left: auto !important;
   margin-right: -6px !important;

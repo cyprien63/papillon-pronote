@@ -65,7 +65,8 @@
         "content/pronote/Cahier de textes/Contenus/Contenus.css",
         "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.css",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.css",
-        "content/pronote/Cahier de textes/Forums/Forums.css"
+        "content/pronote/Cahier de textes/Forums/Forums.css",
+        "content/pronote/matiere-icones/matiere-icones.css"
       ],
       "js": [
         "content/pronote/accueil/pronote.js",
@@ -97,7 +98,8 @@
         "content/pronote/Cahier de textes/Contenus/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/TravailAFaire/TravailAFaire.js",
         "content/pronote/Cahier de textes/TravailAFaire/Vue hebdomadaire/VueHebdomadaire.js",
-        "content/pronote/Cahier de textes/Forums/Forums.js"
+        "content/pronote/Cahier de textes/Forums/Forums.js",
+        "content/pronote/matiere-icones/matiere-icones.js"
       ],
       "run_at": "document_idle"
     }
@@ -186,6 +188,8 @@
         "content/pronote/Cahier de textes/TravailAFaire/Vue hebdomadaire/VueHebdomadaire.js",
         "content/pronote/Cahier de textes/Forums/Forums.css",
         "content/pronote/Cahier de textes/Forums/Forums.js",
+        "content/pronote/matiere-icones/matiere-icones.css",
+        "content/pronote/matiere-icones/matiere-icones.js",
         "styles/fonts/*",
         "assets/brand/*",
         "assets/icons/*"

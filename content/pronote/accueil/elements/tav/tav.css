@@ -100,6 +100,10 @@ body.papillon-pronote .widget.travailafaire header .papillon-icon {
 }
 
 body.papillon-pronote .widget.travailafaire .cta-conteneur {
+  /* PRONOTE le pose en position:absolute : il sort alors du flux flex et le
+     titre, qui s'étire, passe dessous. Dans le flux, c'est le titre qui
+     cède de la place (ellipse) et « Tout voir » reste toujours entier. */
+  position: static !important;
   flex: 0 0 auto !important;
   margin-left: auto !important;
   margin-right: -6px !important;
